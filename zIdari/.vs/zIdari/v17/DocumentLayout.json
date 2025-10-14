@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\projects\\zrh\\zIdari\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|e:\\projects\\zrh\\zidari\\forms\\employeeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|solutionrelative:forms\\employeeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|e:\\projects\\zrh\\zidari\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|solutionrelative:mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|e:\\projects\\zrh\\zidari\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C228F5A6-16AD-45E2-B492-D8159778FE04}|zIdari.csproj|solutionrelative:mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EmployeeForm.cs [Design]",
+              "DocumentMoniker": "E:\\projects\\zrh\\zIdari\\Forms\\EmployeeForm.cs",
+              "RelativeDocumentMoniker": "Forms\\EmployeeForm.cs",
+              "ToolTip": "E:\\projects\\zrh\\zIdari\\Forms\\EmployeeForm.cs [Design]",
+              "RelativeToolTip": "Forms\\EmployeeForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T06:17:46.928Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "E:\\projects\\zrh\\zIdari\\MainForm.cs",
+              "RelativeDocumentMoniker": "MainForm.cs",
+              "ToolTip": "E:\\projects\\zrh\\zIdari\\MainForm.cs",
+              "RelativeToolTip": "MainForm.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAwwDsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T03:17:58.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainForm.cs [Design]",
+              "DocumentMoniker": "E:\\projects\\zrh\\zIdari\\MainForm.cs",
+              "RelativeDocumentMoniker": "MainForm.cs",
+              "ToolTip": "E:\\projects\\zrh\\zIdari\\MainForm.cs [Design]",
+              "RelativeToolTip": "MainForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T02:33:13.179Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

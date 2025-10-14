@@ -1,0 +1,14 @@
+E:\projects\zrh\zIdari\bin\Debug\zIdari.exe.config
+E:\projects\zrh\zIdari\bin\Debug\zIdari.exe
+E:\projects\zrh\zIdari\bin\Debug\zIdari.pdb
+E:\projects\zrh\zIdari\bin\Debug\Syncfusion.Licensing.dll
+E:\projects\zrh\zIdari\bin\Debug\Syncfusion.Shared.Base.dll
+E:\projects\zrh\zIdari\bin\Debug\Syncfusion.Shared.Base.xml
+E:\projects\zrh\zIdari\obj\Debug\zIdari.csproj.AssemblyReference.cache
+E:\projects\zrh\zIdari\obj\Debug\zIdari.MainForm.resources
+E:\projects\zrh\zIdari\obj\Debug\zIdari.Properties.Resources.resources
+E:\projects\zrh\zIdari\obj\Debug\zIdari.csproj.GenerateResource.cache
+E:\projects\zrh\zIdari\obj\Debug\zIdari.csproj.CoreCompileInputs.cache
+E:\projects\zrh\zIdari\obj\Debug\zIdari.csproj.Up2Date
+E:\projects\zrh\zIdari\obj\Debug\zIdari.exe
+E:\projects\zrh\zIdari\obj\Debug\zIdari.pdb
