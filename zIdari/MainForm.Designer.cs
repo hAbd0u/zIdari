@@ -48,10 +48,10 @@
             this.addMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.demandWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.demandWorkAckCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.demandWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkAckCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.employeesDataGV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -71,7 +71,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(3030, 64);
+            this.menuStrip1.Size = new System.Drawing.Size(2565, 64);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -105,12 +105,13 @@
             this.EmailCol,
             this.AddressCol});
             this.employeesDataGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.employeesDataGV.Location = new System.Drawing.Point(3, 53);
+            this.employeesDataGV.Location = new System.Drawing.Point(3, 52);
+            this.employeesDataGV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.employeesDataGV.Name = "employeesDataGV";
             this.employeesDataGV.ReadOnly = true;
             this.employeesDataGV.RowHeadersWidth = 102;
             this.employeesDataGV.RowTemplate.Height = 40;
-            this.employeesDataGV.Size = new System.Drawing.Size(3024, 1025);
+            this.employeesDataGV.Size = new System.Drawing.Size(2559, 943);
             this.employeesDataGV.TabIndex = 1;
             this.employeesDataGV.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.employeesDataGV_CellMouseDown);
             // 
@@ -181,9 +182,10 @@
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(3, 3);
+            this.textBox1.Location = new System.Drawing.Point(3, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(3024, 49);
+            this.textBox1.Size = new System.Drawing.Size(2559, 49);
             this.textBox1.TabIndex = 2;
             // 
             // tableLayoutPanel1
@@ -196,11 +198,12 @@
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 64);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(3030, 1081);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(2565, 997);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // employeesContextMenu
@@ -215,6 +218,7 @@
             this.printWorkAckCertieficateMenuItem,
             this.printWorkCertieficateMenuItem});
             this.employeesContextMenu.Name = "employeesContextMenu";
+            this.employeesContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.employeesContextMenu.Size = new System.Drawing.Size(385, 340);
             this.employeesContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.employeesContextMenu_Opening);
             // 
@@ -223,6 +227,7 @@
             this.addMenuItem.Name = "addMenuItem";
             this.addMenuItem.Size = new System.Drawing.Size(384, 48);
             this.addMenuItem.Text = "أضف";
+            this.addMenuItem.Click += new System.EventHandler(this.addMenuItem_Click);
             // 
             // editMenuItem
             // 
@@ -236,23 +241,17 @@
             this.delMenuItem.Size = new System.Drawing.Size(384, 48);
             this.delMenuItem.Text = "حذف";
             // 
-            // demandWorkCertieficateMenuItem
-            // 
-            this.demandWorkCertieficateMenuItem.Name = "demandWorkCertieficateMenuItem";
-            this.demandWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
-            this.demandWorkCertieficateMenuItem.Text = "طلب شهادة عمل";
-            // 
             // demandWorkAckCertieficateMenuItem
             // 
             this.demandWorkAckCertieficateMenuItem.Name = "demandWorkAckCertieficateMenuItem";
             this.demandWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.demandWorkAckCertieficateMenuItem.Text = "طلب شهادة إقرار عمل";
             // 
-            // printWorkCertieficateMenuItem
+            // demandWorkCertieficateMenuItem
             // 
-            this.printWorkCertieficateMenuItem.Name = "printWorkCertieficateMenuItem";
-            this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
-            this.printWorkCertieficateMenuItem.Text = "طباعة شهادة عمل";
+            this.demandWorkCertieficateMenuItem.Name = "demandWorkCertieficateMenuItem";
+            this.demandWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
+            this.demandWorkCertieficateMenuItem.Text = "طلب شهادة عمل";
             // 
             // printWorkAckCertieficateMenuItem
             // 
@@ -260,15 +259,22 @@
             this.printWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.printWorkAckCertieficateMenuItem.Text = "طباعة شهادة إقرار عمل";
             // 
+            // printWorkCertieficateMenuItem
+            // 
+            this.printWorkCertieficateMenuItem.Name = "printWorkCertieficateMenuItem";
+            this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
+            this.printWorkCertieficateMenuItem.Text = "طباعة شهادة عمل";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(3030, 1145);
+            this.ClientSize = new System.Drawing.Size(2565, 1061);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;

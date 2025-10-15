@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using zIdari.Forms;
 
 namespace zIdari
 {
     public partial class MainForm : Form
     {
         private int rightClickedRowIndex = -1;
-
         public MainForm()
         {
             InitializeComponent();
@@ -91,6 +91,10 @@ namespace zIdari
             }
         }
 
-
+        private void addMenuItem_Click(object sender, EventArgs e)
+        {
+            EmployeeForm empForm = new EmployeeForm();
+            empForm.Show();
+        }
     }
 }
