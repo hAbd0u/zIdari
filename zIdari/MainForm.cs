@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using zIdari.Forms;
 using zIdari.Repository;
 using zIdari.Service;
@@ -22,6 +23,8 @@ namespace zIdari
         private EmployeeService _svc;
         private BindingSource _bs = new BindingSource();
         private List<EmployeeGridRow> _allRows = new List<EmployeeGridRow>();
+        
+        
         public MainForm()
         {
             InitializeComponent();
@@ -163,6 +166,58 @@ namespace zIdari
             empForm.EmployeeSaved += (s, emp) => LoadGrid(textBox1.Text?.Trim());
             empForm.SetActionSender("AddEmployee");
             empForm.Show(this);
+        }
+
+        private void delMenuItem_Click(object sender, EventArgs e)
+        {
+            var sel = GetSelectedRow();
+            if (sel == null)
+            {
+                MessageBox.Show("No row selected.", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Delete employee:\n{sel.FullNameArCol}  ({sel.NumFolderCol}) ?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                // Prefer service:
+                _svc.Delete(sel.FolderNum, sel.FolderNumYear);
+
+                // If you don't have a service, call repo instead:
+                // _repo.Delete(sel.FolderNum, sel.FolderNumYear);
+
+                // Refresh grid (preserve current search if you have it)
+                LoadGrid(textBox1.Text?.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Couldn't delete record.\n\n{ex.Message}",
+                    "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private EmployeeGridRow GetSelectedRow()
+        {
+            // If you bound via BindingSource, this is usually enough:
+            if (employeesDataGV.CurrentRow?.DataBoundItem is EmployeeGridRow r1) return r1;
+
+            // Fallbacks:
+            if (employeesDataGV.SelectedRows.Count > 0 &&
+                employeesDataGV.SelectedRows[0].DataBoundItem is EmployeeGridRow r2) return r2;
+
+            if (employeesDataGV.CurrentCell != null &&
+                employeesDataGV.Rows[employeesDataGV.CurrentCell.RowIndex].DataBoundItem is EmployeeGridRow r3) return r3;
+
+            return null;
         }
 
 

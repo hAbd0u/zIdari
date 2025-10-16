@@ -221,7 +221,7 @@
             this.printWorkCertieficateMenuItem});
             this.employeesContextMenu.Name = "employeesContextMenu";
             this.employeesContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.employeesContextMenu.Size = new System.Drawing.Size(385, 340);
+            this.employeesContextMenu.Size = new System.Drawing.Size(385, 395);
             this.employeesContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.employeesContextMenu_Opening);
             // 
             // addMenuItem
@@ -242,6 +242,7 @@
             this.delMenuItem.Name = "delMenuItem";
             this.delMenuItem.Size = new System.Drawing.Size(384, 48);
             this.delMenuItem.Text = "حذف";
+            this.delMenuItem.Click += new System.EventHandler(this.delMenuItem_Click);
             // 
             // demandWorkAckCertieficateMenuItem
             // 
