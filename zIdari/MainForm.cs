@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using zIdari.Forms;
 using zIdari.Repository;
 using zIdari.Service;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace zIdari
 {
@@ -205,23 +206,82 @@ namespace zIdari
         }
 
 
-        private EmployeeGridRow GetSelectedRow()
+
+    // Helper you likely already have:
+    private EmployeeGridRow GetSelectedRow()
+    {
+        if (employeesDataGV.CurrentRow?.DataBoundItem is EmployeeGridRow r1) return r1;
+        if (employeesDataGV.SelectedRows.Count > 0 &&
+            employeesDataGV.SelectedRows[0].DataBoundItem is EmployeeGridRow r2) return r2;
+        if (employeesDataGV.CurrentCell != null &&
+            employeesDataGV.Rows[employeesDataGV.CurrentCell.RowIndex].DataBoundItem is EmployeeGridRow r3) return r3;
+        return null;
+    }
+
+    private void EditSelectedEmployee()
+    {
+        var sel = GetSelectedRow();
+        if (sel == null)
         {
-            // If you bound via BindingSource, this is usually enough:
-            if (employeesDataGV.CurrentRow?.DataBoundItem is EmployeeGridRow r1) return r1;
-
-            // Fallbacks:
-            if (employeesDataGV.SelectedRows.Count > 0 &&
-                employeesDataGV.SelectedRows[0].DataBoundItem is EmployeeGridRow r2) return r2;
-
-            if (employeesDataGV.CurrentCell != null &&
-                employeesDataGV.Rows[employeesDataGV.CurrentCell.RowIndex].DataBoundItem is EmployeeGridRow r3) return r3;
-
-            return null;
+            MessageBox.Show("No row selected.", "Edit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
         }
 
+        // Load full entity from DB
+        var entity = _repo.GetByKey(sel.FolderNum, sel.FolderNumYear);
+        if (entity == null)
+        {
+            MessageBox.Show("Record not found.", "Edit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
 
-        private void BindEmployees(List<zIdari.Repository.EmployeeGridRow> rows)
+        // Open the edit form, prefilled
+        using (var dlg = new zIdari.Forms.EmployeeForm(_svc, entity))
+        {
+            // Optional: nice title
+            dlg.Text = $"Edit Employee — {sel.FullNameArCol} ({sel.NumFolderCol})";
+
+            var result = dlg.ShowDialog(this);
+
+            // If user chose to update on close → DialogResult.OK
+            if (result == DialogResult.OK)
+            {
+                // Refresh and reselect the updated row
+                ReloadAndReselect(entity.FolderNum, entity.FolderNumYear);
+            }
+        }
+    }
+
+    // Keep your search term and reselect the edited row
+    private void ReloadAndReselect(int folderNum, int folderNumYear)
+    {
+        var q = textBox1.Text?.Trim();
+        LoadGrid(string.IsNullOrWhiteSpace(q) ? null : q);
+
+        if (_bs?.DataSource is List<EmployeeGridRow> list)
+        {
+            var idx = list.FindIndex(r => r.FolderNum == folderNum && r.FolderNumYear == folderNumYear);
+            if (idx >= 0)
+            {
+                employeesDataGV.ClearSelection();
+
+                // pick a visible column to focus (NumFolderCol or next visible)
+                int targetCol = 0;
+                for (int c = 0; c < employeesDataGV.Columns.Count; c++)
+                {
+                    if (employeesDataGV.Columns[c].Visible) { targetCol = c; break; }
+                }
+
+                employeesDataGV.CurrentCell = employeesDataGV.Rows[idx].Cells[targetCol];
+                employeesDataGV.Rows[idx].Selected = true;
+                employeesDataGV.FirstDisplayedScrollingRowIndex = Math.Max(0, idx);
+            }
+        }
+    }
+
+
+
+    private void BindEmployees(List<zIdari.Repository.EmployeeGridRow> rows)
         {
             employeesDataGV.AutoGenerateColumns = false;
 
@@ -233,6 +293,16 @@ namespace zIdari
             AddressCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.AddressCol);
 
             employeesDataGV.DataSource = rows;
+        }
+
+        private void editMenuItem_Click(object sender, EventArgs e)
+        {
+            EditSelectedEmployee();
+        }
+
+        private void employeesDataGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) EditSelectedEmployee();
         }
     }
 }

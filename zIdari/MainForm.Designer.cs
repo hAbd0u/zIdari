@@ -70,9 +70,8 @@
             this.القوانينToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(2565, 58);
+            this.menuStrip1.Size = new System.Drawing.Size(6413, 160);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -112,8 +111,9 @@
             this.employeesDataGV.ReadOnly = true;
             this.employeesDataGV.RowHeadersWidth = 102;
             this.employeesDataGV.RowTemplate.Height = 40;
-            this.employeesDataGV.Size = new System.Drawing.Size(2559, 949);
+            this.employeesDataGV.Size = new System.Drawing.Size(6407, 2199);
             this.employeesDataGV.TabIndex = 1;
+            this.employeesDataGV.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.employeesDataGV_CellDoubleClick);
             this.employeesDataGV.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.employeesDataGV_CellMouseDown);
             // 
             // NumFolderCol
@@ -186,7 +186,7 @@
             this.textBox1.Location = new System.Drawing.Point(3, 2);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(2559, 49);
+            this.textBox1.Size = new System.Drawing.Size(6407, 49);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -199,13 +199,13 @@
             this.tableLayoutPanel1.Controls.Add(this.employeesDataGV, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 58);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 400);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(2565, 1003);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(6413, 2253);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // employeesContextMenu
@@ -221,7 +221,7 @@
             this.printWorkCertieficateMenuItem});
             this.employeesContextMenu.Name = "employeesContextMenu";
             this.employeesContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.employeesContextMenu.Size = new System.Drawing.Size(385, 395);
+            this.employeesContextMenu.Size = new System.Drawing.Size(385, 340);
             this.employeesContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.employeesContextMenu_Opening);
             // 
             // addMenuItem
@@ -236,6 +236,7 @@
             this.editMenuItem.Name = "editMenuItem";
             this.editMenuItem.Size = new System.Drawing.Size(384, 48);
             this.editMenuItem.Text = "تعديل";
+            this.editMenuItem.Click += new System.EventHandler(this.editMenuItem_Click);
             // 
             // delMenuItem
             // 

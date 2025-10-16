@@ -226,21 +226,22 @@ namespace zIdari.Forms
             this.Close();
         }
 
+        // In EmployeeForm.cs
         private void EmployeeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // If nothing changed, just close.
-            if (!_isDirty) return;
+            // only prompt if user changed something
+            if (_existing == null && !_isDirty) return; // only skip for Add with no changes
 
-            var res = MessageBox.Show(
-                "Save changes before closing?",
-                "Confirm",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button1);
+            // choose verb based on add vs edit
+            var verb = (_existing == null) ? "save this new employee" : "update this employee";
+            var res = MessageBox.Show($"Do you want to {verb}?",
+                                      "Confirm",
+                                      MessageBoxButtons.YesNo,
+                                      MessageBoxIcon.Question,
+                                      MessageBoxDefaultButton.Button1);
 
             if (res == DialogResult.Yes)
             {
-                // Attempt to save; if validation fails, keep the form open.
                 try
                 {
                     var entity = BuildFromUI();
@@ -248,26 +249,25 @@ namespace zIdari.Forms
                     if (!ok)
                     {
                         MessageBox.Show(string.Join("\n", errors), "Validation",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        e.Cancel = true; // stay open to fix mistakes
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        e.Cancel = true; // keep form open to fix issues
                         return;
                     }
 
-                    // Notify parent if they’re listening
-                    EmployeeSaved?.Invoke(this, entity);
-
-                    _isDirty = false; // saved, allow close
+                    EmployeeSaved?.Invoke(this, entity); // modeless listeners
+                    this.DialogResult = DialogResult.OK; // modal caller refreshes
+                    _isDirty = false; // saved
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Save Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    e.Cancel = true; // keep form open on exception
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Cancel = true;
                 }
             }
             else
             {
-                // No => discard, allow close
+                // No → discard changes
                 _isDirty = false;
             }
         }
