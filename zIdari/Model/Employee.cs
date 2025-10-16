@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Model/Employee.cs
 namespace zIdari.Model
 {
-    public class Employee
+    public sealed class Employee
     {
         public int FolderNum { get; set; }
         public int FolderNumYear { get; set; }
@@ -16,7 +17,8 @@ namespace zIdari.Model
         public string LnameFr { get; set; }
         public string FatherName { get; set; }
         public string MotherName { get; set; }
-        public DateTime Birth { get; set; }
+
+        public System.DateTime? Birth { get; set; }   // <-- nullable
         public string Wilaya { get; set; }
         public bool Sex { get; set; }
         public string Address { get; set; }
@@ -24,8 +26,8 @@ namespace zIdari.Model
         public string Email { get; set; }
         public string Relation { get; set; }
         public string HusbandName { get; set; }
-        public DateTime ActDate { get; set; }
-        public int ActNum { get; set; }
-    }
 
+        public System.DateTime? ActDate { get; set; } // <-- nullable
+        public int? ActNum { get; set; }              // <-- nullable
+    }
 }

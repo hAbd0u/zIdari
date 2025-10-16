@@ -159,8 +159,10 @@ namespace zIdari
 
         private void addMenuItem_Click(object sender, EventArgs e)
         {
-            EmployeeForm empForm = new EmployeeForm();
-            empForm.Show();
+            var empForm = new EmployeeForm(_svc);
+            empForm.EmployeeSaved += (s, emp) => LoadGrid(textBox1.Text?.Trim());
+            empForm.SetActionSender("AddEmployee");
+            empForm.Show(this);
         }
 
 
