@@ -100,6 +100,9 @@ namespace zIdari.Forms
             fnameFrTxt.Text = e.FnameFr;
             lnameFrTxt.Text = e.LnameFr;
 
+            fatherNameTxt.Text = e.FatherName;
+            motherNameTxt.Text = e.MotherName;
+
             if (e.Birth.HasValue) birthDatePicker.Value = e.Birth.Value;
             birthWilayaCombo.Text = e.Wilaya;
 
@@ -133,6 +136,8 @@ namespace zIdari.Forms
                 Lname = lnameTxt.Text?.Trim(),
                 FnameFr = fnameFrTxt.Text?.Trim(),
                 LnameFr = lnameFrTxt.Text?.Trim(),
+                FatherName = fatherNameTxt.Text?.Trim(),
+                MotherName = motherNameTxt.Text?.Trim(),
                 Birth = birthDatePicker.Value.Date,
                 Wilaya = birthWilayaCombo.Text?.Trim(),
                 Sex = (sexCombo.SelectedIndex == 0),
