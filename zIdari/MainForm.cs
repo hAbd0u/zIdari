@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using zIdari.Forms;
+using zIdari.Repository;
+using zIdari.Service;
 
 namespace zIdari
 {
     public partial class MainForm : Form
     {
         private int rightClickedRowIndex = -1;
+        private EmployeeService _employeeService;
+        private IEmployeeRepository _repo;
+        private EmployeeService _svc;
+        private BindingSource _bs = new BindingSource();
+        private List<EmployeeGridRow> _allRows = new List<EmployeeGridRow>();
         public MainForm()
         {
             InitializeComponent();
@@ -29,8 +37,66 @@ namespace zIdari
             this.employeesDataGV.ContextMenuStrip = employeesContextMenu;
 
 
-            this.employeesDataGV.Rows.Add(1, "Ali");
-            this.employeesDataGV.Rows.Add(2, "Sara");
+            var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+
+            try
+            {
+                _repo = new EmployeeRepository(dbPath);
+                _svc = new EmployeeService(_repo);
+
+                employeesDataGV.AutoGenerateColumns = false;
+
+                // DataPropertyName bindings
+                NumFolderCol.DataPropertyName = nameof(EmployeeGridRow.NumFolderCol);
+                FullNameArCol.DataPropertyName = nameof(EmployeeGridRow.FullNameArCol);
+                FullNameFrCol.DataPropertyName = nameof(EmployeeGridRow.FullNameFrCol);
+                PhoneCol.DataPropertyName = nameof(EmployeeGridRow.PhoneCol);
+                EmailCol.DataPropertyName = nameof(EmployeeGridRow.EmailCol);
+                AddressCol.DataPropertyName = nameof(EmployeeGridRow.AddressCol);
+
+                // Add hidden key columns if not present
+                if (!employeesDataGV.Columns.Contains("FolderNum_Key"))
+                {
+                    employeesDataGV.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "FolderNum_Key",
+                        DataPropertyName = nameof(EmployeeGridRow.FolderNum),
+                        Visible = false
+                    });
+                    employeesDataGV.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        Name = "FolderNumYear_Key",
+                        DataPropertyName = nameof(EmployeeGridRow.FolderNumYear),
+                        Visible = false
+                    });
+                }
+
+                employeesDataGV.DataSource = _bs;
+
+                LoadGrid(); // initial
+            }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show($"{ex.Message}\n\nExpected path:\n{dbPath}", "Database Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unexpected error: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadGrid(string search = null)
+        {
+            _allRows = _svc.GetGrid(search);
+            _bs.DataSource = _allRows;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            var q = textBox1.Text?.Trim();
+            LoadGrid(string.IsNullOrEmpty(q) ? null : q);
         }
 
         private void employeesContextMenu_Opening(object sender, CancelEventArgs e)
@@ -95,6 +161,21 @@ namespace zIdari
         {
             EmployeeForm empForm = new EmployeeForm();
             empForm.Show();
+        }
+
+
+        private void BindEmployees(List<zIdari.Repository.EmployeeGridRow> rows)
+        {
+            employeesDataGV.AutoGenerateColumns = false;
+
+            NumFolderCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.NumFolderCol);
+            FullNameArCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.FullNameArCol);
+            FullNameFrCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.FullNameFrCol);
+            PhoneCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.PhoneCol);
+            EmailCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.EmailCol);
+            AddressCol.DataPropertyName = nameof(zIdari.Repository.EmployeeGridRow.AddressCol);
+
+            employeesDataGV.DataSource = rows;
         }
     }
 }
