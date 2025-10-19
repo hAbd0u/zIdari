@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using zIdari.Model;
 using zIdari.Service;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace zIdari.Forms
 {
@@ -161,11 +162,11 @@ namespace zIdari.Forms
             {
                 switch (c)
                 {
-                    case TextBox tb:
+                    case System.Windows.Forms.TextBox tb:
                         tb.TextChanged -= MarkDirty;
                         tb.TextChanged += MarkDirty;
                         break;
-                    case ComboBox cb:
+                    case System.Windows.Forms.ComboBox cb:
                         cb.TextChanged -= MarkDirty;
                         cb.TextChanged += MarkDirty;
                         cb.SelectedIndexChanged -= MarkDirty;
@@ -277,5 +278,9 @@ namespace zIdari.Forms
             }
         }
 
+        private void EmployeeTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            tabControl1.SelectedIndex = e.Node.Index;
+        }
     }
 }
