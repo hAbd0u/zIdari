@@ -56,6 +56,40 @@ namespace zIdari.Repository
 
         private static string DateOut(DateTime? dt)
             => dt?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        public (int FolderNum, int FolderNumYear) GenerateNextKey(int? yearOverride = null)
+        {
+            int year = yearOverride ?? DateTime.Now.Year;
+
+            using var conn = new SQLiteConnection(_connString);
+            conn.Open();
+
+            using (var pragma = new SQLiteCommand("PRAGMA foreign_keys = ON;", conn))
+                pragma.ExecuteNonQuery();
+
+            // Get MAX(FolderNum) for the chosen year, then +1
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"SELECT COALESCE(MAX(FolderNum), 0) FROM employee WHERE FolderNumYear = @fy;";
+            cmd.Parameters.AddWithValue("@fy", year);
+            var obj = cmd.ExecuteScalar();
+
+            int next = (obj == DBNull.Value ? 0 : Convert.ToInt32(obj)) + 1;
+
+            // Safety loop: if somehow taken, bump until free (rare, but robust)
+            using var exists = conn.CreateCommand();
+            exists.CommandText = @"SELECT 1 FROM employee WHERE FolderNum = @fn AND FolderNumYear = @fy LIMIT 1;";
+            exists.Parameters.AddWithValue("@fn", next);
+            exists.Parameters.AddWithValue("@fy", year);
+
+            var taken = exists.ExecuteScalar();
+            while (taken != null && taken != DBNull.Value)
+            {
+                next++;
+                exists.Parameters["@fn"].Value = next;
+                taken = exists.ExecuteScalar();
+            }
+
+            return (next, year);
+        }
 
         // ---- Listing for Grid ----
         public List<EmployeeGridRow> GetEmployeesForGrid(string search = null)

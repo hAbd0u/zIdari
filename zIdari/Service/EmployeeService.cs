@@ -44,5 +44,9 @@ namespace zIdari.Service
 
         public List<EmployeeGridRow> GetGrid(string search = null)
             => _repo.GetEmployeesForGrid(search);
+
+        public (int FolderNum, int FolderNumYear) GenerateNewFolderKey(int? year = null)
+            => _repo.GenerateNextKey(year);
+
     }
 }

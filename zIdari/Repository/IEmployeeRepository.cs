@@ -13,5 +13,6 @@ namespace zIdari.Repository
         void Add(Employee e);
         void Update(Employee e);
         void Delete(int folderNum, int folderNumYear);
+        (int FolderNum, int FolderNumYear) GenerateNextKey(int? yearOverride = null);
     }
 }

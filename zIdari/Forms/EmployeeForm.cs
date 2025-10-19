@@ -282,5 +282,32 @@ namespace zIdari.Forms
         {
             tabControl1.SelectedIndex = e.Node.Index;
         }
+
+        public void SetInitialKeys(int folderNum, int folderNumYear, bool lockFields = true)
+        {
+            // Ensure the year combo is populated
+            if (folderNumCombo.Items.Count == 0)
+            {
+                int yearNow = DateTime.Now.Year;
+                for (int y = yearNow; y >= 1980; y--) folderNumCombo.Items.Add(y.ToString());
+            }
+
+            _initializing = true;               // don't mark dirty while we prefill
+            folderNumTxt.Text = folderNum.ToString();
+
+            var yearText = folderNumYear.ToString();
+            if (!folderNumCombo.Items.Contains(yearText))
+                folderNumCombo.Items.Add(yearText);
+            folderNumCombo.SelectedItem = yearText;
+
+            if (lockFields)
+            {
+                folderNumTxt.ReadOnly = true;
+                folderNumCombo.Enabled = false;
+            }
+
+            _initializing = false;
+            _isDirty = false;                   // start clean; user edits will flip this to true
+        }
     }
 }
