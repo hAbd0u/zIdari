@@ -21,6 +21,9 @@ namespace zIdari.Forms
         private bool _isDirty = false;
         private bool _initializing = false;
 
+        private ExperienceService _expSvc;
+        private BindingSource _expBS = new BindingSource();
+        private ContextMenuStrip _experienceContextMenu;
 
         // RUNTIME: call this for Add, or pass an existing entity for Edit.
         public EmployeeForm(EmployeeService svc, Employee existing = null)
@@ -76,6 +79,11 @@ namespace zIdari.Forms
 
             _initializing = false; // user changes from here on mark dirty
             _isDirty = false;      // clean slate after initial load
+
+            SetupExperienceGrid();
+
+            if (_existing != null)
+                LoadExperienceGrid();
         }
 
 
@@ -309,5 +317,227 @@ namespace zIdari.Forms
             _initializing = false;
             _isDirty = false;                   // start clean; user edits will flip this to true
         }
+
+
+
+
+
+
+
+
+        private void InitializeExperienceService()
+        {
+            var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+            var expRepo = new zIdari.Repository.ExperienceRepository(dbPath);
+            _expSvc = new ExperienceService(expRepo);
+        }
+
+        // Add this method to set up the experience grid and context menu:
+
+        private void SetupExperienceGrid()
+        {
+            // Initialize service if not already done
+            if (_expSvc == null)
+                InitializeExperienceService();
+
+            // Set up DataGridView
+            experienceGridView.AutoGenerateColumns = false;
+            experienceGridView.ReadOnly = true;
+            experienceGridView.AllowUserToAddRows = false;
+            experienceGridView.AllowUserToDeleteRows = false;
+            experienceGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            experienceGridView.MultiSelect = false;
+
+            // Set data property names
+            CertNumCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.CertNumCol);
+            CompanyCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.CompanyCol);
+            DateFromCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.DateFromCol);
+            DateToCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.DateToCol);
+            PositionCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.PositionCol);
+
+            // Add hidden column for ExperienceId
+            if (!experienceGridView.Columns.Contains("ExperienceId_Key"))
+            {
+                experienceGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "ExperienceId_Key",
+                    DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.ExperienceId),
+                    Visible = false
+                });
+            }
+
+            // Create context menu
+            _experienceContextMenu = new ContextMenuStrip();
+
+            var addItem = new ToolStripMenuItem("أضف خبرة");
+            addItem.Click += ExperienceAddMenuItem_Click;
+
+            var editItem = new ToolStripMenuItem("تعديل");
+            editItem.Name = "editExpItem";
+            editItem.Click += ExperienceEditMenuItem_Click;
+
+            var deleteItem = new ToolStripMenuItem("حذف");
+            deleteItem.Name = "deleteExpItem";
+            deleteItem.Click += ExperienceDeleteMenuItem_Click;
+
+            _experienceContextMenu.Items.AddRange(new ToolStripItem[] { addItem, editItem, deleteItem });
+            _experienceContextMenu.Opening += ExperienceContextMenu_Opening;
+
+            experienceGridView.ContextMenuStrip = _experienceContextMenu;
+            experienceGridView.DataSource = _expBS;
+
+            // Handle double-click
+            experienceGridView.CellDoubleClick += experienceGridView_CellDoubleClick;
+            experienceGridView.CellMouseDown += experienceGridView_CellMouseDown;
+        }
+
+        // Add this method to load experiences:
+
+        private void LoadExperienceGrid()
+        {
+            if (_expSvc == null || _existing == null) return;
+
+            var rows = _expSvc.GetGrid(_existing.FolderNum, _existing.FolderNumYear);
+            _expBS.DataSource = rows;
+        }
+
+        // Context menu opening handler:
+
+        private void ExperienceContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Point clientPos = experienceGridView.PointToClient(Cursor.Position);
+            DataGridView.HitTestInfo hit = experienceGridView.HitTest(clientPos.X, clientPos.Y);
+
+            bool clickedOnRow = (hit.Type == DataGridViewHitTestType.Cell ||
+                                 hit.Type == DataGridViewHitTestType.RowHeader) &&
+                                 hit.RowIndex >= 0;
+
+            var editItem = _experienceContextMenu.Items["editExpItem"] as ToolStripMenuItem;
+            var deleteItem = _experienceContextMenu.Items["deleteExpItem"] as ToolStripMenuItem;
+
+            if (editItem != null) editItem.Enabled = clickedOnRow;
+            if (deleteItem != null) deleteItem.Enabled = clickedOnRow;
+        }
+
+        // Mouse down handler for row selection:
+
+        private void experienceGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
+            {
+                experienceGridView.ClearSelection();
+                experienceGridView.Rows[e.RowIndex].Selected = true;
+                experienceGridView.CurrentCell = experienceGridView.Rows[e.RowIndex].Cells[0];
+            }
+        }
+
+        // Double-click handler:
+
+        private void experienceGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+                EditSelectedExperience();
+        }
+
+        // Add experience:
+
+        private void ExperienceAddMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_existing == null)
+            {
+                MessageBox.Show("يجب حفظ الموظف أولاً قبل إضافة الخبرات.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (var dlg = new ExperienceForm(_expSvc, _existing.FolderNum, _existing.FolderNumYear))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadExperienceGrid();
+                }
+            }
+        }
+
+        // Edit experience:
+
+        private void ExperienceEditMenuItem_Click(object sender, EventArgs e)
+        {
+            EditSelectedExperience();
+        }
+
+        private void EditSelectedExperience()
+        {
+            var sel = GetSelectedExperience();
+            if (sel == null)
+            {
+                MessageBox.Show("لم يتم اختيار صف.", "تعديل",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var entity = _expSvc.GetById(sel.ExperienceId);
+            if (entity == null)
+            {
+                MessageBox.Show("السجل غير موجود.", "تعديل",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (var dlg = new ExperienceForm(_expSvc, entity))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadExperienceGrid();
+                }
+            }
+        }
+
+        // Delete experience:
+
+        private void ExperienceDeleteMenuItem_Click(object sender, EventArgs e)
+        {
+            var sel = GetSelectedExperience();
+            if (sel == null)
+            {
+                MessageBox.Show("لم يتم اختيار صف.", "حذف",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"حذف الخبرة في:\n{sel.CompanyCol}?",
+                "تأكيد الحذف",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                _expSvc.Delete(sel.ExperienceId);
+                LoadExperienceGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"لا يمكن حذف السجل.\n\n{ex.Message}",
+                    "خطأ في الحذف", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Helper to get selected experience:
+
+        private zIdari.Repository.ExperienceGridRow GetSelectedExperience()
+        {
+            if (experienceGridView.CurrentRow?.DataBoundItem is zIdari.Repository.ExperienceGridRow r1)
+                return r1;
+            if (experienceGridView.SelectedRows.Count > 0 &&
+                experienceGridView.SelectedRows[0].DataBoundItem is zIdari.Repository.ExperienceGridRow r2)
+                return r2;
+            return null;
+        }
+
+
     }
 }

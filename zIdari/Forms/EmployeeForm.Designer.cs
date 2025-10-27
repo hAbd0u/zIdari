@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("الملف الشخصي");
-            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
-            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("الدرجات");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("الترقيات");
-            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Node4");
-            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Node5");
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("الملف الشخصي");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("الدرجات");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("الترقيات");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node4");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node5");
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.EmployeeTreeView = new System.Windows.Forms.TreeView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -82,15 +83,17 @@
             this.fnameTxt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.CertNumCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CompanyNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ScanCol = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.experienceGridView = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.ExperienceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CertNumCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CompanyCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PositionCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ViewCertCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -102,7 +105,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -127,29 +130,29 @@
             this.EmployeeTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EmployeeTreeView.Location = new System.Drawing.Point(737, 3);
             this.EmployeeTreeView.Name = "EmployeeTreeView";
-            treeNode31.Name = "ProfileNode";
-            treeNode31.Tag = "0";
-            treeNode31.Text = "الملف الشخصي";
-            treeNode32.Name = "ExperienceNode";
-            treeNode32.Tag = "1";
-            treeNode32.Text = "الخبرة المهنية";
-            treeNode33.Name = "DegreesNode";
-            treeNode33.Tag = "2";
-            treeNode33.Text = "الدرجات";
-            treeNode34.Name = "PromotionsNode";
-            treeNode34.Tag = "3";
-            treeNode34.Text = "الترقيات";
-            treeNode35.Name = "Node4";
-            treeNode35.Text = "Node4";
-            treeNode36.Name = "Node5";
-            treeNode36.Text = "Node5";
+            treeNode7.Name = "ProfileNode";
+            treeNode7.Tag = "0";
+            treeNode7.Text = "الملف الشخصي";
+            treeNode8.Name = "ExperienceNode";
+            treeNode8.Tag = "1";
+            treeNode8.Text = "الخبرة المهنية";
+            treeNode9.Name = "DegreesNode";
+            treeNode9.Tag = "2";
+            treeNode9.Text = "الدرجات";
+            treeNode10.Name = "PromotionsNode";
+            treeNode10.Tag = "3";
+            treeNode10.Text = "الترقيات";
+            treeNode11.Name = "Node4";
+            treeNode11.Text = "Node4";
+            treeNode12.Name = "Node5";
+            treeNode12.Text = "Node5";
             this.EmployeeTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode31,
-            treeNode32,
-            treeNode33,
-            treeNode34,
-            treeNode35,
-            treeNode36});
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12});
             this.EmployeeTreeView.RightToLeftLayout = true;
             this.EmployeeTreeView.Size = new System.Drawing.Size(205, 455);
             this.EmployeeTreeView.TabIndex = 0;
@@ -768,7 +771,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.dataGridView1);
+            this.tabPage2.Controls.Add(this.experienceGridView);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -777,58 +780,25 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // experienceGridView
             // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.experienceGridView.AllowUserToAddRows = false;
+            this.experienceGridView.AllowUserToDeleteRows = false;
+            this.experienceGridView.AllowUserToOrderColumns = true;
+            this.experienceGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.experienceGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CertNumCol,
-            this.CompanyNameCol,
-            this.FromCol,
-            this.ToCol,
-            this.ScanCol});
-            this.dataGridView1.Location = new System.Drawing.Point(520, 533);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(1);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 102;
-            this.dataGridView1.RowTemplate.Height = 40;
-            this.dataGridView1.Size = new System.Drawing.Size(1503, 178);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // CertNumCol
-            // 
-            this.CertNumCol.HeaderText = "رقم الشهادة";
-            this.CertNumCol.MinimumWidth = 12;
-            this.CertNumCol.Name = "CertNumCol";
-            this.CertNumCol.Width = 250;
-            // 
-            // CompanyNameCol
-            // 
-            this.CompanyNameCol.HeaderText = "المؤسسة";
-            this.CompanyNameCol.MinimumWidth = 12;
-            this.CompanyNameCol.Name = "CompanyNameCol";
-            this.CompanyNameCol.Width = 250;
-            // 
-            // FromCol
-            // 
-            this.FromCol.HeaderText = "من تاريخ";
-            this.FromCol.MinimumWidth = 12;
-            this.FromCol.Name = "FromCol";
-            this.FromCol.Width = 250;
-            // 
-            // ToCol
-            // 
-            this.ToCol.HeaderText = "إلى تاريخ";
-            this.ToCol.MinimumWidth = 12;
-            this.ToCol.Name = "ToCol";
-            this.ToCol.Width = 250;
-            // 
-            // ScanCol
-            // 
-            this.ScanCol.HeaderText = "مسح";
-            this.ScanCol.MinimumWidth = 12;
-            this.ScanCol.Name = "ScanCol";
-            this.ScanCol.Width = 250;
+            this.CompanyCol,
+            this.DateFromCol,
+            this.DateToCol,
+            this.PositionCol,
+            this.ViewCertCol});
+            this.experienceGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.experienceGridView.Location = new System.Drawing.Point(3, 3);
+            this.experienceGridView.Name = "experienceGridView";
+            this.experienceGridView.ReadOnly = true;
+            this.experienceGridView.Size = new System.Drawing.Size(714, 409);
+            this.experienceGridView.TabIndex = 1;
             // 
             // tabPage3
             // 
@@ -859,6 +829,47 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // ExperienceContextMenu
+            // 
+            this.ExperienceContextMenu.Name = "ExperienceContextMenu";
+            this.ExperienceContextMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // CertNumCol
+            // 
+            this.CertNumCol.HeaderText = "رقم الشهادة";
+            this.CertNumCol.Name = "CertNumCol";
+            this.CertNumCol.ReadOnly = true;
+            // 
+            // CompanyCol
+            // 
+            this.CompanyCol.HeaderText = "المؤسسة";
+            this.CompanyCol.Name = "CompanyCol";
+            this.CompanyCol.ReadOnly = true;
+            // 
+            // DateFromCol
+            // 
+            this.DateFromCol.HeaderText = "من";
+            this.DateFromCol.Name = "DateFromCol";
+            this.DateFromCol.ReadOnly = true;
+            // 
+            // DateToCol
+            // 
+            this.DateToCol.HeaderText = "إلى";
+            this.DateToCol.Name = "DateToCol";
+            this.DateToCol.ReadOnly = true;
+            // 
+            // PositionCol
+            // 
+            this.PositionCol.HeaderText = "المنصب";
+            this.PositionCol.Name = "PositionCol";
+            this.PositionCol.ReadOnly = true;
+            // 
+            // ViewCertCol
+            // 
+            this.ViewCertCol.HeaderText = "عرض";
+            this.ViewCertCol.Name = "ViewCertCol";
+            this.ViewCertCol.ReadOnly = true;
             // 
             // EmployeeForm
             // 
@@ -891,7 +902,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -950,11 +961,13 @@
         private System.Windows.Forms.TextBox folderNumTxt;
         private System.Windows.Forms.TextBox EmailTxt;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView experienceGridView;
+        private System.Windows.Forms.ContextMenuStrip ExperienceContextMenu;
         private System.Windows.Forms.DataGridViewTextBoxColumn CertNumCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CompanyNameCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FromCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ToCol;
-        private System.Windows.Forms.DataGridViewButtonColumn ScanCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CompanyCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateFromCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DateToCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PositionCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ViewCertCol;
     }
 }
