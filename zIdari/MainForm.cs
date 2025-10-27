@@ -307,5 +307,29 @@ namespace zIdari
             if (e.RowIndex >= 0) EditSelectedEmployee();
         }
 
+        private void CorpsMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new zIdari.Forms.CorpsBranchPositionForm("corp"))
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private void BranchesMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new zIdari.Forms.CorpsBranchPositionForm("branche"))
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private void GradesMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new zIdari.Forms.CorpsBranchPositionForm("fonction"))
+            {
+                form.ShowDialog(this);
+            }
+        }
+
     }
 }

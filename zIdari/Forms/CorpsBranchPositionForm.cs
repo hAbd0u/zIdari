@@ -15,9 +15,10 @@ namespace zIdari.Forms
         private BindingSource _bs = new BindingSource();
         private string _currentType = "corp"; // Default to corps
 
-        public CorpsBranchPositionForm()
+        public CorpsBranchPositionForm(string initialType = "corp")
         {
             InitializeComponent();
+            _currentType = initialType;
         }
 
         private void CorpsBranchPositionForm_Load(object sender, EventArgs e)

@@ -32,6 +32,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LawsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CorpsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BranchesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.GradesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.employeesDataGV = new System.Windows.Forms.DataGridView();
             this.NumFolderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FullNameArCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,9 +55,6 @@
             this.demandWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkAckCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CorpsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BranchesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GradesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.employeesDataGV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -92,6 +92,27 @@
             this.LawsMenuItem.Name = "LawsMenuItem";
             this.LawsMenuItem.Size = new System.Drawing.Size(70, 24);
             this.LawsMenuItem.Text = "القوانين";
+            // 
+            // CorpsMenuItem
+            // 
+            this.CorpsMenuItem.Name = "CorpsMenuItem";
+            this.CorpsMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.CorpsMenuItem.Text = "الأسلاك";
+            this.CorpsMenuItem.Click += new System.EventHandler(this.CorpsMenuItem_Click);
+            // 
+            // BranchesMenuItem
+            // 
+            this.BranchesMenuItem.Name = "BranchesMenuItem";
+            this.BranchesMenuItem.Size = new System.Drawing.Size(66, 24);
+            this.BranchesMenuItem.Text = "الشعب";
+            this.BranchesMenuItem.Click += new System.EventHandler(this.BranchesMenuItem_Click);
+            // 
+            // GradesMenuItem
+            // 
+            this.GradesMenuItem.Name = "GradesMenuItem";
+            this.GradesMenuItem.Size = new System.Drawing.Size(77, 24);
+            this.GradesMenuItem.Text = "المناصب";
+            this.GradesMenuItem.Click += new System.EventHandler(this.GradesMenuItem_Click);
             // 
             // employeesDataGV
             // 
@@ -274,24 +295,6 @@
             this.printWorkCertieficateMenuItem.Name = "printWorkCertieficateMenuItem";
             this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(187, 22);
             this.printWorkCertieficateMenuItem.Text = "طباعة شهادة عمل";
-            // 
-            // CorpsMenuItem
-            // 
-            this.CorpsMenuItem.Name = "CorpsMenuItem";
-            this.CorpsMenuItem.Size = new System.Drawing.Size(69, 24);
-            this.CorpsMenuItem.Text = "الأسلاك";
-            // 
-            // BranchesMenuItem
-            // 
-            this.BranchesMenuItem.Name = "BranchesMenuItem";
-            this.BranchesMenuItem.Size = new System.Drawing.Size(66, 24);
-            this.BranchesMenuItem.Text = "الشعب";
-            // 
-            // GradesMenuItem
-            // 
-            this.GradesMenuItem.Name = "GradesMenuItem";
-            this.GradesMenuItem.Size = new System.Drawing.Size(77, 24);
-            this.GradesMenuItem.Text = "المناصب";
             // 
             // MainForm
             // 
