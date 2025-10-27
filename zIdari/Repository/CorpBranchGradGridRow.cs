@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// Repository/CorpBranchGradGridRow.cs
 namespace zIdari.Repository
 {
-    internal class CorpBranchGradGridRow
+    public sealed class CorpBranchGradGridRow
     {
+        // Hidden key for Edit/Delete
+        public int CsgId { get; set; }
+
+        // Columns bound to the grid
+        public string LawNumCol { get; set; }
+        public string TitleCol { get; set; }
     }
 }

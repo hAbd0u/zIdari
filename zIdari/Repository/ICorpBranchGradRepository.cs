@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using zIdari.Model;
 
+// Repository/ICorpBranchGradRepository.cs
 namespace zIdari.Repository
 {
-    internal class ICorpBranchGradRepository
+    public interface ICorpBranchGradRepository
     {
+        // Grid/listing by type
+        List<CorpBranchGradGridRow> GetByType(string type);
+
+        // CRUD
+        CorpBranchGrad GetById(int csgId);
+        void Add(CorpBranchGrad cbg);
+        void Update(CorpBranchGrad cbg);
+        void Delete(int csgId);
     }
 }

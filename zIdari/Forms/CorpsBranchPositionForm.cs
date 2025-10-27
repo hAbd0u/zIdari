@@ -9,18 +9,18 @@ using zIdari.Service;
 // Forms/CorpBranchGradForm.cs
 namespace zIdari.Forms
 {
-    public partial class CorpBranchGradForm : Form
+    public partial class CorpsBranchPositionForm : Form
     {
         private CorpBranchGradService _svc;
         private BindingSource _bs = new BindingSource();
         private string _currentType = "corp"; // Default to corps
 
-        public CorpBranchGradForm()
+        public CorpsBranchPositionForm()
         {
             InitializeComponent();
         }
 
-        private void CorpBranchGradForm_Load(object sender, EventArgs e)
+        private void CorpsBranchPositionForm_Load(object sender, EventArgs e)
         {
             // Initialize service
             var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");

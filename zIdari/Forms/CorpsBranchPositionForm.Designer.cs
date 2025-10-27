@@ -132,7 +132,7 @@
             this.deleteMenuItem.Text = "حذف";
             this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
             // 
-            // CorpBranchGradForm
+            // CorpsBranchPositionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -145,7 +145,7 @@
             this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "إدارة الأسلاك والفروع والرتب";
-            this.Load += new System.EventHandler(this.CorpBranchGradForm_Load);
+            this.Load += new System.EventHandler(this.CorpsBranchPositionForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cbpGridView)).EndInit();
