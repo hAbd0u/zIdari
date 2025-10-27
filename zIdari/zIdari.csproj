@@ -92,6 +92,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\CorpsBranchPositionAEForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CorpsBranchPositionAEForm.Designer.cs">
+      <DependentUpon>CorpsBranchPositionAEForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CorpsBranchPositionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CorpsBranchPositionForm.Designer.cs">
+      <DependentUpon>CorpsBranchPositionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EmployeeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,18 +122,29 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\CorpBranchGrad.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\Experience.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\CorpBranchGradGridRow.cs" />
+    <Compile Include="Repository\CorpBranchGradRepository.cs" />
     <Compile Include="Repository\EmployeeGridRow.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\ExperienceGridRow.cs" />
     <Compile Include="Repository\ExperienceRepository.cs" />
+    <Compile Include="Repository\ICorpBranchGradRepository.cs" />
     <Compile Include="Repository\IEmployeeRepository.cs" />
     <Compile Include="Repository\IExperienceRepository.cs" />
+    <Compile Include="Service\CorpBranchGradService.cs" />
     <Compile Include="Service\EmployeeService.cs" />
     <Compile Include="Service\ExperienceService.cs" />
+    <EmbeddedResource Include="Forms\CorpsBranchPositionAEForm.resx">
+      <DependentUpon>CorpsBranchPositionAEForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CorpsBranchPositionForm.resx">
+      <DependentUpon>CorpsBranchPositionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\EmployeeForm.resx">
       <DependentUpon>EmployeeForm.cs</DependentUpon>
     </EmbeddedResource>
