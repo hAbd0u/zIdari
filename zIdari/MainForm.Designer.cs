@@ -35,6 +35,7 @@
             this.CorpsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BranchesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GradesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.docMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.employeesDataGV = new System.Windows.Forms.DataGridView();
             this.NumFolderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FullNameArCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,7 +56,6 @@
             this.demandWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkAckCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.docMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.employeesDataGV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -78,7 +78,6 @@
             this.docMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.menuStrip1.Size = new System.Drawing.Size(2565, 58);
             this.menuStrip1.TabIndex = 0;
@@ -87,35 +86,42 @@
             // FileMenuItem
             // 
             this.FileMenuItem.Name = "FileMenuItem";
-            this.FileMenuItem.Size = new System.Drawing.Size(138, 56);
+            this.FileMenuItem.Size = new System.Drawing.Size(138, 54);
             this.FileMenuItem.Text = "الملف";
             // 
             // LawsMenuItem
             // 
             this.LawsMenuItem.Name = "LawsMenuItem";
-            this.LawsMenuItem.Size = new System.Drawing.Size(163, 56);
+            this.LawsMenuItem.Size = new System.Drawing.Size(163, 54);
             this.LawsMenuItem.Text = "القوانين";
             // 
             // CorpsMenuItem
             // 
             this.CorpsMenuItem.Name = "CorpsMenuItem";
-            this.CorpsMenuItem.Size = new System.Drawing.Size(159, 56);
+            this.CorpsMenuItem.Size = new System.Drawing.Size(159, 54);
             this.CorpsMenuItem.Text = "الأسلاك";
             this.CorpsMenuItem.Click += new System.EventHandler(this.CorpsMenuItem_Click);
             // 
             // BranchesMenuItem
             // 
             this.BranchesMenuItem.Name = "BranchesMenuItem";
-            this.BranchesMenuItem.Size = new System.Drawing.Size(154, 56);
+            this.BranchesMenuItem.Size = new System.Drawing.Size(154, 54);
             this.BranchesMenuItem.Text = "الشعب";
             this.BranchesMenuItem.Click += new System.EventHandler(this.BranchesMenuItem_Click);
             // 
             // GradesMenuItem
             // 
             this.GradesMenuItem.Name = "GradesMenuItem";
-            this.GradesMenuItem.Size = new System.Drawing.Size(181, 56);
+            this.GradesMenuItem.Size = new System.Drawing.Size(181, 54);
             this.GradesMenuItem.Text = "المناصب";
             this.GradesMenuItem.Click += new System.EventHandler(this.GradesMenuItem_Click);
+            // 
+            // docMenuItem
+            // 
+            this.docMenuItem.Name = "docMenuItem";
+            this.docMenuItem.Size = new System.Drawing.Size(127, 54);
+            this.docMenuItem.Text = "وثيقة";
+            this.docMenuItem.Click += new System.EventHandler(this.docMenuItem_Click);
             // 
             // employeesDataGV
             // 
@@ -298,12 +304,6 @@
             this.printWorkCertieficateMenuItem.Name = "printWorkCertieficateMenuItem";
             this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.printWorkCertieficateMenuItem.Text = "طباعة شهادة عمل";
-            // 
-            // docMenuItem
-            // 
-            this.docMenuItem.Name = "docMenuItem";
-            this.docMenuItem.Size = new System.Drawing.Size(127, 56);
-            this.docMenuItem.Text = "وثيقة";
             // 
             // MainForm
             // 

@@ -331,5 +331,13 @@ namespace zIdari
             }
         }
 
+        private void docMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new zIdari.Forms.DocsListForm())
+            {
+                dlg.ShowDialog(this);
+            }
+        }
+
     }
 }

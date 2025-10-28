@@ -2,15 +2,8 @@
 {
     partial class DocsListForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,83 +13,107 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.docsGridView = new System.Windows.Forms.DataGridView();
-            this.DocIdCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DocTypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.components = new System.ComponentModel.Container();
+            this.docsGrid = new System.Windows.Forms.DataGridView();
+            this.TypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TitleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.docsGridView)).BeginInit();
+            this.docsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.docsGrid)).BeginInit();
+            this.docsContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // docsGridView
+            // docsGrid
             // 
-            this.docsGridView.AllowUserToAddRows = false;
-            this.docsGridView.AllowUserToDeleteRows = false;
-            this.docsGridView.AllowUserToOrderColumns = true;
-            this.docsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.docsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.DocIdCol,
-            this.DocTypeCol,
+            this.docsGrid.AllowUserToAddRows = false;
+            this.docsGrid.AllowUserToDeleteRows = false;
+            this.docsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.docsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.docsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.TypeCol,
             this.TitleCol});
-            this.docsGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.docsGridView.Location = new System.Drawing.Point(0, 0);
-            this.docsGridView.Name = "docsGridView";
-            this.docsGridView.ReadOnly = true;
-            this.docsGridView.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.docsGridView.RowHeadersWidth = 102;
-            this.docsGridView.RowTemplate.Height = 40;
-            this.docsGridView.Size = new System.Drawing.Size(1844, 777);
-            this.docsGridView.TabIndex = 0;
+            this.docsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.docsGrid.Location = new System.Drawing.Point(0, 0);
+            this.docsGrid.MultiSelect = false;
+            this.docsGrid.Name = "docsGrid";
+            this.docsGrid.ReadOnly = true;
+            this.docsGrid.RowTemplate.Height = 30;
+            this.docsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.docsGrid.Size = new System.Drawing.Size(784, 461);
+            this.docsGrid.TabIndex = 0;
+            this.docsGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.docsGrid_CellMouseDown);
             // 
-            // DocIdCol
+            // TypeCol
             // 
-            this.DocIdCol.HeaderText = "الرقم";
-            this.DocIdCol.MinimumWidth = 12;
-            this.DocIdCol.Name = "DocIdCol";
-            this.DocIdCol.ReadOnly = true;
-            this.DocIdCol.Width = 250;
-            // 
-            // DocTypeCol
-            // 
-            this.DocTypeCol.HeaderText = "نوع الوثيقة";
-            this.DocTypeCol.MinimumWidth = 12;
-            this.DocTypeCol.Name = "DocTypeCol";
-            this.DocTypeCol.ReadOnly = true;
-            this.DocTypeCol.Width = 250;
+            this.TypeCol.HeaderText = "النوع";
+            this.TypeCol.Name = "TypeCol";
+            this.TypeCol.ReadOnly = true;
             // 
             // TitleCol
             // 
-            this.TitleCol.HeaderText = "عنوان الوثيقة";
-            this.TitleCol.MinimumWidth = 12;
+            this.TitleCol.HeaderText = "العنوان";
             this.TitleCol.Name = "TitleCol";
             this.TitleCol.ReadOnly = true;
-            this.TitleCol.Width = 250;
+            // 
+            // docsContextMenu
+            // 
+            this.docsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addMenuItem,
+            this.editMenuItem,
+            this.deleteMenuItem});
+            this.docsContextMenu.Name = "docsContextMenu";
+            this.docsContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.docsContextMenu.Size = new System.Drawing.Size(100, 70);
+            this.docsContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.docsContextMenu_Opening);
+            // 
+            // addMenuItem
+            // 
+            this.addMenuItem.Name = "addMenuItem";
+            this.addMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.addMenuItem.Text = "أضف";
+            this.addMenuItem.Click += new System.EventHandler(this.addMenuItem_Click);
+            // 
+            // editMenuItem
+            // 
+            this.editMenuItem.Name = "editMenuItem";
+            this.editMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.editMenuItem.Text = "تعديل";
+            this.editMenuItem.Click += new System.EventHandler(this.editMenuItem_Click);
+            // 
+            // deleteMenuItem
+            // 
+            this.deleteMenuItem.Name = "deleteMenuItem";
+            this.deleteMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.deleteMenuItem.Text = "حذف";
+            this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
             // 
             // DocsListForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1844, 777);
-            this.Controls.Add(this.docsGridView);
+            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.docsGrid);
             this.Name = "DocsListForm";
-            this.Text = "DocsForm";
-            ((System.ComponentModel.ISupportInitialize)(this.docsGridView)).EndInit();
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "قائمة الوثائق";
+            this.Load += new System.EventHandler(this.DocsListForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.docsGrid)).EndInit();
+            this.docsContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
-        #endregion
-
-        private System.Windows.Forms.DataGridView docsGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DocIdCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DocTypeCol;
+        private System.Windows.Forms.DataGridView docsGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TypeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn TitleCol;
+        private System.Windows.Forms.ContextMenuStrip docsContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteMenuItem;
     }
 }
