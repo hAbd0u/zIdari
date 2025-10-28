@@ -55,6 +55,7 @@
             this.demandWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkAckCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printWorkCertieficateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.docMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.employeesDataGV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -65,6 +66,7 @@
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -72,45 +74,46 @@
             this.LawsMenuItem,
             this.CorpsMenuItem,
             this.BranchesMenuItem,
-            this.GradesMenuItem});
+            this.GradesMenuItem,
+            this.docMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(1, 1, 0, 1);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(962, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(2565, 58);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // FileMenuItem
             // 
             this.FileMenuItem.Name = "FileMenuItem";
-            this.FileMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.FileMenuItem.Size = new System.Drawing.Size(138, 56);
             this.FileMenuItem.Text = "الملف";
             // 
             // LawsMenuItem
             // 
             this.LawsMenuItem.Name = "LawsMenuItem";
-            this.LawsMenuItem.Size = new System.Drawing.Size(70, 24);
+            this.LawsMenuItem.Size = new System.Drawing.Size(163, 56);
             this.LawsMenuItem.Text = "القوانين";
             // 
             // CorpsMenuItem
             // 
             this.CorpsMenuItem.Name = "CorpsMenuItem";
-            this.CorpsMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.CorpsMenuItem.Size = new System.Drawing.Size(159, 56);
             this.CorpsMenuItem.Text = "الأسلاك";
             this.CorpsMenuItem.Click += new System.EventHandler(this.CorpsMenuItem_Click);
             // 
             // BranchesMenuItem
             // 
             this.BranchesMenuItem.Name = "BranchesMenuItem";
-            this.BranchesMenuItem.Size = new System.Drawing.Size(66, 24);
+            this.BranchesMenuItem.Size = new System.Drawing.Size(154, 56);
             this.BranchesMenuItem.Text = "الشعب";
             this.BranchesMenuItem.Click += new System.EventHandler(this.BranchesMenuItem_Click);
             // 
             // GradesMenuItem
             // 
             this.GradesMenuItem.Name = "GradesMenuItem";
-            this.GradesMenuItem.Size = new System.Drawing.Size(77, 24);
+            this.GradesMenuItem.Size = new System.Drawing.Size(181, 56);
             this.GradesMenuItem.Text = "المناصب";
             this.GradesMenuItem.Click += new System.EventHandler(this.GradesMenuItem_Click);
             // 
@@ -132,13 +135,13 @@
             this.EmailCol,
             this.AddressCol});
             this.employeesDataGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.employeesDataGV.Location = new System.Drawing.Point(1, 22);
-            this.employeesDataGV.Margin = new System.Windows.Forms.Padding(1);
+            this.employeesDataGV.Location = new System.Drawing.Point(3, 52);
+            this.employeesDataGV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.employeesDataGV.Name = "employeesDataGV";
             this.employeesDataGV.ReadOnly = true;
             this.employeesDataGV.RowHeadersWidth = 102;
             this.employeesDataGV.RowTemplate.Height = 40;
-            this.employeesDataGV.Size = new System.Drawing.Size(960, 396);
+            this.employeesDataGV.Size = new System.Drawing.Size(2559, 949);
             this.employeesDataGV.TabIndex = 1;
             this.employeesDataGV.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.employeesDataGV_CellDoubleClick);
             this.employeesDataGV.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.employeesDataGV_CellMouseDown);
@@ -210,10 +213,10 @@
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(1, 1);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(1);
+            this.textBox1.Location = new System.Drawing.Point(3, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(960, 24);
+            this.textBox1.Size = new System.Drawing.Size(2559, 49);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -226,13 +229,13 @@
             this.tableLayoutPanel1.Controls.Add(this.employeesDataGV, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 26);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 58);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(962, 419);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(2565, 1003);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // employeesContextMenu
@@ -248,64 +251,70 @@
             this.printWorkCertieficateMenuItem});
             this.employeesContextMenu.Name = "employeesContextMenu";
             this.employeesContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.employeesContextMenu.Size = new System.Drawing.Size(188, 158);
+            this.employeesContextMenu.Size = new System.Drawing.Size(385, 340);
             this.employeesContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.employeesContextMenu_Opening);
             // 
             // addMenuItem
             // 
             this.addMenuItem.Name = "addMenuItem";
-            this.addMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.addMenuItem.Size = new System.Drawing.Size(384, 48);
             this.addMenuItem.Text = "أضف";
             this.addMenuItem.Click += new System.EventHandler(this.addMenuItem_Click);
             // 
             // editMenuItem
             // 
             this.editMenuItem.Name = "editMenuItem";
-            this.editMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.editMenuItem.Size = new System.Drawing.Size(384, 48);
             this.editMenuItem.Text = "تعديل";
             this.editMenuItem.Click += new System.EventHandler(this.editMenuItem_Click);
             // 
             // delMenuItem
             // 
             this.delMenuItem.Name = "delMenuItem";
-            this.delMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.delMenuItem.Size = new System.Drawing.Size(384, 48);
             this.delMenuItem.Text = "حذف";
             this.delMenuItem.Click += new System.EventHandler(this.delMenuItem_Click);
             // 
             // demandWorkAckCertieficateMenuItem
             // 
             this.demandWorkAckCertieficateMenuItem.Name = "demandWorkAckCertieficateMenuItem";
-            this.demandWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.demandWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.demandWorkAckCertieficateMenuItem.Text = "طلب شهادة إقرار عمل";
             // 
             // demandWorkCertieficateMenuItem
             // 
             this.demandWorkCertieficateMenuItem.Name = "demandWorkCertieficateMenuItem";
-            this.demandWorkCertieficateMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.demandWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.demandWorkCertieficateMenuItem.Text = "طلب شهادة عمل";
             // 
             // printWorkAckCertieficateMenuItem
             // 
             this.printWorkAckCertieficateMenuItem.Name = "printWorkAckCertieficateMenuItem";
-            this.printWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.printWorkAckCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.printWorkAckCertieficateMenuItem.Text = "طباعة شهادة إقرار عمل";
             // 
             // printWorkCertieficateMenuItem
             // 
             this.printWorkCertieficateMenuItem.Name = "printWorkCertieficateMenuItem";
-            this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.printWorkCertieficateMenuItem.Size = new System.Drawing.Size(384, 48);
             this.printWorkCertieficateMenuItem.Text = "طباعة شهادة عمل";
+            // 
+            // docMenuItem
+            // 
+            this.docMenuItem.Name = "docMenuItem";
+            this.docMenuItem.Size = new System.Drawing.Size(127, 56);
+            this.docMenuItem.Text = "وثيقة";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(962, 445);
+            this.ClientSize = new System.Drawing.Size(2565, 1061);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
@@ -352,6 +361,7 @@
         private System.Windows.Forms.ToolStripMenuItem CorpsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem BranchesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem GradesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem docMenuItem;
     }
 }
 

@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("الملف الشخصي");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("الدرجات");
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("الترقيات");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node4");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node5");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("الملف الشخصي");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("الدرجات");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("الترقيات");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Node4");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Node5");
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.EmployeeTreeView = new System.Windows.Forms.TreeView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -84,16 +84,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.experienceGridView = new System.Windows.Forms.DataGridView();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.ExperienceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CertNumCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CompanyCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PositionCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ViewCertCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.ExperienceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -106,6 +107,8 @@
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -121,7 +124,7 @@
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 461F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(945, 461);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -130,29 +133,29 @@
             this.EmployeeTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EmployeeTreeView.Location = new System.Drawing.Point(737, 3);
             this.EmployeeTreeView.Name = "EmployeeTreeView";
-            treeNode7.Name = "ProfileNode";
-            treeNode7.Tag = "0";
-            treeNode7.Text = "الملف الشخصي";
-            treeNode8.Name = "ExperienceNode";
-            treeNode8.Tag = "1";
-            treeNode8.Text = "الخبرة المهنية";
-            treeNode9.Name = "DegreesNode";
-            treeNode9.Tag = "2";
-            treeNode9.Text = "الدرجات";
-            treeNode10.Name = "PromotionsNode";
-            treeNode10.Tag = "3";
-            treeNode10.Text = "الترقيات";
-            treeNode11.Name = "Node4";
-            treeNode11.Text = "Node4";
-            treeNode12.Name = "Node5";
-            treeNode12.Text = "Node5";
+            treeNode1.Name = "ProfileNode";
+            treeNode1.Tag = "0";
+            treeNode1.Text = "الملف الشخصي";
+            treeNode2.Name = "ExperienceNode";
+            treeNode2.Tag = "1";
+            treeNode2.Text = "الخبرة المهنية";
+            treeNode3.Name = "DegreesNode";
+            treeNode3.Tag = "2";
+            treeNode3.Text = "الدرجات";
+            treeNode4.Name = "PromotionsNode";
+            treeNode4.Tag = "3";
+            treeNode4.Text = "الترقيات";
+            treeNode5.Name = "Node4";
+            treeNode5.Text = "Node4";
+            treeNode6.Name = "Node5";
+            treeNode6.Text = "Node5";
             this.EmployeeTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8,
-            treeNode9,
-            treeNode10,
-            treeNode11,
-            treeNode12});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6});
             this.EmployeeTreeView.RightToLeftLayout = true;
             this.EmployeeTreeView.Size = new System.Drawing.Size(205, 455);
             this.EmployeeTreeView.TabIndex = 0;
@@ -800,41 +803,6 @@
             this.experienceGridView.Size = new System.Drawing.Size(714, 409);
             this.experienceGridView.TabIndex = 1;
             // 
-            // tabPage3
-            // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(720, 415);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(720, 415);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "tabPage4";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(720, 415);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "tabPage5";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // ExperienceContextMenu
-            // 
-            this.ExperienceContextMenu.Name = "ExperienceContextMenu";
-            this.ExperienceContextMenu.Size = new System.Drawing.Size(61, 4);
-            // 
             // CertNumCol
             // 
             this.CertNumCol.HeaderText = "رقم الشهادة";
@@ -871,6 +839,56 @@
             this.ViewCertCol.Name = "ViewCertCol";
             this.ViewCertCol.ReadOnly = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(720, 415);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(720, 415);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(720, 415);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "tabPage5";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // ExperienceContextMenu
+            // 
+            this.ExperienceContextMenu.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.ExperienceContextMenu.Name = "ExperienceContextMenu";
+            this.ExperienceContextMenu.Size = new System.Drawing.Size(61, 4);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(714, 409);
+            this.dataGridView1.TabIndex = 0;
+            // 
             // EmployeeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -903,6 +921,8 @@
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -969,5 +989,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DateToCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ViewCertCol;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
