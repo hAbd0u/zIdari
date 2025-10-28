@@ -36,6 +36,7 @@
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CorpsMenuItem,
             this.BranchesMenuItem,
@@ -49,22 +50,22 @@
             // CorpsMenuItem
             // 
             this.CorpsMenuItem.Name = "CorpsMenuItem";
-            this.CorpsMenuItem.Size = new System.Drawing.Size(61, 24);
+            this.CorpsMenuItem.Size = new System.Drawing.Size(69, 24);
             this.CorpsMenuItem.Text = "الأسلاك";
             this.CorpsMenuItem.Click += new System.EventHandler(this.CorpsMenuItem_Click);
             // 
             // BranchesMenuItem
             // 
             this.BranchesMenuItem.Name = "BranchesMenuItem";
-            this.BranchesMenuItem.Size = new System.Drawing.Size(52, 24);
-            this.BranchesMenuItem.Text = "الفروع";
+            this.BranchesMenuItem.Size = new System.Drawing.Size(66, 24);
+            this.BranchesMenuItem.Text = "الشعب";
             this.BranchesMenuItem.Click += new System.EventHandler(this.BranchesMenuItem_Click);
             // 
             // GradesMenuItem
             // 
             this.GradesMenuItem.Name = "GradesMenuItem";
-            this.GradesMenuItem.Size = new System.Drawing.Size(50, 24);
-            this.GradesMenuItem.Text = "الرتب";
+            this.GradesMenuItem.Size = new System.Drawing.Size(77, 24);
+            this.GradesMenuItem.Text = "المناصب";
             this.GradesMenuItem.Click += new System.EventHandler(this.GradesMenuItem_Click);
             // 
             // cbpGridView
@@ -102,33 +103,34 @@
             // 
             // cbgContextMenu
             // 
+            this.cbgContextMenu.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.cbgContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addMenuItem,
             this.editMenuItem,
             this.deleteMenuItem});
             this.cbgContextMenu.Name = "cbgContextMenu";
             this.cbgContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cbgContextMenu.Size = new System.Drawing.Size(100, 70);
+            this.cbgContextMenu.Size = new System.Drawing.Size(104, 70);
             this.cbgContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.cbgContextMenu_Opening);
             // 
             // addMenuItem
             // 
             this.addMenuItem.Name = "addMenuItem";
-            this.addMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.addMenuItem.Size = new System.Drawing.Size(103, 22);
             this.addMenuItem.Text = "أضف";
             this.addMenuItem.Click += new System.EventHandler(this.addMenuItem_Click);
             // 
             // editMenuItem
             // 
             this.editMenuItem.Name = "editMenuItem";
-            this.editMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.editMenuItem.Size = new System.Drawing.Size(103, 22);
             this.editMenuItem.Text = "تعديل";
             this.editMenuItem.Click += new System.EventHandler(this.editMenuItem_Click);
             // 
             // deleteMenuItem
             // 
             this.deleteMenuItem.Name = "deleteMenuItem";
-            this.deleteMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.deleteMenuItem.Size = new System.Drawing.Size(103, 22);
             this.deleteMenuItem.Text = "حذف";
             this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
             // 
@@ -140,7 +142,7 @@
             this.Controls.Add(this.cbpGridView);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "CorpBranchGradForm";
+            this.Name = "CorpsBranchPositionForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -152,6 +154,7 @@
             this.cbgContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.MenuStrip menuStrip1;
