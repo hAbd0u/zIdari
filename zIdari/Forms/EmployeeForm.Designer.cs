@@ -105,6 +105,10 @@
             this.CarrierDocEffectiveDateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFinanceControlCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFinanceControlDateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CarrierContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.delCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -119,6 +123,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.carrierGridView)).BeginInit();
+            this.CarrierContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -995,6 +1000,36 @@
             this.CarrierFinanceControlDateCol.ReadOnly = true;
             this.CarrierFinanceControlDateCol.Width = 250;
             // 
+            // CarrierContextMenu
+            // 
+            this.CarrierContextMenu.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.CarrierContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addCarrierMenuItem,
+            this.editCarrierMenuItem,
+            this.delCarrierMenuItem});
+            this.CarrierContextMenu.Name = "CarrierContextMenu";
+            this.CarrierContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.CarrierContextMenu.Size = new System.Drawing.Size(361, 203);
+            // 
+            // addCarrierMenuItem
+            // 
+            this.addCarrierMenuItem.Name = "addCarrierMenuItem";
+            this.addCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
+            this.addCarrierMenuItem.Text = "أضف";
+            this.addCarrierMenuItem.Click += new System.EventHandler(this.addCarrierMenuItem_Click);
+            // 
+            // editCarrierMenuItem
+            // 
+            this.editCarrierMenuItem.Name = "editCarrierMenuItem";
+            this.editCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
+            this.editCarrierMenuItem.Text = "تعديل";
+            // 
+            // delCarrierMenuItem
+            // 
+            this.delCarrierMenuItem.Name = "delCarrierMenuItem";
+            this.delCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
+            this.delCarrierMenuItem.Text = "حذف";
+            // 
             // EmployeeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -1029,6 +1064,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.experienceGridView)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.carrierGridView)).EndInit();
+            this.CarrierContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1106,5 +1142,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierDocEffectiveDateCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFinanceControlCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFinanceControlDateCol;
+        private System.Windows.Forms.ContextMenuStrip CarrierContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addCarrierMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editCarrierMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem delCarrierMenuItem;
     }
 }

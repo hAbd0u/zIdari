@@ -84,6 +84,13 @@ namespace zIdari.Forms
 
             if (_existing != null)
                 LoadExperienceGrid();
+
+            // Carrier grid context menu wiring
+            carrierGridView.ContextMenuStrip = CarrierContextMenu;
+            CarrierContextMenu.Opening -= CarrierContextMenu_Opening;
+            CarrierContextMenu.Opening += CarrierContextMenu_Opening;
+            carrierGridView.CellMouseDown -= carrierGridView_CellMouseDown;
+            carrierGridView.CellMouseDown += carrierGridView_CellMouseDown;
         }
 
 
@@ -128,6 +135,47 @@ namespace zIdari.Forms
             if (e.ActNum.HasValue) actNumTxt.Text = e.ActNum.Value.ToString(CultureInfo.InvariantCulture);
         }
 
+
+        // Carrier context menu activation: enable Edit/Delete only when a row is clicked
+        private void CarrierContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Point clientPos = carrierGridView.PointToClient(Cursor.Position);
+            DataGridView.HitTestInfo hit = carrierGridView.HitTest(clientPos.X, clientPos.Y);
+
+            bool clickedOnRow = (hit.Type == DataGridViewHitTestType.Cell ||
+                                 hit.Type == DataGridViewHitTestType.RowHeader) &&
+                                 hit.RowIndex >= 0;
+
+            if (!clickedOnRow)
+            {
+                editCarrierMenuItem.Enabled = false;
+                delCarrierMenuItem.Enabled = false;
+                return;
+            }
+
+            editCarrierMenuItem.Enabled = true;
+            delCarrierMenuItem.Enabled = true;
+        }
+
+        // Right-click selects the row under cursor before opening context menu
+        private void carrierGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
+            {
+                carrierGridView.ClearSelection();
+                carrierGridView.Rows[e.RowIndex].Selected = true;
+                carrierGridView.CurrentCell = carrierGridView.Rows[e.RowIndex].Cells[0];
+            }
+        }
+
+        // Open CarrierForm on Add
+        private void addCarrierMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new CarrierForm())
+            {
+                dlg.ShowDialog(this);
+            }
+        }
         private Employee BuildFromUI()
         {
             if (!int.TryParse(folderNumTxt.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var folderNum))
