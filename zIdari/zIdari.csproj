@@ -92,6 +92,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\CarrierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CarrierForm.Designer.cs">
+      <DependentUpon>CarrierForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CorpsBranchPositionAEForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,9 @@
     <Compile Include="Service\DocumentService.cs" />
     <Compile Include="Service\EmployeeService.cs" />
     <Compile Include="Service\ExperienceService.cs" />
+    <EmbeddedResource Include="Forms\CarrierForm.resx">
+      <DependentUpon>CarrierForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CorpsBranchPositionAEForm.resx">
       <DependentUpon>CorpsBranchPositionAEForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -538,6 +538,9 @@ namespace zIdari.Forms
             return null;
         }
 
-
+        private void ProfileNode_clicked()
+        {
+            tabControl1.SelectedIndex = 0;
+        }
     }
 }
