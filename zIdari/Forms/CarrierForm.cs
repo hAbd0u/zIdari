@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using zIdari.Repository;
 
 namespace zIdari.Forms
 {
@@ -29,6 +31,145 @@ namespace zIdari.Forms
 
             // Wire up the event handler
             carrierTypeCombo.SelectedIndexChanged += CarrierTypeCombo_SelectedIndexChanged;
+            docTypeComboList.SelectedIndexChanged += DocTypeComboList_SelectedIndexChanged;
+            
+            // Wire up Load event
+            this.Load += CarrierForm_Load;
+        }
+
+        private void CarrierForm_Load(object sender, EventArgs e)
+        {
+            LoadDocumentTypes();
+            LoadCorpsList();
+            LoadBranchesList();
+            LoadPositionsList();
+        }
+
+        private void DocTypeComboList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadDocumentTitles();
+        }
+
+        private void LoadDocumentTypes()
+        {
+            try
+            {
+                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var repo = new DocumentRepository(dbPath);
+                var types = repo.GetDistinctTypes();
+
+                docTypeComboList.Items.Clear();
+                docTypeComboList.Items.Add(""); // Add empty option
+                docTypeComboList.Items.AddRange(types.ToArray());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل أنواع الوثائق: {ex.Message}", "خطأ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadDocumentTitles()
+        {
+            try
+            {
+                // Clear the titles combo
+                DocTitleComboList.Items.Clear();
+                DocTitleComboList.Items.Add(""); // Add empty option
+
+                // Get selected type
+                string selectedType = docTypeComboList.SelectedItem?.ToString();
+                
+                // If no type selected or empty, just leave the titles combo with empty option
+                if (string.IsNullOrWhiteSpace(selectedType))
+                {
+                    return;
+                }
+
+                // Load titles for the selected type
+                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var repo = new DocumentRepository(dbPath);
+                var titles = repo.GetTitlesByType(selectedType);
+
+                if (titles != null && titles.Count > 0)
+                {
+                    DocTitleComboList.Items.AddRange(titles.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل عناوين الوثائق: {ex.Message}", "خطأ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadCorpsList()
+        {
+            try
+            {
+                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var repo = new CorpBranchGradRepository(dbPath);
+                var corps = repo.GetDistinctTitlesByType("corp");
+
+                CorpListCombo.Items.Clear();
+                CorpListCombo.Items.Add(""); // Add empty option
+                
+                if (corps != null && corps.Count > 0)
+                {
+                    CorpListCombo.Items.AddRange(corps.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل الأسلاك: {ex.Message}", "خطأ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadBranchesList()
+        {
+            try
+            {
+                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var repo = new CorpBranchGradRepository(dbPath);
+                var branches = repo.GetDistinctTitlesByType("branche");
+
+                BrancheListCombo.Items.Clear();
+                BrancheListCombo.Items.Add(""); // Add empty option
+                
+                if (branches != null && branches.Count > 0)
+                {
+                    BrancheListCombo.Items.AddRange(branches.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل الشعب: {ex.Message}", "خطأ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadPositionsList()
+        {
+            try
+            {
+                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var repo = new CorpBranchGradRepository(dbPath);
+                var positions = repo.GetDistinctTitlesByType("fonction");
+
+                PositionListCombo.Items.Clear();
+                PositionListCombo.Items.Add(""); // Add empty option
+                
+                if (positions != null && positions.Count > 0)
+                {
+                    PositionListCombo.Items.AddRange(positions.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ في تحميل المناصب: {ex.Message}", "خطأ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void CarrierTypeCombo_SelectedIndexChanged(object sender, EventArgs e)

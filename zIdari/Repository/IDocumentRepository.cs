@@ -10,6 +10,8 @@ namespace zIdari.Repository
         int Insert(Document doc);
         void Update(Document doc);
         void Delete(int id);
+        List<string> GetDistinctTypes();
+        List<string> GetTitlesByType(string type);
     }
 }
 

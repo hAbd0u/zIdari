@@ -14,5 +14,8 @@ namespace zIdari.Repository
         void Add(CorpBranchGrad cbg);
         void Update(CorpBranchGrad cbg);
         void Delete(int csgId);
+
+        // Get distinct titles by type
+        List<string> GetDistinctTitlesByType(string type);
     }
 }

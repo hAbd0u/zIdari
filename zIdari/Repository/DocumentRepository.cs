@@ -108,6 +108,51 @@ namespace zIdari.Repository
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public List<string> GetDistinctTypes()
+        {
+            var list = new List<string>();
+            using (var conn = new SQLiteConnection(_connString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = "SELECT DISTINCT type FROM document WHERE type IS NOT NULL ORDER BY type";
+                using (var rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        if (!rd.IsDBNull(0))
+                        {
+                            list.Add(rd.GetString(0));
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public List<string> GetTitlesByType(string type)
+        {
+            var list = new List<string>();
+            using (var conn = new SQLiteConnection(_connString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = "SELECT DISTINCT title FROM document WHERE type=@type AND title IS NOT NULL ORDER BY title";
+                cmd.Parameters.AddWithValue("@type", type);
+                using (var rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        if (!rd.IsDBNull(0))
+                        {
+                            list.Add(rd.GetString(0));
+                        }
+                    }
+                }
+            }
+            return list;
+        }
     }
 }
 

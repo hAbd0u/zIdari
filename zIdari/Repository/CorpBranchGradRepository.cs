@@ -149,5 +149,34 @@ namespace zIdari.Repository
             cmd.Parameters.AddWithValue("@id", csgId);
             cmd.ExecuteNonQuery();
         }
+
+        // Get distinct titles by type
+        public List<string> GetDistinctTitlesByType(string type)
+        {
+            var list = new List<string>();
+            using var conn = new SQLiteConnection(_connString);
+            conn.Open();
+
+            using (var pragma = new SQLiteCommand("PRAGMA foreign_keys = ON;", conn))
+                pragma.ExecuteNonQuery();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                SELECT DISTINCT title 
+                FROM corp_bran_grad 
+                WHERE type = @type AND title IS NOT NULL 
+                ORDER BY title;";
+            cmd.Parameters.AddWithValue("@type", type);
+
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                if (!r.IsDBNull(0))
+                {
+                    list.Add(r.GetString(0));
+                }
+            }
+            return list;
+        }
     }
 }
