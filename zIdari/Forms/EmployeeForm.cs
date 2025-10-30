@@ -177,11 +177,6 @@ namespace zIdari.Forms
             CarrierFinanceControlCol.DataPropertyName = nameof(Carrier.FinCtrlNum);
             CarrierFinanceControlDateCol.DataPropertyName = nameof(Carrier.FinCtrlDate);
 
-            // Hide ID and folder columns as they're not user-relevant
-            CarrierIdCol.Visible = false;
-            CarrierFolderNumCol.Visible = false;
-            CarrierFolderNumYearCol.Visible = false;
-
             // Adjust column fill weights for better proportions
             CarrierTypeCol.FillWeight = 80;
             CarrierPositionCol.FillWeight = 100;
@@ -193,6 +188,20 @@ namespace zIdari.Forms
 
             // Bind to data source
             carrierGridView.DataSource = _carrierBS;
+
+            // Hide ID and folder columns as they're not user-relevant (do this AFTER binding)
+            CarrierIdCol.Visible = false;
+            CarrierFolderNumCol.Visible = false;
+            CarrierFolderNumYearCol.Visible = false;
+            
+            // Remove any auto-generated columns that might have been created
+            foreach (DataGridViewColumn col in carrierGridView.Columns)
+            {
+                if (col.DataPropertyName == "CarrierId" && col != CarrierIdCol)
+                {
+                    col.Visible = false;
+                }
+            }
 
             // Handle double-click for edit
             carrierGridView.CellDoubleClick -= carrierGridView_CellDoubleClick;

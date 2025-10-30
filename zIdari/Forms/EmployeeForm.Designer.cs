@@ -884,6 +884,7 @@
             this.carrierGridView.AllowUserToAddRows = false;
             this.carrierGridView.AllowUserToDeleteRows = false;
             this.carrierGridView.AllowUserToOrderColumns = true;
+            this.carrierGridView.AutoGenerateColumns = false;
             this.carrierGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.carrierGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CarrierIdCol,

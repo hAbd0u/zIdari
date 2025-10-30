@@ -20,6 +20,30 @@ namespace zIdari.Repository
 
         private static object Db(object value) => value ?? DBNull.Value;
 
+        private static string SafeGetString(SQLiteDataReader rd, int index)
+        {
+            if (rd.IsDBNull(index)) return null;
+            
+            try
+            {
+                // Try to get as string first
+                return rd.GetString(index);
+            }
+            catch
+            {
+                // If that fails, get the raw value and convert to string
+                try
+                {
+                    var val = rd.GetValue(index);
+                    return val?.ToString();
+                }
+                catch
+                {
+                    return null; // Last resort
+                }
+            }
+        }
+
         public List<Carrier> GetByEmployee(int folderNum, int folderNumYear)
         {
             var list = new List<Carrier>();
@@ -176,22 +200,22 @@ namespace zIdari.Repository
                 CarrierId = rd.GetInt32(0),
                 FolderNum = rd.GetInt32(1),
                 FolderNumYear = rd.GetInt32(2),
-                CarrierType = rd.IsDBNull(3) ? null : Convert.ToString(rd.GetValue(3)),
-                CarrierName = rd.IsDBNull(4) ? null : Convert.ToString(rd.GetValue(4)),
-                Corp = rd.IsDBNull(5) ? null : Convert.ToString(rd.GetValue(5)),
-                Branche = rd.IsDBNull(6) ? null : Convert.ToString(rd.GetValue(6)),
-                Position = rd.IsDBNull(7) ? null : Convert.ToString(rd.GetValue(7)),
-                Class = rd.IsDBNull(8) ? null : Convert.ToString(rd.GetValue(8)),
-                Degree = rd.IsDBNull(9) ? null : Convert.ToString(rd.GetValue(9)),
-                Status = rd.IsDBNull(10) ? null : Convert.ToString(rd.GetValue(10)),
-                DocType = rd.IsDBNull(11) ? null : Convert.ToString(rd.GetValue(11)),
-                DocName = rd.IsDBNull(12) ? null : Convert.ToString(rd.GetValue(12)),
-                DocNum = rd.IsDBNull(13) ? null : Convert.ToString(rd.GetValue(13)),
+                CarrierType = SafeGetString(rd, 3),
+                CarrierName = SafeGetString(rd, 4),
+                Corp = SafeGetString(rd, 5),
+                Branche = SafeGetString(rd, 6),
+                Position = SafeGetString(rd, 7),
+                Class = SafeGetString(rd, 8),
+                Degree = SafeGetString(rd, 9),
+                Status = SafeGetString(rd, 10),
+                DocType = SafeGetString(rd, 11),
+                DocName = SafeGetString(rd, 12),
+                DocNum = SafeGetString(rd, 13),
                 DocDateSign = rd.IsDBNull(14) ? (DateTime?)null : rd.GetDateTime(14),
                 DocDateEffective = rd.IsDBNull(15) ? (DateTime?)null : rd.GetDateTime(15),
-                PubFuncNum = rd.IsDBNull(16) ? null : Convert.ToString(rd.GetValue(16)),
+                PubFuncNum = SafeGetString(rd, 16),
                 PubFuncDate = rd.IsDBNull(17) ? (DateTime?)null : rd.GetDateTime(17),
-                FinCtrlNum = rd.IsDBNull(18) ? null : Convert.ToString(rd.GetValue(18)),
+                FinCtrlNum = SafeGetString(rd, 18),
                 FinCtrlDate = rd.IsDBNull(19) ? (DateTime?)null : rd.GetDateTime(19)
             };
         }
