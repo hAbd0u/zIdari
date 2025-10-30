@@ -140,12 +140,14 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Carrier.cs" />
     <Compile Include="Model\CorpBranchGrad.cs" />
     <Compile Include="Model\Document.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\Experience.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\CarrierRepository.cs" />
     <Compile Include="Repository\CorpBranchGradGridRow.cs" />
     <Compile Include="Repository\CorpBranchGradRepository.cs" />
     <Compile Include="Repository\DocumentRepository.cs" />
@@ -153,10 +155,12 @@
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\ExperienceGridRow.cs" />
     <Compile Include="Repository\ExperienceRepository.cs" />
+    <Compile Include="Repository\ICarrierRepository.cs" />
     <Compile Include="Repository\ICorpBranchGradRepository.cs" />
     <Compile Include="Repository\IDocumentRepository.cs" />
     <Compile Include="Repository\IEmployeeRepository.cs" />
     <Compile Include="Repository\IExperienceRepository.cs" />
+    <Compile Include="Service\CarrierService.cs" />
     <Compile Include="Service\CorpBranchGradService.cs" />
     <Compile Include="Service\DocumentService.cs" />
     <Compile Include="Service\EmployeeService.cs" />

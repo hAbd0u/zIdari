@@ -39,6 +39,8 @@ namespace zIdari
         {
             this.employeesDataGV.AutoGenerateColumns = false;
             this.employeesDataGV.ContextMenuStrip = employeesContextMenu;
+            this.employeesDataGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.employeesDataGV.RowHeadersVisible = false;
 
 
             var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");

@@ -57,6 +57,8 @@ namespace zIdari.Forms
             cbpGridView.AllowUserToDeleteRows = false;
             cbpGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             cbpGridView.MultiSelect = false;
+            cbpGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            cbpGridView.RowHeadersVisible = false;
 
             // Set data property names
             LawNumCol.DataPropertyName = nameof(CorpBranchGradGridRow.LawNumCol);

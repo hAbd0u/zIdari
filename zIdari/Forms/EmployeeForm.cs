@@ -25,6 +25,9 @@ namespace zIdari.Forms
         private BindingSource _expBS = new BindingSource();
         private ContextMenuStrip _experienceContextMenu;
 
+        private Service.CarrierService _carrierSvc;
+        private BindingSource _carrierBS = new BindingSource();
+
         // RUNTIME: call this for Add, or pass an existing entity for Edit.
         public EmployeeForm(EmployeeService svc, Employee existing = null)
         {
@@ -85,6 +88,11 @@ namespace zIdari.Forms
             if (_existing != null)
                 LoadExperienceGrid();
 
+            // Carrier grid setup
+            SetupCarrierGrid();
+            if (_existing != null)
+                LoadCarrierGrid();
+
             // Carrier grid context menu wiring
             carrierGridView.ContextMenuStrip = CarrierContextMenu;
             CarrierContextMenu.Opening -= CarrierContextMenu_Opening;
@@ -136,6 +144,77 @@ namespace zIdari.Forms
         }
 
 
+        // Carrier grid setup
+        private void SetupCarrierGrid()
+        {
+            // Initialize service if not already done
+            if (_carrierSvc == null)
+            {
+                var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var carrierRepo = new zIdari.Repository.CarrierRepository(dbPath);
+                _carrierSvc = new zIdari.Service.CarrierService(carrierRepo);
+            }
+
+            // Set up DataGridView
+            carrierGridView.AutoGenerateColumns = false;
+            carrierGridView.ReadOnly = true;
+            carrierGridView.AllowUserToAddRows = false;
+            carrierGridView.AllowUserToDeleteRows = false;
+            carrierGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            carrierGridView.MultiSelect = false;
+            carrierGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            carrierGridView.RowHeadersVisible = false;
+
+            // Map columns to Carrier properties
+            CarrierIdCol.DataPropertyName = nameof(Carrier.CarrierId);
+            CarrierFolderNumCol.DataPropertyName = nameof(Carrier.FolderNum);
+            CarrierFolderNumYearCol.DataPropertyName = nameof(Carrier.FolderNumYear);
+            CarrierTypeCol.DataPropertyName = nameof(Carrier.CarrierType);
+            CarrierPositionCol.DataPropertyName = nameof(Carrier.Position);
+            CarrierDocTypeCol.DataPropertyName = nameof(Carrier.DocType);
+            CarrierDocNameCol.DataPropertyName = nameof(Carrier.DocName);
+            CarrierDocEffectiveDateCol.DataPropertyName = nameof(Carrier.DocDateEffective);
+            CarrierFinanceControlCol.DataPropertyName = nameof(Carrier.FinCtrlNum);
+            CarrierFinanceControlDateCol.DataPropertyName = nameof(Carrier.FinCtrlDate);
+
+            // Hide ID and folder columns as they're not user-relevant
+            CarrierIdCol.Visible = false;
+            CarrierFolderNumCol.Visible = false;
+            CarrierFolderNumYearCol.Visible = false;
+
+            // Adjust column fill weights for better proportions
+            CarrierTypeCol.FillWeight = 80;
+            CarrierPositionCol.FillWeight = 100;
+            CarrierDocTypeCol.FillWeight = 90;
+            CarrierDocNameCol.FillWeight = 120;
+            CarrierDocEffectiveDateCol.FillWeight = 90;
+            CarrierFinanceControlCol.FillWeight = 80;
+            CarrierFinanceControlDateCol.FillWeight = 90;
+
+            // Bind to data source
+            carrierGridView.DataSource = _carrierBS;
+
+            // Handle double-click for edit
+            carrierGridView.CellDoubleClick -= carrierGridView_CellDoubleClick;
+            carrierGridView.CellDoubleClick += carrierGridView_CellDoubleClick;
+        }
+
+        private void LoadCarrierGrid()
+        {
+            if (_carrierSvc == null || _existing == null) return;
+
+            var carriers = _carrierSvc.GetByEmployee(_existing.FolderNum, _existing.FolderNumYear);
+            _carrierBS.DataSource = carriers;
+        }
+
+        private void carrierGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                EditSelectedCarrier();
+            }
+        }
+
         // Carrier context menu activation: enable Edit/Delete only when a row is clicked
         private void CarrierContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -171,11 +250,104 @@ namespace zIdari.Forms
         // Open CarrierForm on Add
         private void addCarrierMenuItem_Click(object sender, EventArgs e)
         {
-            using (var dlg = new CarrierForm())
+            if (_existing == null)
             {
-                dlg.ShowDialog(this);
+                MessageBox.Show("يجب حفظ الموظف أولاً قبل إضافة المسار المهني.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (_carrierSvc == null)
+            {
+                var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var carrierRepo = new zIdari.Repository.CarrierRepository(dbPath);
+                _carrierSvc = new zIdari.Service.CarrierService(carrierRepo);
+            }
+
+            using (var dlg = new CarrierForm(_carrierSvc, _existing.FolderNum, _existing.FolderNumYear))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadCarrierGrid();
+                }
             }
         }
+
+        private void editCarrierMenuItem_Click(object sender, EventArgs e)
+        {
+            EditSelectedCarrier();
+        }
+
+        private void delCarrierMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedCarrier();
+        }
+
+        private void EditSelectedCarrier()
+        {
+            if (carrierGridView.CurrentRow == null) return;
+            
+            var selectedCarrier = carrierGridView.CurrentRow.DataBoundItem as Carrier;
+            if (selectedCarrier == null) return;
+
+            if (_carrierSvc == null)
+            {
+                var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var carrierRepo = new zIdari.Repository.CarrierRepository(dbPath);
+                _carrierSvc = new zIdari.Service.CarrierService(carrierRepo);
+            }
+
+            // Fetch fresh data from database
+            var carrier = _carrierSvc.GetById(selectedCarrier.CarrierId);
+            if (carrier == null)
+            {
+                MessageBox.Show("المسار المهني غير موجود", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (var dlg = new CarrierForm(_carrierSvc, carrier))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadCarrierGrid();
+                }
+            }
+        }
+
+        private void DeleteSelectedCarrier()
+        {
+            if (carrierGridView.CurrentRow == null) return;
+
+            var selectedCarrier = carrierGridView.CurrentRow.DataBoundItem as Carrier;
+            if (selectedCarrier == null) return;
+
+            var result = MessageBox.Show(
+                $"هل أنت متأكد من حذف هذا المسار المهني؟\n\nالنوع: {selectedCarrier.CarrierType}\nالإسم: {selectedCarrier.CarrierName}",
+                "تأكيد الحذف",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result != DialogResult.Yes) return;
+
+            if (_carrierSvc == null)
+            {
+                var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "kwin4rh.db");
+                var carrierRepo = new zIdari.Repository.CarrierRepository(dbPath);
+                _carrierSvc = new zIdari.Service.CarrierService(carrierRepo);
+            }
+
+            try
+            {
+                _carrierSvc.Delete(selectedCarrier.CarrierId);
+                MessageBox.Show("تم الحذف بنجاح", "نجح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadCarrierGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"فشل الحذف: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private Employee BuildFromUI()
         {
             if (!int.TryParse(folderNumTxt.Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var folderNum))
@@ -395,6 +567,8 @@ namespace zIdari.Forms
             experienceGridView.AllowUserToDeleteRows = false;
             experienceGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             experienceGridView.MultiSelect = false;
+            experienceGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            experienceGridView.RowHeadersVisible = false;
 
             // Set data property names
             CertNumCol.DataPropertyName = nameof(zIdari.Repository.ExperienceGridRow.CertNumCol);

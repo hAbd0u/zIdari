@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using zIdari.Model;
 using zIdari.Repository;
+using zIdari.Service;
 
 namespace zIdari.Forms
 {
@@ -25,13 +27,42 @@ namespace zIdari.Forms
             { "إنزال في الرتبة", new string[0] }
         };
 
-        public CarrierForm()
+        private readonly CarrierService _svc;
+        private readonly Carrier _existing; // null = Add, not null = Edit
+        private readonly int _folderNum;
+        private readonly int _folderNumYear;
+
+        // Constructor for Add mode
+        public CarrierForm(CarrierService svc, int folderNum, int folderNumYear)
         {
             InitializeComponent();
+            _svc = svc ?? throw new ArgumentNullException(nameof(svc));
+            _folderNum = folderNum;
+            _folderNumYear = folderNumYear;
+            _existing = null;
 
-            // Wire up the event handler
+            InitHandlers();
+        }
+
+        // Constructor for Edit mode
+        public CarrierForm(CarrierService svc, Carrier existing)
+        {
+            InitializeComponent();
+            _svc = svc ?? throw new ArgumentNullException(nameof(svc));
+            _existing = existing ?? throw new ArgumentNullException(nameof(existing));
+            _folderNum = existing.FolderNum;
+            _folderNumYear = existing.FolderNumYear;
+
+            InitHandlers();
+        }
+
+        private void InitHandlers()
+        {
+            // Wire up the event handlers
             carrierTypeCombo.SelectedIndexChanged += CarrierTypeCombo_SelectedIndexChanged;
             docTypeComboList.SelectedIndexChanged += DocTypeComboList_SelectedIndexChanged;
+            SaveBtn.Click += SaveBtn_Click;
+            CancelBtn.Click += CancelBtn_Click;
             
             // Wire up Load event
             this.Load += CarrierForm_Load;
@@ -43,6 +74,12 @@ namespace zIdari.Forms
             LoadCorpsList();
             LoadBranchesList();
             LoadPositionsList();
+
+            // If editing, populate the form
+            if (_existing != null)
+            {
+                FillUI(_existing);
+            }
         }
 
         private void DocTypeComboList_SelectedIndexChanged(object sender, EventArgs e)
@@ -217,6 +254,122 @@ namespace zIdari.Forms
         private void DocEffectiveDate_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void FillUI(Carrier c)
+        {
+            // Carrier type and name
+            carrierTypeCombo.SelectedItem = c.CarrierType;
+            carrierNameCombo.SelectedItem = c.CarrierName;
+
+            // Corps/Branch/Position
+            CorpListCombo.SelectedItem = c.Corp;
+            BrancheListCombo.SelectedItem = c.Branche;
+            PositionListCombo.SelectedItem = c.Position;
+
+            // Class and Degree
+            ClassListCombo.SelectedItem = c.Class;
+            DegreeListCombo.SelectedItem = c.Degree;
+
+            // Status
+            if (c.Status == "مرسم")
+                statusRadio.Checked = true;
+            else if (c.Status == "متربص")
+                statusRadio2.Checked = true;
+
+            // Document fields
+            docTypeComboList.SelectedItem = c.DocType;
+            DocTitleComboList.SelectedItem = c.DocName;
+            DocNumText.Text = c.DocNum;
+
+            if (c.DocDateSign.HasValue)
+                DocSignDate.Value = c.DocDateSign.Value;
+            if (c.DocDateEffective.HasValue)
+                DocEffectiveDate.Value = c.DocDateEffective.Value;
+
+            // Public function
+            PubFunctionNumText.Text = c.PubFuncNum;
+            if (c.PubFuncDate.HasValue)
+                PubFunctionNumDate.Value = c.PubFuncDate.Value;
+
+            // Finance control
+            FinanceControlNumText.Text = c.FinCtrlNum;
+            if (c.FinCtrlDate.HasValue)
+                FinanceControlDate.Value = c.FinCtrlDate.Value;
+        }
+
+        private Carrier BuildFromUI()
+        {
+            var carrier = new Carrier
+            {
+                CarrierId = _existing?.CarrierId ?? 0,
+                FolderNum = _folderNum,
+                FolderNumYear = _folderNumYear,
+                CarrierType = carrierTypeCombo.SelectedItem?.ToString(),
+                CarrierName = carrierNameCombo.SelectedItem?.ToString(),
+                Corp = CorpListCombo.SelectedItem?.ToString(),
+                Branche = BrancheListCombo.SelectedItem?.ToString(),
+                Position = PositionListCombo.SelectedItem?.ToString(),
+                Class = ClassListCombo.SelectedItem?.ToString(),
+                Degree = DegreeListCombo.SelectedItem?.ToString(),
+                Status = statusRadio.Checked ? "مرسم" : (statusRadio2.Checked ? "متربص" : null),
+                DocType = docTypeComboList.SelectedItem?.ToString(),
+                DocName = DocTitleComboList.SelectedItem?.ToString(),
+                DocNum = DocNumText.Text?.Trim(),
+                DocDateSign = DocSignDate.Value.Date,
+                DocDateEffective = DocEffectiveDate.Value.Date,
+                PubFuncNum = PubFunctionNumText.Text?.Trim(),
+                PubFuncDate = PubFunctionNumDate.Value.Date,
+                FinCtrlNum = FinanceControlNumText.Text?.Trim(),
+                FinCtrlDate = FinanceControlDate.Value.Date
+            };
+
+            return carrier;
+        }
+
+        private void SaveBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var carrier = BuildFromUI();
+
+                if (_existing == null)
+                {
+                    // Add mode
+                    var (ok, errors, id) = _svc.Add(carrier);
+                    if (!ok)
+                    {
+                        MessageBox.Show(string.Join("\n", errors), "التحقق",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+                else
+                {
+                    // Edit mode
+                    var (ok, errors) = _svc.Update(carrier);
+                    if (!ok)
+                    {
+                        MessageBox.Show(string.Join("\n", errors), "التحقق",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "خطأ في الحفظ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

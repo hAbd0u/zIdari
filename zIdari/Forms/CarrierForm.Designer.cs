@@ -48,6 +48,8 @@
             this.statusRadio2 = new System.Windows.Forms.RadioButton();
             this.statusRadio = new System.Windows.Forms.RadioButton();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.docTypeComboList = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.ScanBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -68,8 +70,6 @@
             this.FinanceControlDate = new System.Windows.Forms.DateTimePicker();
             this.SaveBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
-            this.docTypeComboList = new System.Windows.Forms.ComboBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -320,6 +320,27 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "الوثيقة";
             // 
+            // docTypeComboList
+            // 
+            this.docTypeComboList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.docTypeComboList.FormattingEnabled = true;
+            this.docTypeComboList.Location = new System.Drawing.Point(762, 18);
+            this.docTypeComboList.Margin = new System.Windows.Forms.Padding(1);
+            this.docTypeComboList.Name = "docTypeComboList";
+            this.docTypeComboList.Size = new System.Drawing.Size(123, 21);
+            this.docTypeComboList.TabIndex = 23;
+            // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(889, 18);
+            this.label14.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(30, 13);
+            this.label14.TabIndex = 22;
+            this.label14.Text = "النوع";
+            // 
             // ScanBtn
             // 
             this.ScanBtn.Location = new System.Drawing.Point(55, 10);
@@ -530,27 +551,6 @@
             this.CancelBtn.TabIndex = 20;
             this.CancelBtn.Text = "إلغاء";
             this.CancelBtn.UseVisualStyleBackColor = true;
-            // 
-            // docTypeComboList
-            // 
-            this.docTypeComboList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.docTypeComboList.FormattingEnabled = true;
-            this.docTypeComboList.Location = new System.Drawing.Point(762, 18);
-            this.docTypeComboList.Margin = new System.Windows.Forms.Padding(1);
-            this.docTypeComboList.Name = "docTypeComboList";
-            this.docTypeComboList.Size = new System.Drawing.Size(123, 21);
-            this.docTypeComboList.TabIndex = 23;
-            // 
-            // label14
-            // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(889, 18);
-            this.label14.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(30, 13);
-            this.label14.TabIndex = 22;
-            this.label14.Text = "النوع";
             // 
             // CarrierForm
             // 

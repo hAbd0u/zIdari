@@ -31,6 +31,8 @@ namespace zIdari.Forms
             docsGrid.AllowUserToDeleteRows = false;
             docsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             docsGrid.MultiSelect = false;
+            docsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            docsGrid.RowHeadersVisible = false;
 
             TypeCol.DataPropertyName = nameof(Document.Type);
             TitleCol.DataPropertyName = nameof(Document.Title);

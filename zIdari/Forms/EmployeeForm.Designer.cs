@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("الملف الشخصي");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("المسار المهني");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("الدرجات");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("الترقيات");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Node5");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("الملف الشخصي");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("الخبرة المهنية");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("المسار المهني");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("الدرجات");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("الترقيات");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node5");
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.EmployeeTreeView = new System.Windows.Forms.TreeView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -95,6 +95,10 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.ExperienceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.CarrierContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.delCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CarrierIdCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFolderNumCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFolderNumYearCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -105,10 +109,6 @@
             this.CarrierDocEffectiveDateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFinanceControlCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CarrierFinanceControlDateCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CarrierContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.delCarrierMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -136,62 +136,59 @@
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1099F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(2520, 1099);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 461F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(945, 642);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // EmployeeTreeView
             // 
             this.EmployeeTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EmployeeTreeView.Location = new System.Drawing.Point(1963, 7);
-            this.EmployeeTreeView.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.EmployeeTreeView.Location = new System.Drawing.Point(737, 3);
             this.EmployeeTreeView.Name = "EmployeeTreeView";
-            treeNode1.Name = "ProfileNode";
-            treeNode1.Tag = "0";
-            treeNode1.Text = "الملف الشخصي";
-            treeNode2.Name = "ExperienceNode";
-            treeNode2.Tag = "1";
-            treeNode2.Text = "الخبرة المهنية";
-            treeNode3.Name = "CarrierNode";
-            treeNode3.Text = "المسار المهني";
-            treeNode4.Name = "DegreesNode";
-            treeNode4.Tag = "2";
-            treeNode4.Text = "الدرجات";
-            treeNode5.Name = "PromotionsNode";
-            treeNode5.Tag = "3";
-            treeNode5.Text = "الترقيات";
-            treeNode6.Name = "Node5";
-            treeNode6.Text = "Node5";
+            treeNode7.Name = "ProfileNode";
+            treeNode7.Tag = "0";
+            treeNode7.Text = "الملف الشخصي";
+            treeNode8.Name = "ExperienceNode";
+            treeNode8.Tag = "1";
+            treeNode8.Text = "الخبرة المهنية";
+            treeNode9.Name = "CarrierNode";
+            treeNode9.Text = "المسار المهني";
+            treeNode10.Name = "DegreesNode";
+            treeNode10.Tag = "2";
+            treeNode10.Text = "الدرجات";
+            treeNode11.Name = "PromotionsNode";
+            treeNode11.Tag = "3";
+            treeNode11.Text = "الترقيات";
+            treeNode12.Name = "Node5";
+            treeNode12.Text = "Node5";
             this.EmployeeTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4,
-            treeNode5,
-            treeNode6});
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12});
             this.EmployeeTreeView.RightToLeftLayout = true;
-            this.EmployeeTreeView.Size = new System.Drawing.Size(549, 1085);
+            this.EmployeeTreeView.Size = new System.Drawing.Size(205, 636);
             this.EmployeeTreeView.TabIndex = 0;
             this.EmployeeTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.EmployeeTreeView_NodeMouseClick);
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Location = new System.Drawing.Point(8, 7);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.RightToLeftLayout = true;
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1939, 1052);
+            this.tabControl1.Size = new System.Drawing.Size(728, 636);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -204,11 +201,10 @@
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Location = new System.Drawing.Point(10, 48);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabPage1.Size = new System.Drawing.Size(1919, 994);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Size = new System.Drawing.Size(720, 415);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -221,21 +217,21 @@
             this.groupBox7.Controls.Add(this.folderNumCombo);
             this.groupBox7.Controls.Add(this.label17);
             this.groupBox7.Controls.Add(this.label18);
-            this.groupBox7.Location = new System.Drawing.Point(1022, 10);
-            this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox7.Location = new System.Drawing.Point(384, 4);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox7.Size = new System.Drawing.Size(885, 103);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox7.Size = new System.Drawing.Size(332, 43);
             this.groupBox7.TabIndex = 9;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "الجرد";
             // 
             // folderNumTxt
             // 
-            this.folderNumTxt.Location = new System.Drawing.Point(584, 38);
-            this.folderNumTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.folderNumTxt.Location = new System.Drawing.Point(219, 16);
+            this.folderNumTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.folderNumTxt.Name = "folderNumTxt";
-            this.folderNumTxt.Size = new System.Drawing.Size(217, 38);
+            this.folderNumTxt.Size = new System.Drawing.Size(84, 20);
             this.folderNumTxt.TabIndex = 4;
             // 
             // folderNumCombo
@@ -289,27 +285,29 @@
             "1982",
             "1981",
             "1980"});
-            this.folderNumCombo.Location = new System.Drawing.Point(339, 38);
-            this.folderNumCombo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.folderNumCombo.Location = new System.Drawing.Point(127, 16);
+            this.folderNumCombo.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.folderNumCombo.Name = "folderNumCombo";
-            this.folderNumCombo.Size = new System.Drawing.Size(164, 39);
+            this.folderNumCombo.Size = new System.Drawing.Size(64, 21);
             this.folderNumCombo.TabIndex = 6;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(512, 41);
+            this.label17.Location = new System.Drawing.Point(192, 17);
+            this.label17.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(62, 32);
+            this.label17.Size = new System.Drawing.Size(31, 13);
             this.label17.TabIndex = 2;
             this.label17.Text = "السنة";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(808, 41);
+            this.label18.Location = new System.Drawing.Point(303, 17);
+            this.label18.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(59, 32);
+            this.label18.Size = new System.Drawing.Size(29, 13);
             this.label18.TabIndex = 0;
             this.label18.Text = "الرقم";
             // 
@@ -325,57 +323,59 @@
             this.groupBox6.Controls.Add(this.relationCombo);
             this.groupBox6.Controls.Add(this.label13);
             this.groupBox6.Controls.Add(this.label14);
-            this.groupBox6.Location = new System.Drawing.Point(193, 787);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox6.Location = new System.Drawing.Point(73, 330);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox6.Size = new System.Drawing.Size(1715, 110);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox6.Size = new System.Drawing.Size(643, 46);
             this.groupBox6.TabIndex = 9;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "العائلة";
             // 
             // actNumTxt
             // 
-            this.actNumTxt.Location = new System.Drawing.Point(67, 48);
-            this.actNumTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.actNumTxt.Location = new System.Drawing.Point(25, 20);
+            this.actNumTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.actNumTxt.Name = "actNumTxt";
-            this.actNumTxt.Size = new System.Drawing.Size(161, 38);
+            this.actNumTxt.Size = new System.Drawing.Size(63, 20);
             this.actNumTxt.TabIndex = 10;
             // 
             // husbandTxt
             // 
-            this.husbandTxt.Location = new System.Drawing.Point(624, 45);
-            this.husbandTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.husbandTxt.Location = new System.Drawing.Point(234, 19);
+            this.husbandTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.husbandTxt.Name = "husbandTxt";
-            this.husbandTxt.Size = new System.Drawing.Size(599, 38);
+            this.husbandTxt.Size = new System.Drawing.Size(227, 20);
             this.husbandTxt.TabIndex = 5;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(232, 48);
+            this.label12.Location = new System.Drawing.Point(87, 20);
+            this.label12.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(59, 32);
+            this.label12.Size = new System.Drawing.Size(29, 13);
             this.label12.TabIndex = 7;
             this.label12.Text = "الرقم";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1229, 48);
+            this.label15.Location = new System.Drawing.Point(461, 20);
+            this.label15.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(136, 32);
+            this.label15.Size = new System.Drawing.Size(65, 13);
             this.label15.TabIndex = 4;
             this.label15.Text = "إسم الزوج(ة)";
             // 
             // actDatePicker
             // 
             this.actDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.actDatePicker.Location = new System.Drawing.Point(312, 45);
-            this.actDatePicker.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.actDatePicker.Location = new System.Drawing.Point(117, 19);
+            this.actDatePicker.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.actDatePicker.Name = "actDatePicker";
             this.actDatePicker.RightToLeftLayout = true;
-            this.actDatePicker.Size = new System.Drawing.Size(201, 38);
+            this.actDatePicker.Size = new System.Drawing.Size(78, 20);
             this.actDatePicker.TabIndex = 5;
             // 
             // relationCombo
@@ -386,27 +386,29 @@
             "أعزب",
             "متزوج",
             "مطلق"});
-            this.relationCombo.Location = new System.Drawing.Point(1408, 45);
-            this.relationCombo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.relationCombo.Location = new System.Drawing.Point(528, 19);
+            this.relationCombo.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.relationCombo.Name = "relationCombo";
-            this.relationCombo.Size = new System.Drawing.Size(209, 39);
+            this.relationCombo.Size = new System.Drawing.Size(81, 21);
             this.relationCombo.TabIndex = 6;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(1624, 48);
+            this.label13.Location = new System.Drawing.Point(609, 20);
+            this.label13.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(66, 32);
+            this.label13.Size = new System.Drawing.Size(32, 13);
             this.label13.TabIndex = 2;
             this.label13.Text = "الحالة";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(517, 48);
+            this.label14.Location = new System.Drawing.Point(194, 20);
+            this.label14.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(77, 32);
+            this.label14.Size = new System.Drawing.Size(38, 13);
             this.label14.TabIndex = 0;
             this.label14.Text = "التاريخ";
             // 
@@ -420,63 +422,66 @@
             this.groupBox5.Controls.Add(this.label10);
             this.groupBox5.Controls.Add(this.addressTxt);
             this.groupBox5.Controls.Add(this.label11);
-            this.groupBox5.Location = new System.Drawing.Point(163, 553);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox5.Location = new System.Drawing.Point(62, 232);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox5.Size = new System.Drawing.Size(1744, 145);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox5.Size = new System.Drawing.Size(654, 61);
             this.groupBox5.TabIndex = 5;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "الإتصال";
             // 
             // EmailTxt
             // 
-            this.EmailTxt.Location = new System.Drawing.Point(763, 88);
-            this.EmailTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EmailTxt.Location = new System.Drawing.Point(286, 37);
+            this.EmailTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.EmailTxt.Name = "EmailTxt";
-            this.EmailTxt.Size = new System.Drawing.Size(724, 38);
+            this.EmailTxt.Size = new System.Drawing.Size(274, 20);
             this.EmailTxt.TabIndex = 5;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(1491, 88);
+            this.label16.Location = new System.Drawing.Point(559, 37);
+            this.label16.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(168, 32);
+            this.label16.Size = new System.Drawing.Size(82, 13);
             this.label16.TabIndex = 4;
             this.label16.Text = "البريد الإلكتروني";
             // 
             // phoneTxt
             // 
-            this.phoneTxt.Location = new System.Drawing.Point(32, 38);
-            this.phoneTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.phoneTxt.Location = new System.Drawing.Point(12, 16);
+            this.phoneTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.phoneTxt.Name = "phoneTxt";
-            this.phoneTxt.Size = new System.Drawing.Size(724, 38);
+            this.phoneTxt.Size = new System.Drawing.Size(274, 20);
             this.phoneTxt.TabIndex = 3;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(763, 41);
+            this.label10.Location = new System.Drawing.Point(286, 17);
+            this.label10.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(113, 32);
+            this.label10.Size = new System.Drawing.Size(55, 13);
             this.label10.TabIndex = 2;
             this.label10.Text = "رقم الهاتف";
             // 
             // addressTxt
             // 
-            this.addressTxt.Location = new System.Drawing.Point(907, 36);
-            this.addressTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.addressTxt.Location = new System.Drawing.Point(340, 15);
+            this.addressTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.addressTxt.Name = "addressTxt";
-            this.addressTxt.Size = new System.Drawing.Size(724, 38);
+            this.addressTxt.Size = new System.Drawing.Size(274, 20);
             this.addressTxt.TabIndex = 1;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(1637, 41);
+            this.label11.Location = new System.Drawing.Point(614, 17);
+            this.label11.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(79, 32);
+            this.label11.Size = new System.Drawing.Size(39, 13);
             this.label11.TabIndex = 0;
             this.label11.Text = "العنوان";
             // 
@@ -490,11 +495,11 @@
             this.groupBox4.Controls.Add(this.birthWilayaCombo);
             this.groupBox4.Controls.Add(this.label7);
             this.groupBox4.Controls.Add(this.label8);
-            this.groupBox4.Location = new System.Drawing.Point(875, 446);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox4.Location = new System.Drawing.Point(329, 187);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox4.Size = new System.Drawing.Size(1032, 103);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox4.Size = new System.Drawing.Size(387, 43);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "الإزدياد";
@@ -506,29 +511,30 @@
             this.sexCombo.Items.AddRange(new object[] {
             "ذكر",
             "أنثى"});
-            this.sexCombo.Location = new System.Drawing.Point(5, 45);
-            this.sexCombo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.sexCombo.Location = new System.Drawing.Point(2, 19);
+            this.sexCombo.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.sexCombo.Name = "sexCombo";
-            this.sexCombo.Size = new System.Drawing.Size(180, 39);
+            this.sexCombo.Size = new System.Drawing.Size(70, 21);
             this.sexCombo.TabIndex = 8;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(197, 50);
+            this.label9.Location = new System.Drawing.Point(74, 21);
+            this.label9.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 32);
+            this.label9.Size = new System.Drawing.Size(33, 13);
             this.label9.TabIndex = 7;
             this.label9.Text = "الجنس";
             // 
             // birthDatePicker
             // 
             this.birthDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.birthDatePicker.Location = new System.Drawing.Point(717, 50);
-            this.birthDatePicker.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.birthDatePicker.Location = new System.Drawing.Point(269, 21);
+            this.birthDatePicker.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.birthDatePicker.Name = "birthDatePicker";
             this.birthDatePicker.RightToLeftLayout = true;
-            this.birthDatePicker.Size = new System.Drawing.Size(201, 38);
+            this.birthDatePicker.Size = new System.Drawing.Size(78, 20);
             this.birthDatePicker.TabIndex = 5;
             // 
             // birthWilayaCombo
@@ -595,27 +601,29 @@
             "جانت",
             "المغير",
             "المنيعة"});
-            this.birthWilayaCombo.Location = new System.Drawing.Point(275, 50);
-            this.birthWilayaCombo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.birthWilayaCombo.Location = new System.Drawing.Point(103, 21);
+            this.birthWilayaCombo.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.birthWilayaCombo.Name = "birthWilayaCombo";
-            this.birthWilayaCombo.Size = new System.Drawing.Size(351, 39);
+            this.birthWilayaCombo.Size = new System.Drawing.Size(134, 21);
             this.birthWilayaCombo.TabIndex = 6;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(629, 52);
+            this.label7.Location = new System.Drawing.Point(236, 22);
+            this.label7.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(71, 32);
+            this.label7.Size = new System.Drawing.Size(36, 13);
             this.label7.TabIndex = 2;
             this.label7.Text = "المكان";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(925, 52);
+            this.label8.Location = new System.Drawing.Point(347, 22);
+            this.label8.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(77, 32);
+            this.label8.Size = new System.Drawing.Size(38, 13);
             this.label8.TabIndex = 0;
             this.label8.Text = "التاريخ";
             // 
@@ -627,46 +635,48 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.fatherNameTxt);
             this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Location = new System.Drawing.Point(499, 339);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox3.Location = new System.Drawing.Point(188, 142);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(1408, 100);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox3.Size = new System.Drawing.Size(528, 42);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "الوالدين";
             // 
             // motherNameTxt
             // 
-            this.motherNameTxt.Location = new System.Drawing.Point(200, 41);
-            this.motherNameTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.motherNameTxt.Location = new System.Drawing.Point(75, 17);
+            this.motherNameTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.motherNameTxt.Name = "motherNameTxt";
-            this.motherNameTxt.Size = new System.Drawing.Size(529, 38);
+            this.motherNameTxt.Size = new System.Drawing.Size(201, 20);
             this.motherNameTxt.TabIndex = 3;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(736, 48);
+            this.label5.Location = new System.Drawing.Point(276, 20);
+            this.label5.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 32);
+            this.label5.Size = new System.Drawing.Size(21, 13);
             this.label5.TabIndex = 2;
             this.label5.Text = "الأم";
             // 
             // fatherNameTxt
             // 
-            this.fatherNameTxt.Location = new System.Drawing.Point(805, 41);
-            this.fatherNameTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fatherNameTxt.Location = new System.Drawing.Point(302, 17);
+            this.fatherNameTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.fatherNameTxt.Name = "fatherNameTxt";
-            this.fatherNameTxt.Size = new System.Drawing.Size(529, 38);
+            this.fatherNameTxt.Size = new System.Drawing.Size(201, 20);
             this.fatherNameTxt.TabIndex = 1;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1339, 48);
+            this.label6.Location = new System.Drawing.Point(502, 20);
+            this.label6.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(56, 32);
+            this.label6.Size = new System.Drawing.Size(24, 13);
             this.label6.TabIndex = 0;
             this.label6.Text = "الأب";
             // 
@@ -678,46 +688,48 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.lnameFrTxt);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Location = new System.Drawing.Point(499, 224);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox2.Location = new System.Drawing.Point(188, 94);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(1408, 100);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox2.Size = new System.Drawing.Size(528, 42);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "بالفرنسية";
             // 
             // fnameFrTxt
             // 
-            this.fnameFrTxt.Location = new System.Drawing.Point(115, 48);
-            this.fnameFrTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fnameFrTxt.Location = new System.Drawing.Point(43, 20);
+            this.fnameFrTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.fnameFrTxt.Name = "fnameFrTxt";
-            this.fnameFrTxt.Size = new System.Drawing.Size(529, 38);
+            this.fnameFrTxt.Size = new System.Drawing.Size(201, 20);
             this.fnameFrTxt.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(672, 52);
+            this.label3.Location = new System.Drawing.Point(252, 22);
+            this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(113, 32);
+            this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Prenom";
             // 
             // lnameFrTxt
             // 
-            this.lnameFrTxt.Location = new System.Drawing.Point(789, 48);
-            this.lnameFrTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lnameFrTxt.Location = new System.Drawing.Point(296, 20);
+            this.lnameFrTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.lnameFrTxt.Name = "lnameFrTxt";
-            this.lnameFrTxt.Size = new System.Drawing.Size(529, 38);
+            this.lnameFrTxt.Size = new System.Drawing.Size(201, 20);
             this.lnameFrTxt.TabIndex = 1;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 50);
+            this.label4.Location = new System.Drawing.Point(7, 21);
+            this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 32);
+            this.label4.Size = new System.Drawing.Size(29, 13);
             this.label4.TabIndex = 0;
             this.label4.Text = "Nom";
             // 
@@ -729,57 +741,58 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.fnameTxt);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(499, 117);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Location = new System.Drawing.Point(188, 49);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(1408, 100);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.groupBox1.Size = new System.Drawing.Size(528, 42);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "بالعربية";
             // 
             // lnameTxt
             // 
-            this.lnameTxt.Location = new System.Drawing.Point(200, 41);
-            this.lnameTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lnameTxt.Location = new System.Drawing.Point(75, 17);
+            this.lnameTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.lnameTxt.Name = "lnameTxt";
-            this.lnameTxt.Size = new System.Drawing.Size(529, 38);
+            this.lnameTxt.Size = new System.Drawing.Size(201, 20);
             this.lnameTxt.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(736, 48);
+            this.label2.Location = new System.Drawing.Point(276, 20);
+            this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 32);
+            this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "الإسم";
             // 
             // fnameTxt
             // 
-            this.fnameTxt.Location = new System.Drawing.Point(805, 41);
-            this.fnameTxt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fnameTxt.Location = new System.Drawing.Point(302, 17);
+            this.fnameTxt.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.fnameTxt.Name = "fnameTxt";
-            this.fnameTxt.Size = new System.Drawing.Size(529, 38);
+            this.fnameTxt.Size = new System.Drawing.Size(201, 20);
             this.fnameTxt.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1339, 48);
+            this.label1.Location = new System.Drawing.Point(502, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 32);
+            this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "اللقب";
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.experienceGridView);
-            this.tabPage2.Location = new System.Drawing.Point(10, 48);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabPage2.Size = new System.Drawing.Size(1919, 994);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Size = new System.Drawing.Size(719, 415);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -798,12 +811,11 @@
             this.PositionCol,
             this.ViewCertCol});
             this.experienceGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.experienceGridView.Location = new System.Drawing.Point(8, 7);
-            this.experienceGridView.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.experienceGridView.Location = new System.Drawing.Point(3, 3);
             this.experienceGridView.Name = "experienceGridView";
             this.experienceGridView.ReadOnly = true;
             this.experienceGridView.RowHeadersWidth = 102;
-            this.experienceGridView.Size = new System.Drawing.Size(1903, 980);
+            this.experienceGridView.Size = new System.Drawing.Size(713, 409);
             this.experienceGridView.TabIndex = 1;
             // 
             // CertNumCol
@@ -857,11 +869,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.carrierGridView);
-            this.tabPage3.Location = new System.Drawing.Point(10, 48);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabPage3.Size = new System.Drawing.Size(1919, 994);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage3.Size = new System.Drawing.Size(720, 610);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -884,32 +895,29 @@
             this.CarrierFinanceControlCol,
             this.CarrierFinanceControlDateCol});
             this.carrierGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.carrierGridView.Location = new System.Drawing.Point(8, 7);
-            this.carrierGridView.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.carrierGridView.Location = new System.Drawing.Point(3, 3);
             this.carrierGridView.Name = "carrierGridView";
             this.carrierGridView.ReadOnly = true;
             this.carrierGridView.RowHeadersWidth = 102;
-            this.carrierGridView.Size = new System.Drawing.Size(1903, 980);
+            this.carrierGridView.Size = new System.Drawing.Size(714, 604);
             this.carrierGridView.TabIndex = 0;
             // 
             // tabPage4
             // 
-            this.tabPage4.Location = new System.Drawing.Point(10, 48);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabPage4.Size = new System.Drawing.Size(1919, 994);
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage4.Size = new System.Drawing.Size(719, 415);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage5
             // 
-            this.tabPage5.Location = new System.Drawing.Point(10, 48);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabPage5.Size = new System.Drawing.Size(1919, 994);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage5.Size = new System.Drawing.Size(719, 415);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -920,12 +928,45 @@
             this.ExperienceContextMenu.Name = "ExperienceContextMenu";
             this.ExperienceContextMenu.Size = new System.Drawing.Size(61, 4);
             // 
+            // CarrierContextMenu
+            // 
+            this.CarrierContextMenu.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.CarrierContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addCarrierMenuItem,
+            this.editCarrierMenuItem,
+            this.delCarrierMenuItem});
+            this.CarrierContextMenu.Name = "CarrierContextMenu";
+            this.CarrierContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.CarrierContextMenu.Size = new System.Drawing.Size(104, 70);
+            // 
+            // addCarrierMenuItem
+            // 
+            this.addCarrierMenuItem.Name = "addCarrierMenuItem";
+            this.addCarrierMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.addCarrierMenuItem.Text = "أضف";
+            this.addCarrierMenuItem.Click += new System.EventHandler(this.addCarrierMenuItem_Click);
+            // 
+            // editCarrierMenuItem
+            // 
+            this.editCarrierMenuItem.Name = "editCarrierMenuItem";
+            this.editCarrierMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.editCarrierMenuItem.Text = "تعديل";
+            this.editCarrierMenuItem.Click += new System.EventHandler(this.editCarrierMenuItem_Click);
+            // 
+            // delCarrierMenuItem
+            // 
+            this.delCarrierMenuItem.Name = "delCarrierMenuItem";
+            this.delCarrierMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.delCarrierMenuItem.Text = "حذف";
+            this.delCarrierMenuItem.Click += new System.EventHandler(this.delCarrierMenuItem_Click);
+            // 
             // CarrierIdCol
             // 
             this.CarrierIdCol.HeaderText = "Id";
             this.CarrierIdCol.MinimumWidth = 12;
             this.CarrierIdCol.Name = "CarrierIdCol";
             this.CarrierIdCol.ReadOnly = true;
+            this.CarrierIdCol.Visible = false;
             this.CarrierIdCol.Width = 250;
             // 
             // CarrierFolderNumCol
@@ -934,6 +975,7 @@
             this.CarrierFolderNumCol.MinimumWidth = 12;
             this.CarrierFolderNumCol.Name = "CarrierFolderNumCol";
             this.CarrierFolderNumCol.ReadOnly = true;
+            this.CarrierFolderNumCol.Visible = false;
             this.CarrierFolderNumCol.Width = 250;
             // 
             // CarrierFolderNumYearCol
@@ -942,6 +984,7 @@
             this.CarrierFolderNumYearCol.MinimumWidth = 12;
             this.CarrierFolderNumYearCol.Name = "CarrierFolderNumYearCol";
             this.CarrierFolderNumYearCol.ReadOnly = true;
+            this.CarrierFolderNumYearCol.Visible = false;
             this.CarrierFolderNumYearCol.Width = 250;
             // 
             // CarrierTypeCol
@@ -1000,44 +1043,14 @@
             this.CarrierFinanceControlDateCol.ReadOnly = true;
             this.CarrierFinanceControlDateCol.Width = 250;
             // 
-            // CarrierContextMenu
-            // 
-            this.CarrierContextMenu.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this.CarrierContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addCarrierMenuItem,
-            this.editCarrierMenuItem,
-            this.delCarrierMenuItem});
-            this.CarrierContextMenu.Name = "CarrierContextMenu";
-            this.CarrierContextMenu.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.CarrierContextMenu.Size = new System.Drawing.Size(361, 203);
-            // 
-            // addCarrierMenuItem
-            // 
-            this.addCarrierMenuItem.Name = "addCarrierMenuItem";
-            this.addCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
-            this.addCarrierMenuItem.Text = "أضف";
-            this.addCarrierMenuItem.Click += new System.EventHandler(this.addCarrierMenuItem_Click);
-            // 
-            // editCarrierMenuItem
-            // 
-            this.editCarrierMenuItem.Name = "editCarrierMenuItem";
-            this.editCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
-            this.editCarrierMenuItem.Text = "تعديل";
-            // 
-            // delCarrierMenuItem
-            // 
-            this.delCarrierMenuItem.Name = "delCarrierMenuItem";
-            this.delCarrierMenuItem.Size = new System.Drawing.Size(360, 48);
-            this.delCarrierMenuItem.Text = "حذف";
-            // 
             // EmployeeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(2520, 1099);
+            this.ClientSize = new System.Drawing.Size(945, 642);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.Name = "EmployeeForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
@@ -1132,6 +1145,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn PositionCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ViewCertCol;
         private System.Windows.Forms.DataGridView carrierGridView;
+        private System.Windows.Forms.ContextMenuStrip CarrierContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addCarrierMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editCarrierMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem delCarrierMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierIdCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFolderNumCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFolderNumYearCol;
@@ -1142,9 +1159,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierDocEffectiveDateCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFinanceControlCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn CarrierFinanceControlDateCol;
-        private System.Windows.Forms.ContextMenuStrip CarrierContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem addCarrierMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editCarrierMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem delCarrierMenuItem;
     }
 }
