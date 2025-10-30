@@ -63,6 +63,7 @@
             // DateTo
             // 
             this.DateTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateTo.CustomFormat = "yyyy-MM-dd";
             this.DateTo.Location = new System.Drawing.Point(270, 150);
             this.DateTo.Name = "DateTo";
             this.DateTo.RightToLeftLayout = true;
@@ -81,6 +82,7 @@
             // DateFrom
             // 
             this.DateFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.DateFrom.CustomFormat = "yyyy-MM-dd";
             this.DateFrom.Location = new System.Drawing.Point(270, 120);
             this.DateFrom.Name = "DateFrom";
             this.DateFrom.RightToLeftLayout = true;

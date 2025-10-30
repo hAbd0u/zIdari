@@ -371,6 +371,7 @@
             // actDatePicker
             // 
             this.actDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.actDatePicker.CustomFormat = "yyyy-MM-dd";
             this.actDatePicker.Location = new System.Drawing.Point(117, 19);
             this.actDatePicker.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.actDatePicker.Name = "actDatePicker";
@@ -530,6 +531,7 @@
             // birthDatePicker
             // 
             this.birthDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.birthDatePicker.CustomFormat = "yyyy-MM-dd";
             this.birthDatePicker.Location = new System.Drawing.Point(269, 21);
             this.birthDatePicker.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.birthDatePicker.Name = "birthDatePicker";

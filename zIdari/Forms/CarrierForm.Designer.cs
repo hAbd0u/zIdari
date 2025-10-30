@@ -198,6 +198,8 @@
             // 
             // DocSignDate
             // 
+            this.DocSignDate.CustomFormat = "yyyy-MM-dd";
+            this.DocSignDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.DocSignDate.Location = new System.Drawing.Point(271, 18);
             this.DocSignDate.Margin = new System.Windows.Forms.Padding(1);
             this.DocSignDate.Name = "DocSignDate";
@@ -375,6 +377,8 @@
             // 
             // DocEffectiveDate
             // 
+            this.DocEffectiveDate.CustomFormat = "yyyy-MM-dd";
+            this.DocEffectiveDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.DocEffectiveDate.Location = new System.Drawing.Point(96, 18);
             this.DocEffectiveDate.Margin = new System.Windows.Forms.Padding(1);
             this.DocEffectiveDate.Name = "DocEffectiveDate";
@@ -472,10 +476,14 @@
             // 
             // PubFunctionNumDate
             // 
-            this.PubFunctionNumDate.Location = new System.Drawing.Point(628, 19);
+            this.PubFunctionNumDate.Checked = false;
+            this.PubFunctionNumDate.CustomFormat = "yyyy-MM-dd";
+            this.PubFunctionNumDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.PubFunctionNumDate.Location = new System.Drawing.Point(602, 19);
             this.PubFunctionNumDate.Margin = new System.Windows.Forms.Padding(1);
             this.PubFunctionNumDate.Name = "PubFunctionNumDate";
-            this.PubFunctionNumDate.Size = new System.Drawing.Size(103, 20);
+            this.PubFunctionNumDate.ShowCheckBox = true;
+            this.PubFunctionNumDate.Size = new System.Drawing.Size(120, 20);
             this.PubFunctionNumDate.TabIndex = 5;
             // 
             // groupBox7
@@ -526,10 +534,14 @@
             // 
             // FinanceControlDate
             // 
-            this.FinanceControlDate.Location = new System.Drawing.Point(628, 19);
+            this.FinanceControlDate.Checked = false;
+            this.FinanceControlDate.CustomFormat = "yyyy-MM-dd";
+            this.FinanceControlDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.FinanceControlDate.Location = new System.Drawing.Point(602, 19);
             this.FinanceControlDate.Margin = new System.Windows.Forms.Padding(1);
             this.FinanceControlDate.Name = "FinanceControlDate";
-            this.FinanceControlDate.Size = new System.Drawing.Size(103, 20);
+            this.FinanceControlDate.ShowCheckBox = true;
+            this.FinanceControlDate.Size = new System.Drawing.Size(120, 20);
             this.FinanceControlDate.TabIndex = 5;
             // 
             // SaveBtn

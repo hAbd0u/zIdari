@@ -290,12 +290,26 @@ namespace zIdari.Forms
             // Public function
             PubFunctionNumText.Text = c.PubFuncNum;
             if (c.PubFuncDate.HasValue)
+            {
+                PubFunctionNumDate.Checked = true;
                 PubFunctionNumDate.Value = c.PubFuncDate.Value;
+            }
+            else
+            {
+                PubFunctionNumDate.Checked = false;
+            }
 
             // Finance control
             FinanceControlNumText.Text = c.FinCtrlNum;
             if (c.FinCtrlDate.HasValue)
+            {
+                FinanceControlDate.Checked = true;
                 FinanceControlDate.Value = c.FinCtrlDate.Value;
+            }
+            else
+            {
+                FinanceControlDate.Checked = false;
+            }
         }
 
         private Carrier BuildFromUI()
@@ -319,9 +333,9 @@ namespace zIdari.Forms
                 DocDateSign = DocSignDate.Value.Date,
                 DocDateEffective = DocEffectiveDate.Value.Date,
                 PubFuncNum = PubFunctionNumText.Text?.Trim(),
-                PubFuncDate = PubFunctionNumDate.Value.Date,
+                PubFuncDate = PubFunctionNumDate.Checked ? (DateTime?)PubFunctionNumDate.Value.Date : null,
                 FinCtrlNum = FinanceControlNumText.Text?.Trim(),
-                FinCtrlDate = FinanceControlDate.Value.Date
+                FinCtrlDate = FinanceControlDate.Checked ? (DateTime?)FinanceControlDate.Value.Date : null
             };
 
             return carrier;
