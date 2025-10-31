@@ -134,6 +134,12 @@
     <Compile Include="Forms\ExperienceForm.Designer.cs">
       <DependentUpon>ExperienceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ScanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScanForm.Designer.cs">
+      <DependentUpon>ScanForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +191,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExperienceForm.resx">
       <DependentUpon>ExperienceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScanForm.resx">
+      <DependentUpon>ScanForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
