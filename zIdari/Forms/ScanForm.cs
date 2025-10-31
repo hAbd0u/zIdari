@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,9 @@ namespace zIdari.Forms
         private string _selectedScannerId = null;
         private List<ScannerInfo> _availableScanners = new List<ScannerInfo>();
 
-        private const string NAPS2_PATH = @"C:\Program Files\NAPS2\NAPS2.exe";
+        private const string NAPS2_CONSOLE_PATH_64 = @"C:\Program Files\NAPS2\NAPS2.Console.exe";
+        private const string NAPS2_CONSOLE_PATH_32 = @"C:\Program Files (x86)\NAPS2\NAPS2.Console.exe";
+        private string _naps2ConsolePath = null;
         private string _tempScanFolder;
 
         public string SavePath { get; private set; }
@@ -39,6 +42,20 @@ namespace zIdari.Forms
         {
             public string Id { get; set; }
             public string Name { get; set; }
+            
+            public override string ToString()
+            {
+                return Name ?? Id ?? "Unknown Scanner";
+            }
+        }
+        
+        private string FindNAPS2Path()
+        {
+            if (File.Exists(NAPS2_CONSOLE_PATH_64))
+                return NAPS2_CONSOLE_PATH_64;
+            if (File.Exists(NAPS2_CONSOLE_PATH_32))
+                return NAPS2_CONSOLE_PATH_32;
+            return null;
         }
 
         public ScanForm(int folderYear, int folderNumYear)
@@ -56,6 +73,9 @@ namespace zIdari.Forms
 
         private void InitializeForm()
         {
+            // Find NAPS2 Console installation
+            _naps2ConsolePath = FindNAPS2Path();
+            
             // Initialize combo boxes
             InitializeDpiCombo();
             InitializeColorCombo();
@@ -87,69 +107,103 @@ namespace zIdari.Forms
             {
                 statusLabel.Text = "Loading scanners...";
                 
-                if (!File.Exists(NAPS2_PATH))
+                if (string.IsNullOrEmpty(_naps2ConsolePath) || !File.Exists(_naps2ConsolePath))
                 {
-                    ScannerNameCombo.Items.Add("NAPS2 not found. Please install NAPS2 from https://www.naps2.com/");
-                    statusLabel.Text = "NAPS2 not installed";
+                    // Fallback to WIA if NAPS2 not found
+                    LoadScannersUsingWIA();
                     return;
                 }
-
-                // Use NAPS2 CLI to list scanners
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = NAPS2_PATH,
-                        Arguments = "--list-scanners",
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true
-                    }
-                };
-
-                process.Start();
-                var output = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
 
                 _availableScanners.Clear();
                 ScannerNameCombo.Items.Clear();
 
+                // Use NAPS2 Console to list devices with WIA driver
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = _naps2ConsolePath,
+                        Arguments = "--listdevices --driver wia",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true,
+                        StandardOutputEncoding = Encoding.UTF8
+                    }
+                };
+
+                process.Start();
+                
+                // Wait for process with timeout
+                bool finished = process.WaitForExit(5000); // 5 second timeout
+                if (!finished)
+                {
+                    process.Kill();
+                    ScannerNameCombo.Items.Add("NAPS2 command timed out");
+                    statusLabel.Text = "Scanner detection timed out";
+                    return;
+                }
+                
+                var output = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
+                
+                // Debug: Show output if no scanners found
+                System.Diagnostics.Debug.WriteLine($"NAPS2 Output: {output}");
+                System.Diagnostics.Debug.WriteLine($"NAPS2 Error: {error}");
+                System.Diagnostics.Debug.WriteLine($"Exit Code: {process.ExitCode}");
+
                 if (!string.IsNullOrWhiteSpace(output))
                 {
                     var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    
                     foreach (var line in lines)
                     {
-                        if (!string.IsNullOrWhiteSpace(line) && line.Contains("|"))
+                        var trimmedLine = line.Trim();
+                        
+                        // Skip empty lines, help messages, and error messages
+                        if (string.IsNullOrWhiteSpace(trimmedLine) || 
+                            trimmedLine.StartsWith("Usage:") ||
+                            trimmedLine.StartsWith("The --") ||
+                            trimmedLine.StartsWith("Possible values:") ||
+                            trimmedLine.StartsWith("NAPS2") ||
+                            trimmedLine.Contains("www.naps2.com") ||
+                            trimmedLine.Contains("https://") ||
+                            trimmedLine.Contains("naps2.com") ||
+                            trimmedLine.Length < 3)
+                            continue;
+                        
+                        // NAPS2.Console outputs just the device name (e.g., "Canon MF3010")
+                        // Use the device name as both ID and Name
+                        var scanner = new ScannerInfo
                         {
-                            var parts = line.Split('|');
-                            if (parts.Length >= 2)
-                            {
-                                var scanner = new ScannerInfo
-                                {
-                                    Id = parts[0].Trim(),
-                                    Name = parts[1].Trim()
-                                };
-                                _availableScanners.Add(scanner);
-                                ScannerNameCombo.Items.Add(scanner);
-                            }
-                        }
+                            Id = trimmedLine, // Use name as ID for WIA driver
+                            Name = trimmedLine
+                        };
+                        _availableScanners.Add(scanner);
+                        ScannerNameCombo.Items.Add(scanner);
                     }
                 }
 
                 if (ScannerNameCombo.Items.Count == 0)
                 {
-                    ScannerNameCombo.Items.Add("No scanners found");
-                    statusLabel.Text = "No scanners available";
+                    // Try alternative: Use WIA to detect scanners directly
+                    LoadScannersUsingWIA();
+                    
+                    if (ScannerNameCombo.Items.Count == 0)
+                    {
+                        ScannerNameCombo.Items.Add("No scanners found");
+                        statusLabel.Text = "No scanners available";
+                    }
                 }
                 else
                 {
+                    // NAPS2 devices found, update status
                     if (ScannerNameCombo.Items.Count > 0)
                     {
                         ScannerNameCombo.SelectedIndex = 0;
                         _selectedScannerId = ((ScannerInfo)ScannerNameCombo.SelectedItem)?.Id;
+                        statusLabel.Text = $"✓ {_availableScanners.Count} scanner(s) found (NAPS2)";
                     }
-                    statusLabel.Text = $"✓ {_availableScanners.Count} scanner(s) found";
                 }
             }
             catch (Exception ex)
@@ -158,6 +212,72 @@ namespace zIdari.Forms
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 statusLabel.Text = "Error loading scanners";
                 ScannerNameCombo.Items.Add("Error loading scanners");
+                
+                // Fallback to WIA
+                try
+                {
+                    LoadScannersUsingWIA();
+                }
+                catch { }
+            }
+        }
+        
+        private void LoadScannersUsingWIA()
+        {
+            try
+            {
+                // Use dynamic typing to avoid compile-time dependency on WIA
+                Type deviceManagerType = Type.GetTypeFromProgID("WIA.DeviceManager");
+                if (deviceManagerType == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("WIA DeviceManager not available");
+                    return;
+                }
+
+                dynamic deviceManager = Activator.CreateInstance(deviceManagerType);
+                int deviceCount = deviceManager.DeviceInfos.Count;
+
+                for (int i = 1; i <= deviceCount; i++)
+                {
+                    dynamic deviceInfo = deviceManager.DeviceInfos[i];
+                    int deviceType = (int)deviceInfo.Type;
+                    
+                    // WiaDeviceType.ScannerDeviceType = 1
+                    // WiaDeviceType.CameraDeviceType = 2
+                    if (deviceType == 1 || deviceType == 2)
+                    {
+                        string deviceName = "";
+                        try
+                        {
+                            dynamic nameProp = deviceInfo.Properties["Name"];
+                            deviceName = nameProp.get_Value().ToString();
+                        }
+                        catch
+                        {
+                            deviceName = $"Scanner {i}";
+                        }
+
+                        var scanner = new ScannerInfo
+                        {
+                            Id = i.ToString(),
+                            Name = deviceName
+                        };
+                        _availableScanners.Add(scanner);
+                        ScannerNameCombo.Items.Add(scanner);
+                    }
+                }
+                
+                if (ScannerNameCombo.Items.Count > 0)
+                {
+                    ScannerNameCombo.SelectedIndex = 0;
+                    _selectedScannerId = ((ScannerInfo)ScannerNameCombo.SelectedItem)?.Id;
+                    statusLabel.Text = $"✓ {_availableScanners.Count} scanner(s) found (WIA)";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"WIA Error: {ex.Message}");
+                // WIA not available, ignore
             }
         }
 
@@ -285,7 +405,7 @@ namespace zIdari.Forms
             {
                 pageNumericUpDown.Maximum = _pages.Count;
                 pageNumericUpDown.Value = _currentPageIndex + 1;
-                pageLabel.Text = $"من {_currentPageIndex + 1}";
+                //pageLabel.Text = $"من {_currentPageIndex + 1}";
                 totalPagesLabel.Text = $"Total: {_pages.Count} pages";
                 var scannedCount = _pages.Count(p => !p.IsImported);
                 var importedCount = _pages.Count(p => p.IsImported);
@@ -295,7 +415,7 @@ namespace zIdari.Forms
             {
                 pageNumericUpDown.Maximum = 1;
                 pageNumericUpDown.Value = 1;
-                pageLabel.Text = "من 0";
+                //pageLabel.Text = "من 0";
                 totalPagesLabel.Text = "Total: 0 pages";
                 pagesCountLabel.Text = "Total: 0 pages";
             }
@@ -316,8 +436,8 @@ namespace zIdari.Forms
             saveCurrentBtn.Enabled = hasCurrentPage;
             retryScanBtn.Enabled = hasCurrentPage && !_isScanning;
 
-            // Scan button
-            scanBtn.Enabled = !_isScanning && !string.IsNullOrEmpty(_selectedScannerId) && File.Exists(NAPS2_PATH);
+            // Scan button - enabled if we have a scanner selected (NAPS2 Console or WIA)
+            scanBtn.Enabled = !_isScanning && !string.IsNullOrEmpty(_selectedScannerId);
 
             // Update preview
             if (hasCurrentPage)
@@ -721,13 +841,6 @@ namespace zIdari.Forms
                 return;
             }
 
-            if (!File.Exists(NAPS2_PATH))
-            {
-                MessageBox.Show("NAPS2 not found. Please install NAPS2 from https://www.naps2.com/\n\nDefault path: C:\\Program Files\\NAPS2\\NAPS2.exe", 
-                    "NAPS2 Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             if (_isScanning)
                 return;
 
@@ -738,7 +851,17 @@ namespace zIdari.Forms
                 statusLabel.Text = "Scanning...";
                 this.Cursor = Cursors.WaitCursor;
 
-                await Task.Run(() => PerformScan());
+                // Check if using NAPS2 or WIA
+                bool useNAPS2 = !string.IsNullOrEmpty(_naps2ConsolePath) && File.Exists(_naps2ConsolePath);
+                
+                if (useNAPS2)
+                {
+                    await Task.Run(() => PerformScanWithNAPS2());
+                }
+                else
+                {
+                    await Task.Run(() => PerformScanWithWIA());
+                }
 
                 if (_pages.Count > 0)
                 {
@@ -761,37 +884,60 @@ namespace zIdari.Forms
             }
         }
 
-        private void PerformScan()
+        private void PerformScanWithNAPS2()
         {
-            var colorMode = colorCombo.SelectedItem?.ToString() switch
+            // Get values from UI on the UI thread before starting background task
+            string colorMode = null;
+            string dpi = null;
+            
+            this.Invoke((MethodInvoker)(() =>
             {
-                "Gray" => "Gray",
-                "Black&White" => "BlackWhite",
-                _ => "Color"
-            };
-
-            var dpi = DpiCombo.SelectedItem?.ToString() ?? "300";
+                colorMode = colorCombo.SelectedItem?.ToString() switch
+                {
+                    "Gray" => "gray",
+                    "Black&White" => "bw",
+                    _ => "color"
+                };
+                
+                dpi = DpiCombo.SelectedItem?.ToString() ?? "300";
+            }));
+            
             var outputPath = Path.Combine(_tempScanFolder, $"scan_{Guid.NewGuid():N}.png");
 
-            // Build NAPS2 command line arguments
-            var args = new StringBuilder();
-            args.Append($"--scanner \"{_selectedScannerId}\" ");
-            args.Append($"--dpi {dpi} ");
-            args.Append($"--format png ");
-            args.Append($"--color {colorMode} ");
+            // Build NAPS2.Console command line arguments
+            // Use correct syntax: --bitdepth instead of --color, and -o for output
+            bool batchMode = false;
+            bool duplexMode = false;
             
-            if (batchCheckBox.Checked)
-                args.Append("--batch ");
-            if (duplexCheckBox.Checked)
-                args.Append("--duplex ");
+            this.Invoke((MethodInvoker)(() =>
+            {
+                batchMode = batchCheckBox.Checked;
+                duplexMode = duplexCheckBox.Checked;
+            }));
+            
+            var args = new StringBuilder();
+            args.Append($"--driver wia ");
+            args.Append($"--device \"{_selectedScannerId}\" ");
+            args.Append($"--dpi {dpi} ");
+            args.Append($"--bitdepth {colorMode} ");
+            
+            if (duplexMode)
+                args.Append("--source duplex ");
+            else if (batchMode)
+                args.Append("--source feeder ");
+            else
+                args.Append("--source glass ");
 
-            args.Append($"\"{outputPath}\"");
+            args.Append($"-o \"{outputPath}\"");
+            
+            // Debug: Log the command being executed
+            System.Diagnostics.Debug.WriteLine($"NAPS2 Command: {_naps2ConsolePath} {args}");
 
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = NAPS2_PATH,
+                    FileName = _naps2ConsolePath,
                     Arguments = args.ToString(),
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -802,9 +948,71 @@ namespace zIdari.Forms
             };
 
             process.Start();
-            var output = process.StandardOutput.ReadToEnd();
-            var error = process.StandardError.ReadToEnd();
-            process.WaitForExit();
+            
+            // Read output asynchronously with timeout to avoid blocking
+            var outputBuilder = new StringBuilder();
+            var errorBuilder = new StringBuilder();
+            
+            var outputTask = Task.Run(() =>
+            {
+                try
+                {
+                    string line;
+                    while ((line = process.StandardOutput.ReadLine()) != null)
+                    {
+                        outputBuilder.AppendLine(line);
+                        System.Diagnostics.Debug.WriteLine($"NAPS2 Output Line: {line}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error reading output: {ex.Message}");
+                }
+            });
+            
+            var errorTask = Task.Run(() =>
+            {
+                try
+                {
+                    string line;
+                    while ((line = process.StandardError.ReadLine()) != null)
+                    {
+                        errorBuilder.AppendLine(line);
+                        System.Diagnostics.Debug.WriteLine($"NAPS2 Error Line: {line}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error reading error stream: {ex.Message}");
+                }
+            });
+
+            // Wait for process to complete with timeout (60 seconds for scanning)
+            bool finished = process.WaitForExit(60000);
+            
+            if (!finished)
+            {
+                process.Kill();
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    MessageBox.Show("Scan operation timed out (60 seconds). The scanner may be busy or not responding.", 
+                        "Scan Timeout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }));
+                return;
+            }
+
+            // Wait a bit for output streams to finish
+            Task.WaitAll(new[] { outputTask, errorTask }, 1000);
+            
+            var output = outputBuilder.ToString();
+            var error = errorBuilder.ToString();
+
+            // Debug output
+            System.Diagnostics.Debug.WriteLine($"NAPS2 Scan Output: {output}");
+            System.Diagnostics.Debug.WriteLine($"NAPS2 Scan Error: {error}");
+            System.Diagnostics.Debug.WriteLine($"NAPS2 Exit Code: {process.ExitCode}");
+            System.Diagnostics.Debug.WriteLine($"Expected output file: {outputPath}");
+            System.Diagnostics.Debug.WriteLine($"File exists: {File.Exists(outputPath)}");
 
             if (process.ExitCode == 0 && File.Exists(outputPath))
             {
@@ -816,27 +1024,146 @@ namespace zIdari.Forms
                 }));
 
                 // If batch mode, ask if continue
-                if (batchCheckBox.Checked)
+                bool continueBatch = false;
+                int currentPageCount = _pages.Count;
+                
+                this.Invoke((MethodInvoker)(() =>
                 {
-                    var continueScan = MessageBox.Show(
-                        $"Page {_pages.Count} scanned. Continue scanning?", 
-                        "Batch Scan",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if (continueScan == DialogResult.Yes)
+                    if (batchCheckBox.Checked)
                     {
-                        PerformScan(); // Recursive for batch
+                        var continueScan = MessageBox.Show(
+                            $"Page {currentPageCount} scanned. Continue scanning?", 
+                            "Batch Scan",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                        continueBatch = continueScan == DialogResult.Yes;
                     }
+                }));
+                
+                if (continueBatch)
+                {
+                    PerformScanWithNAPS2(); // Recursive for batch
                 }
             }
             else
             {
                 this.Invoke((MethodInvoker)(() =>
                 {
-                    var errorMsg = string.IsNullOrWhiteSpace(error) ? "Scan was cancelled or failed." : error;
+                    var errorMsg = $"Scan failed (Exit Code: {process.ExitCode}).\n\n";
+                    if (!string.IsNullOrWhiteSpace(error))
+                        errorMsg += $"Error: {error}\n\n";
+                    if (!string.IsNullOrWhiteSpace(output))
+                        errorMsg += $"Output: {output}\n\n";
+                    errorMsg += $"Expected file: {outputPath}\nFile exists: {File.Exists(outputPath)}";
                     MessageBox.Show(errorMsg, "Scan Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }));
+            }
+        }
+
+        private void PerformScanWithWIA()
+        {
+            try
+            {
+                Type deviceManagerType = Type.GetTypeFromProgID("WIA.DeviceManager");
+                if (deviceManagerType == null)
+                {
+                    throw new Exception("WIA DeviceManager not available");
+                }
+
+                dynamic deviceManager = Activator.CreateInstance(deviceManagerType);
+                var deviceIndex = int.Parse(_selectedScannerId);
+                dynamic device = deviceManager.DeviceInfos[deviceIndex].Connect();
+
+                // Get the scanner item (usually item 1)
+                dynamic item = device.Items[1];
+
+                // Set scan properties
+                var dpi = int.Parse(DpiCombo.SelectedItem?.ToString() ?? "300");
+                
+                // Set DPI
+                SetWIAProperty(item.Properties, "HorizontalResolution", dpi);
+                SetWIAProperty(item.Properties, "VerticalResolution", dpi);
+
+                // Set color mode
+                var colorMode = colorCombo.SelectedItem?.ToString() switch
+                {
+                    "Gray" => 2, // Grayscale
+                    "Black&White" => 1, // B&W
+                    _ => 0 // Color
+                };
+                SetWIAProperty(item.Properties, "CurrentIntent", colorMode);
+
+                // Perform the scan - WIA_FORMAT_PNG = {B96B3CAE-0728-11D3-9D7B-0000F81EF32E}
+                dynamic imageFile = item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+
+                // Convert WIA image to System.Drawing.Image
+                dynamic fileData = imageFile.FileData;
+                byte[] imageBytes = (byte[])fileData.get_BinaryData();
+                
+                using (var ms = new MemoryStream(imageBytes))
+                {
+                    var bitmap = new Bitmap(ms);
+                    var image = new Bitmap(bitmap); // Clone to avoid disposal issues
+
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        var page = new ScannedPage
+                        {
+                            PageNumber = _pages.Count + 1,
+                            ImageData = image,
+                            Rotation = 0,
+                            IsDuplex = duplexCheckBox.Checked,
+                            IsImported = false
+                        };
+
+                        _pages.Add(page);
+
+                        // Update page numbers
+                        for (int i = 0; i < _pages.Count; i++)
+                        {
+                            _pages[i].PageNumber = i + 1;
+                        }
+                    }));
+                }
+
+                // If batch mode, ask if continue
+                if (batchCheckBox.Checked)
+                {
+                    var continueScan = MessageBox.Show(
+                        $"Page {_pages.Count} scanned. Continue scanning?",
+                        "Batch Scan",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (continueScan == DialogResult.Yes)
+                    {
+                        PerformScanWithWIA(); // Recursive for batch
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    MessageBox.Show($"WIA Scan Error: {ex.Message}", "Scan Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
+            }
+        }
+
+        private void SetWIAProperty(dynamic properties, string propertyName, object value)
+        {
+            try
+            {
+                dynamic prop = properties.get_Item(propertyName);
+                if (prop != null)
+                {
+                    prop.set_Value(value);
+                }
+            }
+            catch
+            {
+                // Property might not exist, ignore
             }
         }
 
@@ -1248,13 +1575,6 @@ namespace zIdari.Forms
                 return;
             }
 
-            if (!File.Exists(NAPS2_PATH))
-            {
-                MessageBox.Show("NAPS2 not found. Please install NAPS2 from https://www.naps2.com/", 
-                    "NAPS2 Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             try
             {
                 var result = MessageBox.Show("Re-scan current page? The existing page will be replaced.", "Confirm", 
@@ -1267,69 +1587,18 @@ namespace zIdari.Forms
                 statusLabel.Text = "Re-scanning...";
                 this.Cursor = Cursors.WaitCursor;
 
+                // Check if using NAPS2 or WIA
+                bool useNAPS2 = !string.IsNullOrEmpty(_naps2ConsolePath) && File.Exists(_naps2ConsolePath);
+
                 await Task.Run(() =>
                 {
-                    var colorMode = colorCombo.SelectedItem?.ToString() switch
+                    if (useNAPS2)
                     {
-                        "Gray" => "Gray",
-                        "Black&White" => "BlackWhite",
-                        _ => "Color"
-                    };
-
-                    var dpi = DpiCombo.SelectedItem?.ToString() ?? "300";
-                    var outputPath = Path.Combine(_tempScanFolder, $"rescan_{Guid.NewGuid():N}.png");
-
-                    var args = new StringBuilder();
-                    args.Append($"--scanner \"{_selectedScannerId}\" ");
-                    args.Append($"--dpi {dpi} ");
-                    args.Append($"--format png ");
-                    args.Append($"--color {colorMode} ");
-                    args.Append($"\"{outputPath}\"");
-
-                    var process = new Process
-                    {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = NAPS2_PATH,
-                            Arguments = args.ToString(),
-                            UseShellExecute = false,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            CreateNoWindow = true
-                        }
-                    };
-
-                    process.Start();
-                    process.WaitForExit();
-
-                    if (process.ExitCode == 0 && File.Exists(outputPath))
-                    {
-                        this.Invoke((MethodInvoker)(() =>
-                        {
-                            // Dispose old image
-                            _pages[_currentPageIndex].ImageData?.Dispose();
-                            
-                            // Replace with new scan
-                            using (var img = Image.FromFile(outputPath))
-                            {
-                                _pages[_currentPageIndex].ImageData = new Bitmap(img);
-                                _pages[_currentPageIndex].Rotation = 0;
-                                _pages[_currentPageIndex].CropRegion = null;
-                                _pages[_currentPageIndex].IsImported = false;
-                            }
-                            
-                            try { File.Delete(outputPath); } catch { }
-                            UpdateUI();
-                            statusLabel.Text = "✓ Page re-scanned successfully";
-                        }));
+                        RetryScanWithNAPS2();
                     }
                     else
                     {
-                        this.Invoke((MethodInvoker)(() =>
-                        {
-                            MessageBox.Show("Scan was cancelled or failed.", "Scan Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            statusLabel.Text = "✗ Re-scan failed";
-                        }));
+                        RetryScanWithWIA();
                     }
                 });
             }
@@ -1343,6 +1612,196 @@ namespace zIdari.Forms
                 _isScanning = false;
                 retryScanBtn.Enabled = true;
                 this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void RetryScanWithNAPS2()
+        {
+            // Get values from UI on the UI thread
+            string colorMode = null;
+            string dpi = null;
+            
+            this.Invoke((MethodInvoker)(() =>
+            {
+                colorMode = colorCombo.SelectedItem?.ToString() switch
+                {
+                    "Gray" => "gray",
+                    "Black&White" => "bw",
+                    _ => "color"
+                };
+                
+                dpi = DpiCombo.SelectedItem?.ToString() ?? "300";
+            }));
+            
+            var outputPath = Path.Combine(_tempScanFolder, $"rescan_{Guid.NewGuid():N}.png");
+
+            var args = new StringBuilder();
+            args.Append($"--driver wia ");
+            args.Append($"--device \"{_selectedScannerId}\" ");
+            args.Append($"--dpi {dpi} ");
+            args.Append($"--bitdepth {colorMode} ");
+            args.Append($"--source glass ");
+            args.Append($"-o \"{outputPath}\"");
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = _naps2ConsolePath,
+                    Arguments = args.ToString(),
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            
+            // Read output with timeout
+            var outputBuilder = new StringBuilder();
+            var errorBuilder = new StringBuilder();
+            
+            var outputTask = Task.Run(() =>
+            {
+                try
+                {
+                    while (!process.StandardOutput.EndOfStream)
+                    {
+                        var line = process.StandardOutput.ReadLine();
+                        if (line != null)
+                            outputBuilder.AppendLine(line);
+                    }
+                }
+                catch { }
+            });
+            
+            var errorTask = Task.Run(() =>
+            {
+                try
+                {
+                    while (!process.StandardError.EndOfStream)
+                    {
+                        var line = process.StandardError.ReadLine();
+                        if (line != null)
+                            errorBuilder.AppendLine(line);
+                    }
+                }
+                catch { }
+            });
+
+            bool finished = process.WaitForExit(60000);
+            
+            if (!finished)
+            {
+                process.Kill();
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    MessageBox.Show("Re-scan operation timed out.", "Scan Timeout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    statusLabel.Text = "✗ Re-scan failed (timeout)";
+                }));
+                return;
+            }
+
+            Task.WaitAll(new[] { outputTask, errorTask }, 1000);
+            var output = outputBuilder.ToString();
+            var error = errorBuilder.ToString();
+
+            if (process.ExitCode == 0 && File.Exists(outputPath))
+            {
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    // Dispose old image
+                    _pages[_currentPageIndex].ImageData?.Dispose();
+                    
+                    // Replace with new scan
+                    using (var img = Image.FromFile(outputPath))
+                    {
+                        _pages[_currentPageIndex].ImageData = new Bitmap(img);
+                        _pages[_currentPageIndex].Rotation = 0;
+                        _pages[_currentPageIndex].CropRegion = null;
+                        _pages[_currentPageIndex].IsImported = false;
+                    }
+                    
+                    try { File.Delete(outputPath); } catch { }
+                    UpdateUI();
+                    statusLabel.Text = "✓ Page re-scanned successfully";
+                }));
+            }
+            else
+            {
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    var errorMsg = $"Re-scan failed (Exit Code: {process.ExitCode})";
+                    if (!string.IsNullOrWhiteSpace(error))
+                        errorMsg += $"\nError: {error}";
+                    MessageBox.Show(errorMsg, "Scan Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    statusLabel.Text = "✗ Re-scan failed";
+                }));
+            }
+        }
+
+        private void RetryScanWithWIA()
+        {
+            try
+            {
+                Type deviceManagerType = Type.GetTypeFromProgID("WIA.DeviceManager");
+                if (deviceManagerType == null)
+                {
+                    throw new Exception("WIA DeviceManager not available");
+                }
+
+                dynamic deviceManager = Activator.CreateInstance(deviceManagerType);
+                var deviceIndex = int.Parse(_selectedScannerId);
+                dynamic device = deviceManager.DeviceInfos[deviceIndex].Connect();
+
+                dynamic item = device.Items[1];
+
+                var dpi = int.Parse(DpiCombo.SelectedItem?.ToString() ?? "300");
+                SetWIAProperty(item.Properties, "HorizontalResolution", dpi);
+                SetWIAProperty(item.Properties, "VerticalResolution", dpi);
+
+                var colorMode = colorCombo.SelectedItem?.ToString() switch
+                {
+                    "Gray" => 2,
+                    "Black&White" => 1,
+                    _ => 0
+                };
+                SetWIAProperty(item.Properties, "CurrentIntent", colorMode);
+
+                dynamic imageFile = item.Transfer("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}");
+
+                dynamic fileData = imageFile.FileData;
+                byte[] imageBytes = (byte[])fileData.get_BinaryData();
+                
+                using (var ms = new MemoryStream(imageBytes))
+                {
+                    var bitmap = new Bitmap(ms);
+                    var image = new Bitmap(bitmap);
+
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        // Dispose old image
+                        _pages[_currentPageIndex].ImageData?.Dispose();
+                        
+                        // Replace with new scan
+                        _pages[_currentPageIndex].ImageData = image;
+                        _pages[_currentPageIndex].Rotation = 0;
+                        _pages[_currentPageIndex].CropRegion = null;
+                        _pages[_currentPageIndex].IsImported = false;
+                        
+                        UpdateUI();
+                        statusLabel.Text = "✓ Page re-scanned successfully";
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    MessageBox.Show($"WIA Re-scan Error: {ex.Message}", "Scan Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    statusLabel.Text = "✗ Re-scan failed";
+                }));
             }
         }
 
