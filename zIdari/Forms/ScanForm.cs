@@ -31,6 +31,9 @@ namespace zIdari.Forms
         private bool _isScanning = false;
         private string _selectedScannerId = null;
         private List<ScannerInfo> _availableScanners = new List<ScannerInfo>();
+        private bool _isPanning = false;
+        private Point _panStartPoint = Point.Empty;
+        private Point _panStartScrollPosition = Point.Empty;
 
         private const string NAPS2_CONSOLE_PATH_64 = @"C:\Program Files\NAPS2\NAPS2.Console.exe";
         private const string NAPS2_CONSOLE_PATH_32 = @"C:\Program Files (x86)\NAPS2\NAPS2.Console.exe";
@@ -337,6 +340,11 @@ namespace zIdari.Forms
             previewPictureBox.MouseDown += PreviewPictureBox_MouseDown;
             previewPictureBox.MouseMove += PreviewPictureBox_MouseMove;
             previewPictureBox.MouseUp += PreviewPictureBox_MouseUp;
+            
+            // Pan support (for zoomed images)
+            previewPictureBox.MouseDown += PreviewPictureBox_PanMouseDown;
+            previewPictureBox.MouseMove += PreviewPictureBox_PanMouseMove;
+            previewPictureBox.MouseUp += PreviewPictureBox_PanMouseUp;
 
             // Actions
             scanBtn.Click += ScanBtn_Click;
@@ -351,6 +359,7 @@ namespace zIdari.Forms
             ScannerNameCombo.SelectedIndexChanged += ScannerNameCombo_SelectedIndexChanged;
             brightnessTrackBar.ValueChanged += BrightnessTrackBar_ValueChanged;
             contrastTrackBar.ValueChanged += ContrastTrackBar_ValueChanged;
+            autoOptimizeCheckBox.CheckedChanged += AutoOptimizeCheckBox_CheckedChanged;
             formatCombo.SelectedIndexChanged += FormatCombo_SelectedIndexChanged;
 
             // Keyboard shortcuts
@@ -472,18 +481,129 @@ namespace zIdari.Forms
 
             if (displayImage == null) return;
 
-            // Apply zoom
-            Image finalImage = displayImage;
-            if (_currentZoom != 1.0)
+            // Apply brightness and contrast adjustments
+            Image adjustedImage = displayImage;
+            int brightness = brightnessTrackBar?.Value ?? 50; // Default is 50 (neutral)
+            int contrast = contrastTrackBar?.Value ?? 50; // Default is 50 (neutral)
+            
+            // Auto-optimize: automatically adjust brightness/contrast based on image analysis
+            if (autoOptimizeCheckBox?.Checked == true)
             {
-                var zoomedWidth = (int)(displayImage.Width * _currentZoom);
-                var zoomedHeight = (int)(displayImage.Height * _currentZoom);
-                finalImage = new Bitmap(displayImage, zoomedWidth, zoomedHeight);
-                if (finalImage != displayImage)
+                var optimized = CalculateAutoOptimize(displayImage);
+                brightness = optimized.brightness;
+                contrast = optimized.contrast;
+            }
+            
+            // Only apply if not at neutral values
+            if (brightness != 50 || contrast != 50)
+            {
+                adjustedImage = ApplyBrightnessContrast(displayImage, brightness, contrast);
+                if (adjustedImage != displayImage)
+                {
                     displayImage?.Dispose();
+                }
             }
 
+            // Apply zoom and update PictureBox settings
+            Image finalImage = adjustedImage;
+            if (_currentZoom != 1.0)
+            {
+                var zoomedWidth = (int)(adjustedImage.Width * _currentZoom);
+                var zoomedHeight = (int)(adjustedImage.Height * _currentZoom);
+                finalImage = new Bitmap(adjustedImage, zoomedWidth, zoomedHeight);
+                if (finalImage != adjustedImage)
+                    adjustedImage?.Dispose();
+            }
+
+            // Set image and configure PictureBox for zooming with scrolling
+            var previewPanel = previewPictureBox.Parent as Panel;
+            if (previewPanel != null && finalImage != null)
+            {
+                int zoomedWidth = finalImage.Width;
+                int zoomedHeight = finalImage.Height;
+                int availableWidth = previewPanel.ClientSize.Width;
+                int availableHeight = previewPanel.ClientSize.Height - 30; // Subtract zoom panel
+                
+                // If image fits in panel, use Zoom mode and dock it
+                if (zoomedWidth <= availableWidth && zoomedHeight <= availableHeight)
+                {
+                    previewPictureBox.Dock = DockStyle.Fill;
+                    previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+                    previewPanel.AutoScroll = false;
+                    previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Default;
+                }
+                else
+                {
+                    // Image is larger than panel - enable scrolling and panning
+                    previewPictureBox.Dock = DockStyle.None;
+                    previewPictureBox.Size = new Size(zoomedWidth, zoomedHeight);
+                    previewPictureBox.SizeMode = PictureBoxSizeMode.Normal;
+                    previewPictureBox.Location = new Point(0, 30);
+                    
+                    // Enable scrolling
+                    previewPanel.AutoScroll = true;
+                    previewPanel.AutoScrollMinSize = new Size(zoomedWidth, zoomedHeight);
+                    
+                    // Enable pan cursor when zoomed in
+                    previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Hand;
+                }
+            }
+            else
+            {
+                previewPictureBox.Dock = DockStyle.Fill;
+                previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            
             previewPictureBox.Image = finalImage;
+        }
+        
+        private Bitmap ApplyBrightnessContrast(Image sourceImage, int brightness, int contrast)
+        {
+            // Trackbar values: 0-100, where 50 is neutral (no adjustment)
+            // Convert to -50 to +50 range
+            int brightnessAdjust = brightness - 50;
+            int contrastAdjust = contrast - 50;
+            
+            // If both are neutral, return original image
+            if (brightnessAdjust == 0 && contrastAdjust == 0)
+            {
+                return new Bitmap(sourceImage);
+            }
+            
+            var bitmap = new Bitmap(sourceImage);
+            
+            // Brightness: -50 to +50 maps to -127.5 to +127.5
+            float brightnessValue = brightnessAdjust / 50.0f * 127.5f;
+            
+            // Contrast: -50 to +50 maps to 0.5x to 1.5x multiplier
+            float contrastValue = 1.0f + (contrastAdjust / 50.0f * 0.5f);
+            if (contrastValue < 0.1f) contrastValue = 0.1f;
+            
+            // Apply adjustments using ColorMatrix
+            float[][] colorMatrixElements = {
+                new float[] { contrastValue, 0, 0, 0, 0 },
+                new float[] { 0, contrastValue, 0, 0, 0 },
+                new float[] { 0, 0, contrastValue, 0, 0 },
+                new float[] { 0, 0, 0, 1, 0 },
+                new float[] { brightnessValue / 255.0f, brightnessValue / 255.0f, brightnessValue / 255.0f, 0, 1 }
+            };
+            
+            var adjustedBitmap = new Bitmap(bitmap.Width, bitmap.Height);
+            using (var graphics = Graphics.FromImage(adjustedBitmap))
+            {
+                var colorMatrix = new System.Drawing.Imaging.ColorMatrix(colorMatrixElements);
+                var imageAttributes = new System.Drawing.Imaging.ImageAttributes();
+                imageAttributes.SetColorMatrix(colorMatrix);
+                
+                graphics.DrawImage(bitmap, 
+                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    0, 0, bitmap.Width, bitmap.Height,
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+            }
+            
+            bitmap?.Dispose();
+            return adjustedBitmap;
         }
 
         private void UpdateThumbnails()
@@ -666,16 +786,28 @@ namespace zIdari.Forms
 
         private void FitBtn_Click(object sender, EventArgs e)
         {
-            if (previewPictureBox.Image != null && previewPictureBox.Width > 0 && previewPictureBox.Height > 0)
+            if (_currentPageIndex < 0 || _currentPageIndex >= _pages.Count)
+                return;
+                
+            var page = _pages[_currentPageIndex];
+            var sourceImage = page.GetDisplayImage();
+            
+            if (sourceImage != null)
             {
-                var imgWidth = previewPictureBox.Image.Width;
-                var imgHeight = previewPictureBox.Image.Height;
-                var picWidth = previewPictureBox.Width;
-                var picHeight = previewPictureBox.Height;
+                var previewPanel = previewPictureBox.Parent as Panel;
+                if (previewPanel != null)
+                {
+                    var imgWidth = sourceImage.Width;
+                    var imgHeight = sourceImage.Height;
+                    var availableWidth = previewPanel.ClientSize.Width;
+                    var availableHeight = previewPanel.ClientSize.Height - 30; // Subtract zoom panel
 
-                var zoomX = (double)picWidth / imgWidth;
-                var zoomY = (double)picHeight / imgHeight;
-                _currentZoom = Math.Min(zoomX, zoomY);
+                    var zoomX = (double)availableWidth / imgWidth;
+                    var zoomY = (double)availableHeight / imgHeight;
+                    _currentZoom = Math.Min(zoomX, zoomY);
+                }
+                
+                sourceImage?.Dispose();
                 UpdatePreview();
                 UpdateZoomCombo();
             }
@@ -772,6 +904,76 @@ namespace zIdari.Forms
             {
                 _isDrawingCrop = true;
                 _cropStartPoint = e.Location;
+            }
+        }
+        
+        private void PreviewPictureBox_PanMouseDown(object sender, MouseEventArgs e)
+        {
+            // Only enable pan when not cropping and when zoomed in
+            if (!_isCropping && _currentZoom > 1.0 && e.Button == MouseButtons.Left)
+            {
+                var previewPanel = previewPictureBox.Parent as Panel;
+                if (previewPanel != null && previewPanel.AutoScroll)
+                {
+                    _isPanning = true;
+                    _panStartPoint = e.Location;
+                    _panStartScrollPosition = previewPanel.AutoScrollPosition;
+                    previewPictureBox.Cursor = Cursors.Hand;
+                }
+            }
+        }
+        
+        private void PreviewPictureBox_PanMouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isPanning)
+            {
+                var previewPanel = previewPictureBox.Parent as Panel;
+                if (previewPanel != null)
+                {
+                    // Calculate movement delta (mouse moved this much)
+                    int deltaX = e.X - _panStartPoint.X;
+                    int deltaY = e.Y - _panStartPoint.Y;
+                    
+                    // Update scroll position (reverse direction for natural panning)
+                    // AutoScrollPosition returns negative values, so we need to negate
+                    int currentX = -previewPanel.AutoScrollPosition.X;
+                    int currentY = -previewPanel.AutoScrollPosition.Y;
+                    
+                    int newX = currentX - deltaX;
+                    int newY = currentY - deltaY;
+                    
+                    // Clamp to valid scroll range
+                    if (previewPanel.HorizontalScroll.Visible)
+                    {
+                        newX = Math.Max(0, Math.Min(previewPanel.HorizontalScroll.Maximum, newX));
+                    }
+                    if (previewPanel.VerticalScroll.Visible)
+                    {
+                        newY = Math.Max(0, Math.Min(previewPanel.VerticalScroll.Maximum, newY));
+                    }
+                    
+                    previewPanel.AutoScrollPosition = new Point(newX, newY);
+                    
+                    // Update start point for smooth continuous panning
+                    _panStartPoint = e.Location;
+                    _panStartScrollPosition = previewPanel.AutoScrollPosition;
+                }
+            }
+        }
+        
+        private void PreviewPictureBox_PanMouseUp(object sender, MouseEventArgs e)
+        {
+            if (_isPanning)
+            {
+                _isPanning = false;
+                if (!_isCropping && _currentZoom > 1.0)
+                {
+                    previewPictureBox.Cursor = Cursors.Hand;
+                }
+                else
+                {
+                    previewPictureBox.Cursor = Cursors.Default;
+                }
             }
         }
 
@@ -2252,6 +2454,12 @@ namespace zIdari.Forms
         // Settings event handlers
         private void BrightnessTrackBar_ValueChanged(object sender, EventArgs e)
         {
+            // Disable auto-optimize when manually adjusting
+            if (autoOptimizeCheckBox != null)
+            {
+                autoOptimizeCheckBox.Checked = false;
+            }
+            
             // Apply brightness to preview in real-time
             if (_currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
             {
@@ -2261,11 +2469,81 @@ namespace zIdari.Forms
 
         private void ContrastTrackBar_ValueChanged(object sender, EventArgs e)
         {
+            // Disable auto-optimize when manually adjusting
+            if (autoOptimizeCheckBox != null)
+            {
+                autoOptimizeCheckBox.Checked = false;
+            }
+            
             // Apply contrast to preview in real-time
             if (_currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
             {
                 UpdatePreview();
             }
+        }
+        
+        private void AutoOptimizeCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoOptimizeCheckBox.Checked && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
+            {
+                var page = _pages[_currentPageIndex];
+                var displayImage = page.GetDisplayImage();
+                if (displayImage != null)
+                {
+                    var optimized = CalculateAutoOptimize(displayImage);
+                    brightnessTrackBar.Value = optimized.brightness;
+                    contrastTrackBar.Value = optimized.contrast;
+                    displayImage?.Dispose();
+                }
+            }
+            UpdatePreview();
+        }
+        
+        private (int brightness, int contrast) CalculateAutoOptimize(Image image)
+        {
+            // Analyze image to determine optimal brightness and contrast
+            // This is a simple implementation - can be enhanced
+            var bitmap = new Bitmap(image);
+            long totalBrightness = 0;
+            long pixelCount = 0;
+            int minBrightness = 255;
+            int maxBrightness = 0;
+            
+            // Sample pixels (every 10th pixel for performance)
+            for (int y = 0; y < bitmap.Height; y += 10)
+            {
+                for (int x = 0; x < bitmap.Width; x += 10)
+                {
+                    var pixel = bitmap.GetPixel(x, y);
+                    int pixelBrightness = (int)((pixel.R + pixel.G + pixel.B) / 3.0);
+                    totalBrightness += pixelBrightness;
+                    pixelCount++;
+                    if (pixelBrightness < minBrightness) minBrightness = pixelBrightness;
+                    if (pixelBrightness > maxBrightness) maxBrightness = pixelBrightness;
+                }
+            }
+            
+            bitmap.Dispose();
+            
+            if (pixelCount == 0) return (50, 50); // Neutral values
+            
+            int avgBrightness = (int)(totalBrightness / pixelCount);
+            int brightnessRange = maxBrightness - minBrightness;
+            
+            // Calculate optimal brightness (target: ~128 average)
+            int brightnessAdjust = 128 - avgBrightness;
+            // Map to trackbar range: -50 to +50
+            int optimalBrightness = 50 + (int)(brightnessAdjust / 2.55f);
+            optimalBrightness = Math.Max(0, Math.Min(100, optimalBrightness));
+            
+            // Calculate optimal contrast (target: good range)
+            // If range is small, increase contrast; if range is large, reduce contrast
+            int contrastAdjust = 128 - brightnessRange;
+            // Map to trackbar range: -50 to +50
+            int optimalContrast = 50 + (int)(contrastAdjust / 5.0f);
+            optimalContrast = Math.Max(0, Math.Min(100, optimalContrast));
+            
+            return (optimalBrightness, optimalContrast);
         }
 
         private void FormatCombo_SelectedIndexChanged(object sender, EventArgs e)
