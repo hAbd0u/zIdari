@@ -224,7 +224,7 @@ namespace zIdari.Forms
                     {
                         ScannerNameCombo.SelectedIndex = 0;
                         _selectedScannerId = ((ScannerInfo)ScannerNameCombo.SelectedItem)?.Id;
-                        statusLabel.Text = $"✓ {_availableScanners.Count} scanner(s) found (NAPS2)";
+                        statusLabel.Text = $"تم إيجاد ✓ {_availableScanners.Count} ماسحة ضوئية";
                     }
                 }
             }
@@ -440,18 +440,18 @@ namespace zIdari.Forms
                 pageNumericUpDown.Maximum = _pages.Count;
                 pageNumericUpDown.Value = _currentPageIndex + 1;
                 //pageLabel.Text = $"من {_currentPageIndex + 1}";
-                totalPagesLabel.Text = $"Total: {_pages.Count} pages";
+                totalPagesLabel.Text = $"{_pages.Count} صفحة";
                 var scannedCount = _pages.Count(p => !p.IsImported);
                 var importedCount = _pages.Count(p => p.IsImported);
-                pagesCountLabel.Text = $"Total: {_pages.Count} pages ({scannedCount} scanned, {importedCount} imported)";
+                pagesCountLabel.Text = $"المجموع: {scannedCount} صفحة ممسوحة، {importedCount} صفحة مستوردة";
             }
             else
             {
                 pageNumericUpDown.Maximum = 1;
                 pageNumericUpDown.Value = 1;
                 //pageLabel.Text = "من 0";
-                totalPagesLabel.Text = "Total: 0 pages";
-                pagesCountLabel.Text = "Total: 0 pages";
+                totalPagesLabel.Text = "0 صفحة";
+                pagesCountLabel.Text = "0 صفحة";
             }
 
             // Rotation buttons
@@ -1839,13 +1839,13 @@ namespace zIdari.Forms
 
         private void ImportFiles(string[] filePaths)
         {
-            int successCount = 0;
+            int pagesBeforeImport = _pages.Count;
             int failCount = 0;
             var errors = new List<string>();
 
             try
             {
-                statusLabel.Text = "Importing files...";
+                statusLabel.Text = "إستيراد الملفات";
                 this.Cursor = Cursors.WaitCursor;
 
                 foreach (var filePath in filePaths)
@@ -1857,12 +1857,10 @@ namespace zIdari.Forms
                         if (extension == ".pdf")
                         {
                             ImportPdfFile(filePath);
-                            successCount++;
                         }
                         else if (IsImageFile(extension))
                         {
                             ImportImageFile(filePath);
-                            successCount++;
                         }
                         else
                         {
@@ -1877,6 +1875,9 @@ namespace zIdari.Forms
                     }
                 }
 
+                // Count pages actually added (not files imported)
+                int successCount = _pages.Count - pagesBeforeImport;
+
                 if (successCount > 0)
                 {
                     // Navigate to last imported page
@@ -1887,7 +1888,7 @@ namespace zIdari.Forms
                     UpdateUI();
                 }
 
-                var message = $"Imported {successCount} page(s) successfully.";
+                var message = $"تم إستيراد {successCount} صفحة.";
                 if (failCount > 0)
                 {
                     message += $"\n{failCount} file(s) failed to import.";
@@ -1897,10 +1898,10 @@ namespace zIdari.Forms
                     }
                 }
 
-                MessageBox.Show(message, "Import Complete", MessageBoxButtons.OK, 
+                MessageBox.Show(message, "تم الإستيراد", MessageBoxButtons.OK, 
                     failCount > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
                 
-                statusLabel.Text = $"✓ {successCount} page(s) imported";
+                statusLabel.Text = $"✓ {successCount} تم إستيرادها";
             }
             catch (Exception ex)
             {

@@ -112,7 +112,7 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 132F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tableLayoutPanel1.Controls.Add(this.thumbnailPanel, 0, 0);
@@ -132,9 +132,9 @@
             this.thumbnailPanel.AutoScroll = true;
             this.thumbnailPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.thumbnailPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.thumbnailPanel.Location = new System.Drawing.Point(1059, 3);
+            this.thumbnailPanel.Location = new System.Drawing.Point(1077, 3);
             this.thumbnailPanel.Name = "thumbnailPanel";
-            this.thumbnailPanel.Size = new System.Drawing.Size(144, 866);
+            this.thumbnailPanel.Size = new System.Drawing.Size(126, 866);
             this.thumbnailPanel.TabIndex = 5;
             this.thumbnailPanel.WrapContents = false;
             // 
@@ -150,7 +150,7 @@
             this.previewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewPanel.Location = new System.Drawing.Point(253, 3);
             this.previewPanel.Name = "previewPanel";
-            this.previewPanel.Size = new System.Drawing.Size(800, 866);
+            this.previewPanel.Size = new System.Drawing.Size(818, 866);
             this.previewPanel.TabIndex = 1;
             // 
             // previewPictureBox
@@ -160,7 +160,7 @@
             this.previewPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewPictureBox.Location = new System.Drawing.Point(0, 30);
             this.previewPictureBox.Name = "previewPictureBox";
-            this.previewPictureBox.Size = new System.Drawing.Size(800, 691);
+            this.previewPictureBox.Size = new System.Drawing.Size(818, 691);
             this.previewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewPictureBox.TabIndex = 0;
             this.previewPictureBox.TabStop = false;
@@ -175,7 +175,7 @@
             this.zoomPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.zoomPanel.Location = new System.Drawing.Point(0, 0);
             this.zoomPanel.Name = "zoomPanel";
-            this.zoomPanel.Size = new System.Drawing.Size(800, 30);
+            this.zoomPanel.Size = new System.Drawing.Size(818, 30);
             this.zoomPanel.TabIndex = 1;
             // 
             // zoomCombo
@@ -211,7 +211,7 @@
             this.fitBtn.Name = "fitBtn";
             this.fitBtn.Size = new System.Drawing.Size(60, 23);
             this.fitBtn.TabIndex = 3;
-            this.fitBtn.Text = "Fit";
+            this.fitBtn.Text = "ملئ";
             this.fitBtn.UseVisualStyleBackColor = true;
             // 
             // actualSizeBtn
@@ -220,7 +220,7 @@
             this.actualSizeBtn.Name = "actualSizeBtn";
             this.actualSizeBtn.Size = new System.Drawing.Size(70, 23);
             this.actualSizeBtn.TabIndex = 4;
-            this.actualSizeBtn.Text = "Actual Size";
+            this.actualSizeBtn.Text = "الحجم الأصلي";
             this.actualSizeBtn.UseVisualStyleBackColor = true;
             // 
             // rotationPanel
@@ -228,11 +228,14 @@
             this.rotationPanel.Controls.Add(this.rotateLeftBtn);
             this.rotationPanel.Controls.Add(this.rotateRightBtn);
             this.rotationPanel.Controls.Add(this.flip180Btn);
+            this.rotationPanel.Controls.Add(this.cropBtn);
             this.rotationPanel.Controls.Add(this.resetRotationBtn);
+            this.rotationPanel.Controls.Add(this.clearCropBtn);
+            this.rotationPanel.Controls.Add(this.applyCropBtn);
             this.rotationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rotationPanel.Location = new System.Drawing.Point(0, 721);
             this.rotationPanel.Name = "rotationPanel";
-            this.rotationPanel.Size = new System.Drawing.Size(800, 30);
+            this.rotationPanel.Size = new System.Drawing.Size(818, 30);
             this.rotationPanel.TabIndex = 2;
             // 
             // rotateLeftBtn
@@ -241,7 +244,7 @@
             this.rotateLeftBtn.Name = "rotateLeftBtn";
             this.rotateLeftBtn.Size = new System.Drawing.Size(80, 23);
             this.rotateLeftBtn.TabIndex = 0;
-            this.rotateLeftBtn.Text = "↻ Rotate Left";
+            this.rotateLeftBtn.Text = "↻ تدوير يسار";
             this.rotateLeftBtn.UseVisualStyleBackColor = true;
             // 
             // rotateRightBtn
@@ -250,7 +253,7 @@
             this.rotateRightBtn.Name = "rotateRightBtn";
             this.rotateRightBtn.Size = new System.Drawing.Size(80, 23);
             this.rotateRightBtn.TabIndex = 1;
-            this.rotateRightBtn.Text = "↺ Rotate Right";
+            this.rotateRightBtn.Text = "↺ تدوير يمين";
             this.rotateRightBtn.UseVisualStyleBackColor = true;
             // 
             // flip180Btn
@@ -259,7 +262,7 @@
             this.flip180Btn.Name = "flip180Btn";
             this.flip180Btn.Size = new System.Drawing.Size(80, 23);
             this.flip180Btn.TabIndex = 2;
-            this.flip180Btn.Text = "🔄 Flip 180°";
+            this.flip180Btn.Text = "🔄 قلب 180°";
             this.flip180Btn.UseVisualStyleBackColor = true;
             // 
             // resetRotationBtn
@@ -268,7 +271,7 @@
             this.resetRotationBtn.Name = "resetRotationBtn";
             this.resetRotationBtn.Size = new System.Drawing.Size(70, 23);
             this.resetRotationBtn.TabIndex = 3;
-            this.resetRotationBtn.Text = "↺ Reset";
+            this.resetRotationBtn.Text = "↺ إعادة ";
             this.resetRotationBtn.UseVisualStyleBackColor = true;
             // 
             // cropPanel
@@ -276,91 +279,88 @@
             this.cropPanel.Controls.Add(this.totalPagesLabel);
             this.cropPanel.Controls.Add(this.firstBtn);
             this.cropPanel.Controls.Add(this.lastBtn);
-            this.cropPanel.Controls.Add(this.cropBtn);
             this.cropPanel.Controls.Add(this.prevBtn);
-            this.cropPanel.Controls.Add(this.applyCropBtn);
-            this.cropPanel.Controls.Add(this.clearCropBtn);
             this.cropPanel.Controls.Add(this.pageNumericUpDown);
             this.cropPanel.Controls.Add(this.nextBtn);
             this.cropPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.cropPanel.Location = new System.Drawing.Point(0, 751);
             this.cropPanel.Name = "cropPanel";
-            this.cropPanel.Size = new System.Drawing.Size(800, 30);
+            this.cropPanel.Size = new System.Drawing.Size(818, 30);
             this.cropPanel.TabIndex = 3;
             // 
             // totalPagesLabel
             // 
             this.totalPagesLabel.AutoSize = true;
-            this.totalPagesLabel.Location = new System.Drawing.Point(611, 9);
+            this.totalPagesLabel.Location = new System.Drawing.Point(483, 7);
             this.totalPagesLabel.Name = "totalPagesLabel";
-            this.totalPagesLabel.Size = new System.Drawing.Size(75, 13);
+            this.totalPagesLabel.Size = new System.Drawing.Size(42, 13);
             this.totalPagesLabel.TabIndex = 6;
-            this.totalPagesLabel.Text = "Total: 0 pages";
+            this.totalPagesLabel.Text = "0 صفحة";
             // 
             // firstBtn
             // 
-            this.firstBtn.Location = new System.Drawing.Point(555, 4);
+            this.firstBtn.Location = new System.Drawing.Point(443, 2);
             this.firstBtn.Name = "firstBtn";
-            this.firstBtn.Size = new System.Drawing.Size(50, 23);
+            this.firstBtn.Size = new System.Drawing.Size(34, 23);
             this.firstBtn.TabIndex = 0;
             this.firstBtn.Text = "►►";
             this.firstBtn.UseVisualStyleBackColor = true;
             // 
             // lastBtn
             // 
-            this.lastBtn.Location = new System.Drawing.Point(331, 4);
+            this.lastBtn.Location = new System.Drawing.Point(275, 2);
             this.lastBtn.Name = "lastBtn";
-            this.lastBtn.Size = new System.Drawing.Size(50, 23);
+            this.lastBtn.Size = new System.Drawing.Size(34, 23);
             this.lastBtn.TabIndex = 5;
             this.lastBtn.Text = "◄◄";
             this.lastBtn.UseVisualStyleBackColor = true;
             // 
             // cropBtn
             // 
-            this.cropBtn.Location = new System.Drawing.Point(3, 3);
+            this.cropBtn.Location = new System.Drawing.Point(737, 1);
             this.cropBtn.Name = "cropBtn";
             this.cropBtn.Size = new System.Drawing.Size(60, 23);
             this.cropBtn.TabIndex = 0;
-            this.cropBtn.Text = "Crop";
+            this.cropBtn.Text = "قص";
             this.cropBtn.UseVisualStyleBackColor = true;
             // 
             // prevBtn
             // 
-            this.prevBtn.Location = new System.Drawing.Point(499, 4);
+            this.prevBtn.Location = new System.Drawing.Point(405, 2);
             this.prevBtn.Name = "prevBtn";
-            this.prevBtn.Size = new System.Drawing.Size(50, 23);
+            this.prevBtn.Size = new System.Drawing.Size(34, 23);
             this.prevBtn.TabIndex = 1;
             this.prevBtn.Text = "►";
             this.prevBtn.UseVisualStyleBackColor = true;
             // 
             // applyCropBtn
             // 
-            this.applyCropBtn.Location = new System.Drawing.Point(69, 3);
+            this.applyCropBtn.Location = new System.Drawing.Point(661, 1);
             this.applyCropBtn.Name = "applyCropBtn";
             this.applyCropBtn.Size = new System.Drawing.Size(70, 23);
             this.applyCropBtn.TabIndex = 1;
-            this.applyCropBtn.Text = "Apply Crop";
+            this.applyCropBtn.Text = "تطبيق";
             this.applyCropBtn.UseVisualStyleBackColor = true;
             // 
             // clearCropBtn
             // 
-            this.clearCropBtn.Location = new System.Drawing.Point(145, 3);
+            this.clearCropBtn.Location = new System.Drawing.Point(585, 1);
             this.clearCropBtn.Name = "clearCropBtn";
             this.clearCropBtn.Size = new System.Drawing.Size(70, 23);
             this.clearCropBtn.TabIndex = 2;
-            this.clearCropBtn.Text = "Clear Crop";
+            this.clearCropBtn.Text = "إلغاء القص";
             this.clearCropBtn.UseVisualStyleBackColor = true;
             // 
             // pageNumericUpDown
             // 
-            this.pageNumericUpDown.Location = new System.Drawing.Point(443, 7);
+            this.pageNumericUpDown.Location = new System.Drawing.Point(357, 5);
             this.pageNumericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.pageNumericUpDown.Name = "pageNumericUpDown";
-            this.pageNumericUpDown.Size = new System.Drawing.Size(50, 20);
+            this.pageNumericUpDown.Size = new System.Drawing.Size(40, 20);
             this.pageNumericUpDown.TabIndex = 3;
             this.pageNumericUpDown.Value = new decimal(new int[] {
             1,
@@ -370,9 +370,9 @@
             // 
             // nextBtn
             // 
-            this.nextBtn.Location = new System.Drawing.Point(387, 4);
+            this.nextBtn.Location = new System.Drawing.Point(315, 2);
             this.nextBtn.Name = "nextBtn";
-            this.nextBtn.Size = new System.Drawing.Size(50, 23);
+            this.nextBtn.Size = new System.Drawing.Size(34, 23);
             this.nextBtn.TabIndex = 4;
             this.nextBtn.Text = "◄";
             this.nextBtn.UseVisualStyleBackColor = true;
@@ -384,7 +384,7 @@
             this.filenamePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.filenamePanel.Location = new System.Drawing.Point(0, 781);
             this.filenamePanel.Name = "filenamePanel";
-            this.filenamePanel.Size = new System.Drawing.Size(800, 25);
+            this.filenamePanel.Size = new System.Drawing.Size(818, 25);
             this.filenamePanel.TabIndex = 6;
             // 
             // filenameLabel
@@ -412,7 +412,7 @@
             this.saveLocationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.saveLocationPanel.Location = new System.Drawing.Point(0, 806);
             this.saveLocationPanel.Name = "saveLocationPanel";
-            this.saveLocationPanel.Size = new System.Drawing.Size(800, 25);
+            this.saveLocationPanel.Size = new System.Drawing.Size(818, 25);
             this.saveLocationPanel.TabIndex = 7;
             // 
             // saveLocationLabel
@@ -437,7 +437,7 @@
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(121, 20);
             this.browseBtn.TabIndex = 2;
-            this.browseBtn.Text = "Browse...";
+            this.browseBtn.Text = "إختر مسار";
             this.browseBtn.UseVisualStyleBackColor = true;
             // 
             // actionButtonsPanel
@@ -449,7 +449,7 @@
             this.actionButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.actionButtonsPanel.Location = new System.Drawing.Point(0, 831);
             this.actionButtonsPanel.Name = "actionButtonsPanel";
-            this.actionButtonsPanel.Size = new System.Drawing.Size(800, 35);
+            this.actionButtonsPanel.Size = new System.Drawing.Size(818, 35);
             this.actionButtonsPanel.TabIndex = 8;
             // 
             // saveAllBtn
@@ -458,7 +458,7 @@
             this.saveAllBtn.Name = "saveAllBtn";
             this.saveAllBtn.Size = new System.Drawing.Size(100, 25);
             this.saveAllBtn.TabIndex = 0;
-            this.saveAllBtn.Text = "Save All Pages";
+            this.saveAllBtn.Text = "حفظ الكل";
             this.saveAllBtn.UseVisualStyleBackColor = true;
             // 
             // saveCurrentBtn
@@ -467,25 +467,25 @@
             this.saveCurrentBtn.Name = "saveCurrentBtn";
             this.saveCurrentBtn.Size = new System.Drawing.Size(100, 25);
             this.saveCurrentBtn.TabIndex = 1;
-            this.saveCurrentBtn.Text = "Save Current";
+            this.saveCurrentBtn.Text = "حفظ الحالية";
             this.saveCurrentBtn.UseVisualStyleBackColor = true;
             // 
             // cancelBtn
             // 
-            this.cancelBtn.Location = new System.Drawing.Point(721, 5);
+            this.cancelBtn.Location = new System.Drawing.Point(631, 4);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(80, 25);
             this.cancelBtn.TabIndex = 2;
-            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.Text = "إلغاء";
             this.cancelBtn.UseVisualStyleBackColor = true;
             // 
             // retryScanBtn
             // 
-            this.retryScanBtn.Location = new System.Drawing.Point(635, 5);
+            this.retryScanBtn.Location = new System.Drawing.Point(717, 5);
             this.retryScanBtn.Name = "retryScanBtn";
             this.retryScanBtn.Size = new System.Drawing.Size(80, 25);
             this.retryScanBtn.TabIndex = 3;
-            this.retryScanBtn.Text = "Retry Scan";
+            this.retryScanBtn.Text = "إعادة مسح";
             this.retryScanBtn.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel2
