@@ -361,6 +361,9 @@ namespace zIdari.Forms
             contrastTrackBar.ValueChanged += ContrastTrackBar_ValueChanged;
             autoOptimizeCheckBox.CheckedChanged += AutoOptimizeCheckBox_CheckedChanged;
             formatCombo.SelectedIndexChanged += FormatCombo_SelectedIndexChanged;
+            
+            // Lock previewPanel size to its TableLayoutPanel cell and enable scrolling
+            this.Load += ScanForm_Load;
 
             // Keyboard shortcuts
             this.KeyDown += ScanForm_KeyDown;
@@ -524,24 +527,27 @@ namespace zIdari.Forms
                 int availableWidth = previewPanel.ClientSize.Width;
                 int availableHeight = previewPanel.ClientSize.Height - 30; // Subtract zoom panel
                 
-                // If image fits in panel, use Zoom mode and dock it
+                // Panel size is locked (via MaximumSize) so it won't grow beyond cell
+                // AutoScroll is enabled, so content inside can scroll
+                
                 if (zoomedWidth <= availableWidth && zoomedHeight <= availableHeight)
                 {
+                    // Image fits - dock it and use Zoom mode
                     previewPictureBox.Dock = DockStyle.Fill;
                     previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-                    previewPanel.AutoScroll = false;
+                    previewPanel.AutoScrollMinSize = Size.Empty; // Clear scroll requirement
                     previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Default;
                 }
                 else
                 {
                     // Image is larger than panel - enable scrolling and panning
                     previewPictureBox.Dock = DockStyle.None;
-                    previewPictureBox.Size = new Size(zoomedWidth, zoomedHeight);
                     previewPictureBox.SizeMode = PictureBoxSizeMode.Normal;
+                    previewPictureBox.Size = new Size(zoomedWidth, zoomedHeight);
                     previewPictureBox.Location = new Point(0, 30);
                     
-                    // Enable scrolling
-                    previewPanel.AutoScroll = true;
+                    // Set AutoScrollMinSize so panel knows how much space is needed
+                    // Panel itself won't grow because MaximumSize is locked
                     previewPanel.AutoScrollMinSize = new Size(zoomedWidth, zoomedHeight);
                     
                     // Enable pan cursor when zoomed in
@@ -552,6 +558,10 @@ namespace zIdari.Forms
             {
                 previewPictureBox.Dock = DockStyle.Fill;
                 previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+                if (previewPanel != null)
+                {
+                    previewPanel.AutoScrollMinSize = Size.Empty;
+                }
             }
             
             previewPictureBox.Image = finalImage;
@@ -2549,6 +2559,25 @@ namespace zIdari.Forms
         private void FormatCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateFilename();
+        }
+        
+        private void ScanForm_Load(object sender, EventArgs e)
+        {
+            // Lock previewPanel to its allocated TableLayoutPanel cell size
+            // This prevents the panel from growing and causing column scrolling
+            var previewPanel = previewPictureBox.Parent as Panel;
+            if (previewPanel != null)
+            {
+                // Wait for layout to complete, then lock the size
+                this.Shown += (s, args) =>
+                {
+                    // Lock the size to allocated size (after layout is complete)
+                    var currentSize = previewPanel.Size;
+                    previewPanel.MaximumSize = currentSize;
+                    // Enable AutoScroll for scrolling within the cell
+                    previewPanel.AutoScroll = true;
+                };
+            }
         }
 
         // Keyboard shortcuts
