@@ -26,8 +26,25 @@ namespace zIdari.Forms
         private readonly List<ScannedPage> _pages = new List<ScannedPage>();
         private int _currentPageIndex = -1;
         private double _currentZoom = 1.0;
-        private Rectangle? _cropSelection = null;
+        private Rectangle? _cropSelection = null; // In image coordinates
+        private Rectangle? _cropScreenRect = null; // In screen coordinates (for display)
         private bool _isCropping = false;
+        private bool _isDraggingCrop = false;
+        private bool _isResizingCrop = false;
+        private Point _cropDragStart = Point.Empty;
+        private Rectangle _cropRectBeforeDrag = Rectangle.Empty;
+        private CropHandle _activeHandle = CropHandle.None;
+        
+        private enum CropHandle
+        {
+            None,
+            TopLeft, TopRight, BottomLeft, BottomRight,
+            Top, Bottom, Left, Right,
+            Move
+        }
+        
+        private const int CROP_HANDLE_SIZE = 8;
+        private const int CROP_EDGE_THRESHOLD = 10;
         private bool _isScanning = false;
         private string _selectedScannerId = null;
         private List<ScannerInfo> _availableScanners = new List<ScannerInfo>();
@@ -337,6 +354,9 @@ namespace zIdari.Forms
             cropBtn.Click += CropBtn_Click;
             applyCropBtn.Click += ApplyCropBtn_Click;
             clearCropBtn.Click += ClearCropBtn_Click;
+            
+            // Paint event for crop rectangle overlay
+            previewPictureBox.Paint += PreviewPictureBox_Paint;
             previewPictureBox.MouseDown += PreviewPictureBox_MouseDown;
             previewPictureBox.MouseMove += PreviewPictureBox_MouseMove;
             previewPictureBox.MouseUp += PreviewPictureBox_MouseUp;
@@ -541,7 +561,7 @@ namespace zIdari.Forms
                     // Clear AutoScrollMinSize - no scrolling needed
                     previewPanel.AutoScrollMinSize = Size.Empty;
                     previewPanel.AutoScroll = false; // Disable scrollbars when not needed
-                    previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Default;
+                    UpdateCropCursor(Point.Empty);
                 }
                 else
                 {
@@ -595,8 +615,15 @@ namespace zIdari.Forms
                         }
                     }
                     
-                    // Enable pan cursor when zoomed in
-                    previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Hand;
+                    // Enable pan cursor when zoomed in (but not when cropping)
+                    if (!_isCropping)
+                        previewPictureBox.Cursor = Cursors.Hand;
+                }
+                
+                // Update crop rectangle screen coordinates if we have a crop selection
+                if (_isCropping && _cropSelection.HasValue && finalImage != null)
+                {
+                    _cropScreenRect = ImageToScreen(_cropSelection.Value, finalImage, previewPictureBox);
                 }
             }
             else
@@ -611,6 +638,7 @@ namespace zIdari.Forms
             }
             
             previewPictureBox.Image = finalImage;
+            previewPictureBox.Invalidate(); // Refresh to show crop overlay
         }
         
         private Bitmap ApplyBrightnessContrast(Image sourceImage, int brightness, int contrast)
@@ -948,18 +976,250 @@ namespace zIdari.Forms
             {
                 _isCropping = true;
                 _isDrawingCrop = false;
+                _isDraggingCrop = false;
+                _isResizingCrop = false;
                 _cropSelection = null;
+                _cropScreenRect = null;
+                _activeHandle = CropHandle.None;
                 UpdateUI();
-                previewPictureBox.Cursor = Cursors.Cross;
+                UpdateCropCursor(Point.Empty);
+                previewPictureBox.Invalidate();
             }
+        }
+        
+        private void PreviewPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            // Draw crop rectangle overlay if in cropping mode
+            if (_isCropping && _cropScreenRect.HasValue && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
+            {
+                var rect = _cropScreenRect.Value;
+                
+                // Draw semi-transparent overlay outside crop area
+                using (var brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0)))
+                {
+                    var picBox = previewPictureBox;
+                    var picRect = new Rectangle(0, 0, picBox.Width, picBox.Height);
+                    
+                    // Top rectangle
+                    if (rect.Top > 0)
+                        e.Graphics.FillRectangle(brush, 0, 0, picBox.Width, rect.Top);
+                    
+                    // Bottom rectangle
+                    if (rect.Bottom < picBox.Height)
+                        e.Graphics.FillRectangle(brush, 0, rect.Bottom, picBox.Width, picBox.Height - rect.Bottom);
+                    
+                    // Left rectangle
+                    if (rect.Left > 0)
+                        e.Graphics.FillRectangle(brush, 0, rect.Top, rect.Left, rect.Height);
+                    
+                    // Right rectangle
+                    if (rect.Right < picBox.Width)
+                        e.Graphics.FillRectangle(brush, rect.Right, rect.Top, picBox.Width - rect.Right, rect.Height);
+                }
+                
+                // Draw crop rectangle border
+                using (var pen = new Pen(Color.White, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, rect);
+                }
+                
+                // Draw resize handles at corners and edges
+                using (var handleBrush = new SolidBrush(Color.White))
+                using (var handlePen = new Pen(Color.Blue, 1))
+                {
+                    var handles = GetCropHandles(rect);
+                    foreach (var handle in handles)
+                    {
+                        var handleRect = new Rectangle(
+                            handle.X - CROP_HANDLE_SIZE / 2,
+                            handle.Y - CROP_HANDLE_SIZE / 2,
+                            CROP_HANDLE_SIZE,
+                            CROP_HANDLE_SIZE
+                        );
+                        e.Graphics.FillRectangle(handleBrush, handleRect);
+                        e.Graphics.DrawRectangle(handlePen, handleRect);
+                    }
+                }
+            }
+        }
+        
+        private List<Point> GetCropHandles(Rectangle rect)
+        {
+            return new List<Point>
+            {
+                new Point(rect.Left, rect.Top),           // TopLeft
+                new Point(rect.Right, rect.Top),          // TopRight
+                new Point(rect.Left, rect.Bottom),        // BottomLeft
+                new Point(rect.Right, rect.Bottom),       // BottomRight
+                new Point(rect.Left + rect.Width / 2, rect.Top),      // Top
+                new Point(rect.Left + rect.Width / 2, rect.Bottom),    // Bottom
+                new Point(rect.Left, rect.Top + rect.Height / 2),      // Left
+                new Point(rect.Right, rect.Top + rect.Height / 2)      // Right
+            };
+        }
+        
+        private CropHandle GetHandleAtPoint(Point mousePos, Rectangle cropRect)
+        {
+            if (!cropRect.Contains(mousePos))
+                return CropHandle.None;
+            
+            int threshold = CROP_EDGE_THRESHOLD;
+            
+            // Check corners first (they take priority)
+            if (Math.Abs(mousePos.X - cropRect.Left) < threshold && Math.Abs(mousePos.Y - cropRect.Top) < threshold)
+                return CropHandle.TopLeft;
+            if (Math.Abs(mousePos.X - cropRect.Right) < threshold && Math.Abs(mousePos.Y - cropRect.Top) < threshold)
+                return CropHandle.TopRight;
+            if (Math.Abs(mousePos.X - cropRect.Left) < threshold && Math.Abs(mousePos.Y - cropRect.Bottom) < threshold)
+                return CropHandle.BottomLeft;
+            if (Math.Abs(mousePos.X - cropRect.Right) < threshold && Math.Abs(mousePos.Y - cropRect.Bottom) < threshold)
+                return CropHandle.BottomRight;
+            
+            // Check edges
+            if (Math.Abs(mousePos.X - (cropRect.Left + cropRect.Width / 2)) < threshold && Math.Abs(mousePos.Y - cropRect.Top) < threshold)
+                return CropHandle.Top;
+            if (Math.Abs(mousePos.X - (cropRect.Left + cropRect.Width / 2)) < threshold && Math.Abs(mousePos.Y - cropRect.Bottom) < threshold)
+                return CropHandle.Bottom;
+            if (Math.Abs(mousePos.X - cropRect.Left) < threshold && Math.Abs(mousePos.Y - (cropRect.Top + cropRect.Height / 2)) < threshold)
+                return CropHandle.Left;
+            if (Math.Abs(mousePos.X - cropRect.Right) < threshold && Math.Abs(mousePos.Y - (cropRect.Top + cropRect.Height / 2)) < threshold)
+                return CropHandle.Right;
+            
+            // Inside rectangle = move
+            return CropHandle.Move;
+        }
+        
+        private void UpdateCropCursor(Point mousePos)
+        {
+            if (!_isCropping || !_cropScreenRect.HasValue)
+            {
+                previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Default;
+                return;
+            }
+            
+            var handle = GetHandleAtPoint(mousePos, _cropScreenRect.Value);
+            
+            switch (handle)
+            {
+                case CropHandle.TopLeft:
+                case CropHandle.BottomRight:
+                    previewPictureBox.Cursor = Cursors.SizeNWSE;
+                    break;
+                case CropHandle.TopRight:
+                case CropHandle.BottomLeft:
+                    previewPictureBox.Cursor = Cursors.SizeNESW;
+                    break;
+                case CropHandle.Top:
+                case CropHandle.Bottom:
+                    previewPictureBox.Cursor = Cursors.SizeNS;
+                    break;
+                case CropHandle.Left:
+                case CropHandle.Right:
+                    previewPictureBox.Cursor = Cursors.SizeWE;
+                    break;
+                case CropHandle.Move:
+                    previewPictureBox.Cursor = Cursors.SizeAll;
+                    break;
+                default:
+                    previewPictureBox.Cursor = Cursors.Cross;
+                    break;
+            }
+        }
+        
+        private Rectangle ImageToScreen(Rectangle imageRect, Image image, PictureBox picBox)
+        {
+            if (picBox.Image == null || image == null)
+                return Rectangle.Empty;
+            
+            // Calculate how image is displayed in PictureBox
+            RectangleF displayRect = picBox.SizeMode == PictureBoxSizeMode.Zoom && picBox.Dock == DockStyle.Fill
+                ? CalculateZoomedRect(image, picBox)
+                : new RectangleF(0, 0, picBox.Width, picBox.Height);
+            
+            float scaleX = displayRect.Width / image.Width;
+            float scaleY = displayRect.Height / image.Height;
+            
+            return new Rectangle(
+                (int)(displayRect.X + imageRect.X * scaleX),
+                (int)(displayRect.Y + imageRect.Y * scaleY),
+                (int)(imageRect.Width * scaleX),
+                (int)(imageRect.Height * scaleY)
+            );
+        }
+        
+        private Rectangle ScreenToImage(Point screenPoint, Image image, PictureBox picBox)
+        {
+            return ScreenToImage(new Rectangle(screenPoint.X, screenPoint.Y, 0, 0), image, picBox);
+        }
+        
+        private Rectangle ScreenToImage(Rectangle screenRect, Image image, PictureBox picBox)
+        {
+            if (picBox.Image == null || image == null)
+                return Rectangle.Empty;
+            
+            RectangleF displayRect = picBox.SizeMode == PictureBoxSizeMode.Zoom && picBox.Dock == DockStyle.Fill
+                ? CalculateZoomedRect(image, picBox)
+                : new RectangleF(0, 0, picBox.Width, picBox.Height);
+            
+            float scaleX = image.Width / displayRect.Width;
+            float scaleY = image.Height / displayRect.Height;
+            
+            int x = (int)((screenRect.X - displayRect.X) * scaleX);
+            int y = (int)((screenRect.Y - displayRect.Y) * scaleY);
+            int w = (int)(screenRect.Width * scaleX);
+            int h = (int)(screenRect.Height * scaleY);
+            
+            // Clamp to image bounds
+            x = Math.Max(0, Math.Min(image.Width, x));
+            y = Math.Max(0, Math.Min(image.Height, y));
+            w = Math.Max(0, Math.Min(image.Width - x, w));
+            h = Math.Max(0, Math.Min(image.Height - y, h));
+            
+            return new Rectangle(x, y, w, h);
+        }
+        
+        private RectangleF CalculateZoomedRect(Image image, PictureBox picBox)
+        {
+            float imageAspect = (float)image.Width / image.Height;
+            float boxAspect = (float)picBox.Width / picBox.Height;
+            
+            float scale = imageAspect > boxAspect 
+                ? (float)picBox.Width / image.Width 
+                : (float)picBox.Height / image.Height;
+            
+            float width = image.Width * scale;
+            float height = image.Height * scale;
+            float x = (picBox.Width - width) / 2;
+            float y = (picBox.Height - height) / 2;
+            
+            return new RectangleF(x, y, width, height);
         }
 
         private void PreviewPictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (_isCropping && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
             {
+                if (_cropScreenRect.HasValue)
+                {
+                    // Check if clicking on existing crop rectangle
+                    _activeHandle = GetHandleAtPoint(e.Location, _cropScreenRect.Value);
+                    if (_activeHandle != CropHandle.None)
+                    {
+                        _isDraggingCrop = (_activeHandle == CropHandle.Move);
+                        _isResizingCrop = (_activeHandle != CropHandle.Move && _activeHandle != CropHandle.None);
+                        _cropDragStart = e.Location;
+                        _cropRectBeforeDrag = _cropScreenRect.Value;
+                        return;
+                    }
+                }
+                
+                // Start drawing new crop rectangle
                 _isDrawingCrop = true;
+                _isDraggingCrop = false;
+                _isResizingCrop = false;
                 _cropStartPoint = e.Location;
+                _cropScreenRect = null;
+                _cropSelection = null;
             }
         }
         
@@ -1035,56 +1295,160 @@ namespace zIdari.Forms
 
         private void PreviewPictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_isDrawingCrop && _isCropping)
+            if (_isCropping && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
             {
-                // Draw crop rectangle
-                var rect = new Rectangle(
-                    Math.Min(_cropStartPoint.X, e.X),
-                    Math.Min(_cropStartPoint.Y, e.Y),
-                    Math.Abs(e.X - _cropStartPoint.X),
-                    Math.Abs(e.Y - _cropStartPoint.Y)
-                );
+                UpdateCropCursor(e.Location);
                 
-                // Update preview with crop overlay
-                // For now, we'll just store it and apply on ApplyCropBtn_Click
+                if (_isDrawingCrop)
+                {
+                    // Drawing new crop rectangle
+                    var rect = new Rectangle(
+                        Math.Min(_cropStartPoint.X, e.X),
+                        Math.Min(_cropStartPoint.Y, e.Y),
+                        Math.Abs(e.X - _cropStartPoint.X),
+                        Math.Abs(e.Y - _cropStartPoint.Y)
+                    );
+                    _cropScreenRect = rect;
+                    previewPictureBox.Invalidate();
+                }
+                else if (_isDraggingCrop && _cropScreenRect.HasValue)
+                {
+                    // Dragging crop rectangle
+                    int deltaX = e.X - _cropDragStart.X;
+                    int deltaY = e.Y - _cropDragStart.Y;
+                    
+                    var newRect = _cropRectBeforeDrag;
+                    newRect.Offset(deltaX, deltaY);
+                    
+                    // Clamp to picture box bounds
+                    newRect.X = Math.Max(0, Math.Min(previewPictureBox.Width - newRect.Width, newRect.X));
+                    newRect.Y = Math.Max(0, Math.Min(previewPictureBox.Height - newRect.Height, newRect.Y));
+                    
+                    _cropScreenRect = newRect;
+                    previewPictureBox.Invalidate();
+                }
+                else if (_isResizingCrop && _cropScreenRect.HasValue)
+                {
+                    // Resizing crop rectangle
+                    var rect = _cropRectBeforeDrag;
+                    int deltaX = e.X - _cropDragStart.X;
+                    int deltaY = e.Y - _cropDragStart.Y;
+                    
+                    switch (_activeHandle)
+                    {
+                        case CropHandle.TopLeft:
+                            rect.X = Math.Max(0, rect.Left + deltaX);
+                            rect.Y = Math.Max(0, rect.Top + deltaY);
+                            rect.Width = rect.Right - rect.X;
+                            rect.Height = rect.Bottom - rect.Y;
+                            break;
+                        case CropHandle.TopRight:
+                            rect.Y = Math.Max(0, rect.Top + deltaY);
+                            rect.Width = Math.Max(10, rect.Width + deltaX);
+                            rect.Height = rect.Bottom - rect.Y;
+                            break;
+                        case CropHandle.BottomLeft:
+                            rect.X = Math.Max(0, rect.Left + deltaX);
+                            rect.Width = rect.Right - rect.X;
+                            rect.Height = Math.Max(10, rect.Height + deltaY);
+                            break;
+                        case CropHandle.BottomRight:
+                            rect.Width = Math.Max(10, rect.Width + deltaX);
+                            rect.Height = Math.Max(10, rect.Height + deltaY);
+                            break;
+                        case CropHandle.Top:
+                            rect.Y = Math.Max(0, rect.Top + deltaY);
+                            rect.Height = rect.Bottom - rect.Y;
+                            break;
+                        case CropHandle.Bottom:
+                            rect.Height = Math.Max(10, rect.Height + deltaY);
+                            break;
+                        case CropHandle.Left:
+                            rect.X = Math.Max(0, rect.Left + deltaX);
+                            rect.Width = rect.Right - rect.X;
+                            break;
+                        case CropHandle.Right:
+                            rect.Width = Math.Max(10, rect.Width + deltaX);
+                            break;
+                    }
+                    
+                    // Clamp to picture box bounds
+                    if (rect.X < 0) { rect.Width += rect.X; rect.X = 0; }
+                    if (rect.Y < 0) { rect.Height += rect.Y; rect.Y = 0; }
+                    if (rect.Right > previewPictureBox.Width) rect.Width = previewPictureBox.Width - rect.X;
+                    if (rect.Bottom > previewPictureBox.Height) rect.Height = previewPictureBox.Height - rect.Y;
+                    
+                    if (rect.Width > 0 && rect.Height > 0)
+                    {
+                        _cropScreenRect = rect;
+                        previewPictureBox.Invalidate();
+                    }
+                }
+            }
+            else if (!_isPanning && !_isCropping)
+            {
+                // Handle panning (existing logic)
+                PreviewPictureBox_PanMouseMove(sender, e);
             }
         }
 
         private void PreviewPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (_isDrawingCrop && _isCropping && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
+            if (_isCropping && _currentPageIndex >= 0 && _currentPageIndex < _pages.Count)
             {
-                var page = _pages[_currentPageIndex];
-                if (page.ImageData != null)
+                if (_isDrawingCrop)
                 {
-                    // Convert screen coordinates to image coordinates
-                    var img = page.GetDisplayImage();
-                    if (img != null)
+                    // Finished drawing new crop rectangle
+                    var page = _pages[_currentPageIndex];
+                    if (page.ImageData != null && _cropScreenRect.HasValue)
                     {
-                        var scaleX = (double)img.Width / previewPictureBox.Width;
-                        var scaleY = (double)img.Height / previewPictureBox.Height;
-                        
-                        var cropRect = new Rectangle(
-                            (int)(Math.Min(_cropStartPoint.X, e.X) * scaleX),
-                            (int)(Math.Min(_cropStartPoint.Y, e.Y) * scaleY),
-                            (int)(Math.Abs(e.X - _cropStartPoint.X) * scaleX),
-                            (int)(Math.Abs(e.Y - _cropStartPoint.Y) * scaleY)
-                        );
-                        
-                        // Ensure crop rect is within image bounds
-                        cropRect = Rectangle.Intersect(cropRect, new Rectangle(0, 0, img.Width, img.Height));
-                        if (cropRect.Width > 0 && cropRect.Height > 0)
+                        var img = page.GetDisplayImage();
+                        if (img != null)
                         {
-                            _cropSelection = cropRect;
-                            applyCropBtn.Enabled = true;
+                            var cropRect = ScreenToImage(_cropScreenRect.Value, img, previewPictureBox);
+                            if (cropRect.Width > 0 && cropRect.Height > 0)
+                            {
+                                _cropSelection = cropRect;
+                                applyCropBtn.Enabled = true;
+                            }
+                            else
+                            {
+                                _cropScreenRect = null;
+                                _cropSelection = null;
+                            }
+                            img?.Dispose();
                         }
                     }
-                    img?.Dispose();
+                    _isDrawingCrop = false;
+                }
+                else if (_isDraggingCrop || _isResizingCrop)
+                {
+                    // Finished dragging/resizing - update image coordinates
+                    var page = _pages[_currentPageIndex];
+                    if (page.ImageData != null && _cropScreenRect.HasValue)
+                    {
+                        var img = page.GetDisplayImage();
+                        if (img != null)
+                        {
+                            var cropRect = ScreenToImage(_cropScreenRect.Value, img, previewPictureBox);
+                            if (cropRect.Width > 0 && cropRect.Height > 0)
+                            {
+                                _cropSelection = cropRect;
+                                applyCropBtn.Enabled = true;
+                            }
+                            img?.Dispose();
+                        }
+                    }
                 }
                 
-                _isDrawingCrop = false;
-                previewPictureBox.Cursor = Cursors.Default;
+                _isDraggingCrop = false;
+                _isResizingCrop = false;
+                _activeHandle = CropHandle.None;
+                UpdateCropCursor(e.Location);
             }
+            
+            // Handle panning end (existing logic)
+            PreviewPictureBox_PanMouseUp(sender, e);
         }
 
         private void ApplyCropBtn_Click(object sender, EventArgs e)
@@ -1094,7 +1458,12 @@ namespace zIdari.Forms
                 _pages[_currentPageIndex].CropRegion = _cropSelection;
                 _isCropping = false;
                 _cropSelection = null;
+                _cropScreenRect = null;
+                _isDraggingCrop = false;
+                _isResizingCrop = false;
+                _activeHandle = CropHandle.None;
                 previewPictureBox.Cursor = Cursors.Default;
+                previewPictureBox.Invalidate();
                 UpdateUI();
             }
         }
@@ -1106,7 +1475,13 @@ namespace zIdari.Forms
                 _pages[_currentPageIndex].CropRegion = null;
                 _isCropping = false;
                 _cropSelection = null;
+                _cropScreenRect = null;
+                _isDraggingCrop = false;
+                _isResizingCrop = false;
+                _isDrawingCrop = false;
+                _activeHandle = CropHandle.None;
                 previewPictureBox.Cursor = Cursors.Default;
+                previewPictureBox.Invalidate();
                 UpdateUI();
             }
         }
@@ -2659,6 +3034,17 @@ namespace zIdari.Forms
         // Keyboard shortcuts
         private void ScanForm_KeyDown(object sender, KeyEventArgs e)
         {
+            // Delete key: Cancel/delete crop rectangle
+            if (e.KeyCode == Keys.Delete && _isCropping && _cropScreenRect.HasValue)
+            {
+                _cropScreenRect = null;
+                _cropSelection = null;
+                applyCropBtn.Enabled = false;
+                previewPictureBox.Invalidate();
+                e.Handled = true;
+                return;
+            }
+            
             if (e.Control && e.KeyCode == Keys.R)
             {
                 RotateRightBtn_Click(sender, e);
@@ -2704,7 +3090,7 @@ namespace zIdari.Forms
                 LastBtn_Click(sender, e);
                 e.Handled = true;
             }
-            else if (e.KeyCode == Keys.Delete)
+            else if (e.KeyCode == Keys.Delete && !_isCropping)
             {
                 DeleteCurrentPage();
                 e.Handled = true;
