@@ -341,5 +341,10 @@ namespace zIdari
             }
         }
 
+        private void scanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanForm scanForm = new ScanForm(55,66);
+            scanForm.Show();
+        }
     }
 }

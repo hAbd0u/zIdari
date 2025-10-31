@@ -29,6 +29,42 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.thumbnailPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.previewPanel = new System.Windows.Forms.Panel();
+            this.previewPictureBox = new System.Windows.Forms.PictureBox();
+            this.zoomPanel = new System.Windows.Forms.Panel();
+            this.zoomCombo = new System.Windows.Forms.ComboBox();
+            this.zoomInBtn = new System.Windows.Forms.Button();
+            this.zoomOutBtn = new System.Windows.Forms.Button();
+            this.fitBtn = new System.Windows.Forms.Button();
+            this.actualSizeBtn = new System.Windows.Forms.Button();
+            this.rotationPanel = new System.Windows.Forms.Panel();
+            this.rotateLeftBtn = new System.Windows.Forms.Button();
+            this.rotateRightBtn = new System.Windows.Forms.Button();
+            this.flip180Btn = new System.Windows.Forms.Button();
+            this.resetRotationBtn = new System.Windows.Forms.Button();
+            this.cropPanel = new System.Windows.Forms.Panel();
+            this.totalPagesLabel = new System.Windows.Forms.Label();
+            this.firstBtn = new System.Windows.Forms.Button();
+            this.lastBtn = new System.Windows.Forms.Button();
+            this.cropBtn = new System.Windows.Forms.Button();
+            this.prevBtn = new System.Windows.Forms.Button();
+            this.applyCropBtn = new System.Windows.Forms.Button();
+            this.clearCropBtn = new System.Windows.Forms.Button();
+            this.pageNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.nextBtn = new System.Windows.Forms.Button();
+            this.filenamePanel = new System.Windows.Forms.Panel();
+            this.filenameLabel = new System.Windows.Forms.Label();
+            this.filenameTextBox = new System.Windows.Forms.TextBox();
+            this.saveLocationPanel = new System.Windows.Forms.Panel();
+            this.saveLocationLabel = new System.Windows.Forms.Label();
+            this.saveLocationTextBox = new System.Windows.Forms.TextBox();
+            this.browseBtn = new System.Windows.Forms.Button();
+            this.actionButtonsPanel = new System.Windows.Forms.Panel();
+            this.saveAllBtn = new System.Windows.Forms.Button();
+            this.saveCurrentBtn = new System.Windows.Forms.Button();
+            this.cancelBtn = new System.Windows.Forms.Button();
+            this.retryScanBtn = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.colorCombo = new System.Windows.Forms.ComboBox();
@@ -48,56 +84,10 @@
             this.formatCombo = new System.Windows.Forms.ComboBox();
             this.importBtn = new System.Windows.Forms.Button();
             this.scanBtn = new System.Windows.Forms.Button();
-            this.previewPanel = new System.Windows.Forms.Panel();
-            this.previewPictureBox = new System.Windows.Forms.PictureBox();
-            this.zoomPanel = new System.Windows.Forms.Panel();
-            this.zoomCombo = new System.Windows.Forms.ComboBox();
-            this.zoomInBtn = new System.Windows.Forms.Button();
-            this.zoomOutBtn = new System.Windows.Forms.Button();
-            this.fitBtn = new System.Windows.Forms.Button();
-            this.actualSizeBtn = new System.Windows.Forms.Button();
-            this.rotationPanel = new System.Windows.Forms.Panel();
-            this.rotateLeftBtn = new System.Windows.Forms.Button();
-            this.rotateRightBtn = new System.Windows.Forms.Button();
-            this.flip180Btn = new System.Windows.Forms.Button();
-            this.resetRotationBtn = new System.Windows.Forms.Button();
-            this.cropPanel = new System.Windows.Forms.Panel();
-            this.cropBtn = new System.Windows.Forms.Button();
-            this.applyCropBtn = new System.Windows.Forms.Button();
-            this.clearCropBtn = new System.Windows.Forms.Button();
-            this.navigationPanel = new System.Windows.Forms.Panel();
-            this.firstBtn = new System.Windows.Forms.Button();
-            this.prevBtn = new System.Windows.Forms.Button();
-            this.pageNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.nextBtn = new System.Windows.Forms.Button();
-            this.lastBtn = new System.Windows.Forms.Button();
-            this.totalPagesLabel = new System.Windows.Forms.Label();
-            this.thumbnailPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.filenamePanel = new System.Windows.Forms.Panel();
-            this.filenameLabel = new System.Windows.Forms.Label();
-            this.filenameTextBox = new System.Windows.Forms.TextBox();
-            this.saveLocationPanel = new System.Windows.Forms.Panel();
-            this.saveLocationLabel = new System.Windows.Forms.Label();
-            this.saveLocationTextBox = new System.Windows.Forms.TextBox();
-            this.browseBtn = new System.Windows.Forms.Button();
-            this.actionButtonsPanel = new System.Windows.Forms.Panel();
-            this.saveAllBtn = new System.Windows.Forms.Button();
-            this.saveCurrentBtn = new System.Windows.Forms.Button();
-            this.cancelBtn = new System.Windows.Forms.Button();
-            this.retryScanBtn = new System.Windows.Forms.Button();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.pagesCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.contrastTrackBar)).BeginInit();
-            this.groupBox6.SuspendLayout();
             this.previewPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewPictureBox)).BeginInit();
             this.zoomPanel.SuspendLayout();
@@ -107,16 +97,27 @@
             this.filenamePanel.SuspendLayout();
             this.saveLocationPanel.SuspendLayout();
             this.actionButtonsPanel.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastTrackBar)).BeginInit();
+            this.groupBox6.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.16667F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.83334F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel1.Controls.Add(this.thumbnailPanel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.previewPanel, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -126,224 +127,16 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1206, 872);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // tableLayoutPanel2
+            // thumbnailPanel
             // 
-            this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.groupBox3, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox2, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox4, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox5, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.groupBox6, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.importBtn, 0, 7);
-            this.tableLayoutPanel2.Controls.Add(this.scanBtn, 0, 8);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(1015, 3);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 9;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(188, 866);
-            this.tableLayoutPanel2.TabIndex = 0;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.colorCombo);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(3, 241);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(182, 85);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "الألوان";
-            // 
-            // colorCombo
-            // 
-            this.colorCombo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.colorCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.colorCombo.FormattingEnabled = true;
-            this.colorCombo.Location = new System.Drawing.Point(3, 16);
-            this.colorCombo.Name = "colorCombo";
-            this.colorCombo.Size = new System.Drawing.Size(176, 21);
-            this.colorCombo.TabIndex = 0;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.DpiCombo);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 150);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(182, 85);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "الدقة";
-            // 
-            // DpiCombo
-            // 
-            this.DpiCombo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DpiCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DpiCombo.FormattingEnabled = true;
-            this.DpiCombo.Location = new System.Drawing.Point(3, 16);
-            this.DpiCombo.Name = "DpiCombo";
-            this.DpiCombo.Size = new System.Drawing.Size(176, 21);
-            this.DpiCombo.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 56);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "الإعدادت";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.ScannerNameCombo);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(3, 59);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(182, 85);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "إسم الجهاز";
-            // 
-            // ScannerNameCombo
-            // 
-            this.ScannerNameCombo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ScannerNameCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ScannerNameCombo.FormattingEnabled = true;
-            this.ScannerNameCombo.Location = new System.Drawing.Point(3, 16);
-            this.ScannerNameCombo.Name = "ScannerNameCombo";
-            this.ScannerNameCombo.Size = new System.Drawing.Size(176, 21);
-            this.ScannerNameCombo.TabIndex = 0;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.batchCheckBox);
-            this.groupBox4.Controls.Add(this.duplexCheckBox);
-            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(3, 332);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(182, 107);
-            this.groupBox4.TabIndex = 6;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "طريقة المسح";
-            // 
-            // batchCheckBox
-            // 
-            this.batchCheckBox.AutoSize = true;
-            this.batchCheckBox.Location = new System.Drawing.Point(81, 28);
-            this.batchCheckBox.Name = "batchCheckBox";
-            this.batchCheckBox.Size = new System.Drawing.Size(93, 17);
-            this.batchCheckBox.TabIndex = 4;
-            this.batchCheckBox.Text = "متعدد الصفحات";
-            this.batchCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // duplexCheckBox
-            // 
-            this.duplexCheckBox.AutoSize = true;
-            this.duplexCheckBox.Location = new System.Drawing.Point(99, 51);
-            this.duplexCheckBox.Name = "duplexCheckBox";
-            this.duplexCheckBox.Size = new System.Drawing.Size(75, 17);
-            this.duplexCheckBox.TabIndex = 5;
-            this.duplexCheckBox.Text = "من الجهتين";
-            this.duplexCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.brightnessTrackBar);
-            this.groupBox5.Controls.Add(this.contrastTrackBar);
-            this.groupBox5.Controls.Add(this.autoOptimizeCheckBox);
-            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox5.Location = new System.Drawing.Point(3, 445);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(182, 164);
-            this.groupBox5.TabIndex = 9;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "الإعدادات المتقدمة";
-            // 
-            // brightnessTrackBar
-            // 
-            this.brightnessTrackBar.Location = new System.Drawing.Point(6, 17);
-            this.brightnessTrackBar.Maximum = 100;
-            this.brightnessTrackBar.Name = "brightnessTrackBar";
-            this.brightnessTrackBar.Size = new System.Drawing.Size(168, 45);
-            this.brightnessTrackBar.TabIndex = 0;
-            this.brightnessTrackBar.TickFrequency = 10;
-            this.brightnessTrackBar.Value = 50;
-            // 
-            // contrastTrackBar
-            // 
-            this.contrastTrackBar.Location = new System.Drawing.Point(8, 62);
-            this.contrastTrackBar.Maximum = 100;
-            this.contrastTrackBar.Name = "contrastTrackBar";
-            this.contrastTrackBar.Size = new System.Drawing.Size(168, 45);
-            this.contrastTrackBar.TabIndex = 1;
-            this.contrastTrackBar.TickFrequency = 10;
-            this.contrastTrackBar.Value = 50;
-            // 
-            // autoOptimizeCheckBox
-            // 
-            this.autoOptimizeCheckBox.AutoSize = true;
-            this.autoOptimizeCheckBox.Location = new System.Drawing.Point(81, 109);
-            this.autoOptimizeCheckBox.Name = "autoOptimizeCheckBox";
-            this.autoOptimizeCheckBox.Size = new System.Drawing.Size(90, 17);
-            this.autoOptimizeCheckBox.TabIndex = 2;
-            this.autoOptimizeCheckBox.Text = "تحسين تلقائي";
-            this.autoOptimizeCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Controls.Add(this.formatCombo);
-            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox6.Location = new System.Drawing.Point(3, 615);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(182, 85);
-            this.groupBox6.TabIndex = 10;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "الصيغة";
-            // 
-            // formatCombo
-            // 
-            this.formatCombo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.formatCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.formatCombo.FormattingEnabled = true;
-            this.formatCombo.Location = new System.Drawing.Point(3, 16);
-            this.formatCombo.Name = "formatCombo";
-            this.formatCombo.Size = new System.Drawing.Size(176, 21);
-            this.formatCombo.TabIndex = 0;
-            // 
-            // importBtn
-            // 
-            this.importBtn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.importBtn.Location = new System.Drawing.Point(3, 706);
-            this.importBtn.Name = "importBtn";
-            this.importBtn.Size = new System.Drawing.Size(182, 62);
-            this.importBtn.TabIndex = 7;
-            this.importBtn.Text = "إستيراد ملف";
-            this.importBtn.UseVisualStyleBackColor = true;
-            // 
-            // scanBtn
-            // 
-            this.scanBtn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scanBtn.Location = new System.Drawing.Point(3, 774);
-            this.scanBtn.Name = "scanBtn";
-            this.scanBtn.Size = new System.Drawing.Size(182, 89);
-            this.scanBtn.TabIndex = 8;
-            this.scanBtn.Text = "مسح";
-            this.scanBtn.UseVisualStyleBackColor = true;
+            this.thumbnailPanel.AutoScroll = true;
+            this.thumbnailPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.thumbnailPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.thumbnailPanel.Location = new System.Drawing.Point(1059, 3);
+            this.thumbnailPanel.Name = "thumbnailPanel";
+            this.thumbnailPanel.Size = new System.Drawing.Size(144, 866);
+            this.thumbnailPanel.TabIndex = 5;
+            this.thumbnailPanel.WrapContents = false;
             // 
             // previewPanel
             // 
@@ -351,15 +144,13 @@
             this.previewPanel.Controls.Add(this.zoomPanel);
             this.previewPanel.Controls.Add(this.rotationPanel);
             this.previewPanel.Controls.Add(this.cropPanel);
-            this.previewPanel.Controls.Add(this.navigationPanel);
-            this.previewPanel.Controls.Add(this.thumbnailPanel);
             this.previewPanel.Controls.Add(this.filenamePanel);
             this.previewPanel.Controls.Add(this.saveLocationPanel);
             this.previewPanel.Controls.Add(this.actionButtonsPanel);
             this.previewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.previewPanel.Location = new System.Drawing.Point(3, 3);
+            this.previewPanel.Location = new System.Drawing.Point(253, 3);
             this.previewPanel.Name = "previewPanel";
-            this.previewPanel.Size = new System.Drawing.Size(1006, 866);
+            this.previewPanel.Size = new System.Drawing.Size(800, 866);
             this.previewPanel.TabIndex = 1;
             // 
             // previewPictureBox
@@ -369,7 +160,7 @@
             this.previewPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewPictureBox.Location = new System.Drawing.Point(0, 30);
             this.previewPictureBox.Name = "previewPictureBox";
-            this.previewPictureBox.Size = new System.Drawing.Size(1006, 563);
+            this.previewPictureBox.Size = new System.Drawing.Size(800, 691);
             this.previewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.previewPictureBox.TabIndex = 0;
             this.previewPictureBox.TabStop = false;
@@ -384,7 +175,7 @@
             this.zoomPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.zoomPanel.Location = new System.Drawing.Point(0, 0);
             this.zoomPanel.Name = "zoomPanel";
-            this.zoomPanel.Size = new System.Drawing.Size(1006, 30);
+            this.zoomPanel.Size = new System.Drawing.Size(800, 30);
             this.zoomPanel.TabIndex = 1;
             // 
             // zoomCombo
@@ -439,9 +230,9 @@
             this.rotationPanel.Controls.Add(this.flip180Btn);
             this.rotationPanel.Controls.Add(this.resetRotationBtn);
             this.rotationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.rotationPanel.Location = new System.Drawing.Point(0, 593);
+            this.rotationPanel.Location = new System.Drawing.Point(0, 721);
             this.rotationPanel.Name = "rotationPanel";
-            this.rotationPanel.Size = new System.Drawing.Size(1006, 30);
+            this.rotationPanel.Size = new System.Drawing.Size(800, 30);
             this.rotationPanel.TabIndex = 2;
             // 
             // rotateLeftBtn
@@ -492,10 +283,37 @@
             this.cropPanel.Controls.Add(this.pageNumericUpDown);
             this.cropPanel.Controls.Add(this.nextBtn);
             this.cropPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cropPanel.Location = new System.Drawing.Point(0, 623);
+            this.cropPanel.Location = new System.Drawing.Point(0, 751);
             this.cropPanel.Name = "cropPanel";
-            this.cropPanel.Size = new System.Drawing.Size(1006, 30);
+            this.cropPanel.Size = new System.Drawing.Size(800, 30);
             this.cropPanel.TabIndex = 3;
+            // 
+            // totalPagesLabel
+            // 
+            this.totalPagesLabel.AutoSize = true;
+            this.totalPagesLabel.Location = new System.Drawing.Point(611, 9);
+            this.totalPagesLabel.Name = "totalPagesLabel";
+            this.totalPagesLabel.Size = new System.Drawing.Size(75, 13);
+            this.totalPagesLabel.TabIndex = 6;
+            this.totalPagesLabel.Text = "Total: 0 pages";
+            // 
+            // firstBtn
+            // 
+            this.firstBtn.Location = new System.Drawing.Point(555, 4);
+            this.firstBtn.Name = "firstBtn";
+            this.firstBtn.Size = new System.Drawing.Size(50, 23);
+            this.firstBtn.TabIndex = 0;
+            this.firstBtn.Text = "►►";
+            this.firstBtn.UseVisualStyleBackColor = true;
+            // 
+            // lastBtn
+            // 
+            this.lastBtn.Location = new System.Drawing.Point(331, 4);
+            this.lastBtn.Name = "lastBtn";
+            this.lastBtn.Size = new System.Drawing.Size(50, 23);
+            this.lastBtn.TabIndex = 5;
+            this.lastBtn.Text = "◄◄";
+            this.lastBtn.UseVisualStyleBackColor = true;
             // 
             // cropBtn
             // 
@@ -505,6 +323,15 @@
             this.cropBtn.TabIndex = 0;
             this.cropBtn.Text = "Crop";
             this.cropBtn.UseVisualStyleBackColor = true;
+            // 
+            // prevBtn
+            // 
+            this.prevBtn.Location = new System.Drawing.Point(499, 4);
+            this.prevBtn.Name = "prevBtn";
+            this.prevBtn.Size = new System.Drawing.Size(50, 23);
+            this.prevBtn.TabIndex = 1;
+            this.prevBtn.Text = "►";
+            this.prevBtn.UseVisualStyleBackColor = true;
             // 
             // applyCropBtn
             // 
@@ -523,32 +350,6 @@
             this.clearCropBtn.TabIndex = 2;
             this.clearCropBtn.Text = "Clear Crop";
             this.clearCropBtn.UseVisualStyleBackColor = true;
-            // 
-            // navigationPanel
-            // 
-            this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.navigationPanel.Location = new System.Drawing.Point(0, 653);
-            this.navigationPanel.Name = "navigationPanel";
-            this.navigationPanel.Size = new System.Drawing.Size(1006, 107);
-            this.navigationPanel.TabIndex = 4;
-            // 
-            // firstBtn
-            // 
-            this.firstBtn.Location = new System.Drawing.Point(555, 4);
-            this.firstBtn.Name = "firstBtn";
-            this.firstBtn.Size = new System.Drawing.Size(50, 23);
-            this.firstBtn.TabIndex = 0;
-            this.firstBtn.Text = "►►";
-            this.firstBtn.UseVisualStyleBackColor = true;
-            // 
-            // prevBtn
-            // 
-            this.prevBtn.Location = new System.Drawing.Point(499, 4);
-            this.prevBtn.Name = "prevBtn";
-            this.prevBtn.Size = new System.Drawing.Size(50, 23);
-            this.prevBtn.TabIndex = 1;
-            this.prevBtn.Text = "►";
-            this.prevBtn.UseVisualStyleBackColor = true;
             // 
             // pageNumericUpDown
             // 
@@ -576,34 +377,6 @@
             this.nextBtn.Text = "◄";
             this.nextBtn.UseVisualStyleBackColor = true;
             // 
-            // lastBtn
-            // 
-            this.lastBtn.Location = new System.Drawing.Point(331, 4);
-            this.lastBtn.Name = "lastBtn";
-            this.lastBtn.Size = new System.Drawing.Size(50, 23);
-            this.lastBtn.TabIndex = 5;
-            this.lastBtn.Text = "◄◄";
-            this.lastBtn.UseVisualStyleBackColor = true;
-            // 
-            // totalPagesLabel
-            // 
-            this.totalPagesLabel.AutoSize = true;
-            this.totalPagesLabel.Location = new System.Drawing.Point(611, 9);
-            this.totalPagesLabel.Name = "totalPagesLabel";
-            this.totalPagesLabel.Size = new System.Drawing.Size(75, 13);
-            this.totalPagesLabel.TabIndex = 6;
-            this.totalPagesLabel.Text = "Total: 0 pages";
-            // 
-            // thumbnailPanel
-            // 
-            this.thumbnailPanel.AutoScroll = true;
-            this.thumbnailPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.thumbnailPanel.Location = new System.Drawing.Point(0, 760);
-            this.thumbnailPanel.Name = "thumbnailPanel";
-            this.thumbnailPanel.Size = new System.Drawing.Size(1006, 21);
-            this.thumbnailPanel.TabIndex = 5;
-            this.thumbnailPanel.WrapContents = false;
-            // 
             // filenamePanel
             // 
             this.filenamePanel.Controls.Add(this.filenameLabel);
@@ -611,7 +384,7 @@
             this.filenamePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.filenamePanel.Location = new System.Drawing.Point(0, 781);
             this.filenamePanel.Name = "filenamePanel";
-            this.filenamePanel.Size = new System.Drawing.Size(1006, 25);
+            this.filenamePanel.Size = new System.Drawing.Size(800, 25);
             this.filenamePanel.TabIndex = 6;
             // 
             // filenameLabel
@@ -639,7 +412,7 @@
             this.saveLocationPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.saveLocationPanel.Location = new System.Drawing.Point(0, 806);
             this.saveLocationPanel.Name = "saveLocationPanel";
-            this.saveLocationPanel.Size = new System.Drawing.Size(1006, 25);
+            this.saveLocationPanel.Size = new System.Drawing.Size(800, 25);
             this.saveLocationPanel.TabIndex = 7;
             // 
             // saveLocationLabel
@@ -676,7 +449,7 @@
             this.actionButtonsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.actionButtonsPanel.Location = new System.Drawing.Point(0, 831);
             this.actionButtonsPanel.Name = "actionButtonsPanel";
-            this.actionButtonsPanel.Size = new System.Drawing.Size(1006, 35);
+            this.actionButtonsPanel.Size = new System.Drawing.Size(800, 35);
             this.actionButtonsPanel.TabIndex = 8;
             // 
             // saveAllBtn
@@ -715,6 +488,225 @@
             this.retryScanBtn.Text = "Retry Scan";
             this.retryScanBtn.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.groupBox3, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox2, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox4, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox5, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox6, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.importBtn, 0, 7);
+            this.tableLayoutPanel2.Controls.Add(this.scanBtn, 0, 8);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 9;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(244, 866);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.colorCombo);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(3, 241);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(238, 85);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "الألوان";
+            // 
+            // colorCombo
+            // 
+            this.colorCombo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.colorCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.colorCombo.FormattingEnabled = true;
+            this.colorCombo.Location = new System.Drawing.Point(3, 16);
+            this.colorCombo.Name = "colorCombo";
+            this.colorCombo.Size = new System.Drawing.Size(232, 21);
+            this.colorCombo.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.DpiCombo);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(3, 150);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(238, 85);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "الدقة";
+            // 
+            // DpiCombo
+            // 
+            this.DpiCombo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DpiCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DpiCombo.FormattingEnabled = true;
+            this.DpiCombo.Location = new System.Drawing.Point(3, 16);
+            this.DpiCombo.Name = "DpiCombo";
+            this.DpiCombo.Size = new System.Drawing.Size(232, 21);
+            this.DpiCombo.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(238, 56);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "الإعدادت";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.ScannerNameCombo);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(3, 59);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(238, 85);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "إسم الجهاز";
+            // 
+            // ScannerNameCombo
+            // 
+            this.ScannerNameCombo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ScannerNameCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ScannerNameCombo.FormattingEnabled = true;
+            this.ScannerNameCombo.Location = new System.Drawing.Point(3, 16);
+            this.ScannerNameCombo.Name = "ScannerNameCombo";
+            this.ScannerNameCombo.Size = new System.Drawing.Size(232, 21);
+            this.ScannerNameCombo.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.batchCheckBox);
+            this.groupBox4.Controls.Add(this.duplexCheckBox);
+            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox4.Location = new System.Drawing.Point(3, 332);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(238, 107);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "طريقة المسح";
+            // 
+            // batchCheckBox
+            // 
+            this.batchCheckBox.AutoSize = true;
+            this.batchCheckBox.Location = new System.Drawing.Point(81, 28);
+            this.batchCheckBox.Name = "batchCheckBox";
+            this.batchCheckBox.Size = new System.Drawing.Size(93, 17);
+            this.batchCheckBox.TabIndex = 4;
+            this.batchCheckBox.Text = "متعدد الصفحات";
+            this.batchCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // duplexCheckBox
+            // 
+            this.duplexCheckBox.AutoSize = true;
+            this.duplexCheckBox.Location = new System.Drawing.Point(99, 51);
+            this.duplexCheckBox.Name = "duplexCheckBox";
+            this.duplexCheckBox.Size = new System.Drawing.Size(75, 17);
+            this.duplexCheckBox.TabIndex = 5;
+            this.duplexCheckBox.Text = "من الجهتين";
+            this.duplexCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.brightnessTrackBar);
+            this.groupBox5.Controls.Add(this.contrastTrackBar);
+            this.groupBox5.Controls.Add(this.autoOptimizeCheckBox);
+            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox5.Location = new System.Drawing.Point(3, 445);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(238, 164);
+            this.groupBox5.TabIndex = 9;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "الإعدادات المتقدمة";
+            // 
+            // brightnessTrackBar
+            // 
+            this.brightnessTrackBar.Location = new System.Drawing.Point(6, 17);
+            this.brightnessTrackBar.Maximum = 100;
+            this.brightnessTrackBar.Name = "brightnessTrackBar";
+            this.brightnessTrackBar.Size = new System.Drawing.Size(168, 45);
+            this.brightnessTrackBar.TabIndex = 0;
+            this.brightnessTrackBar.TickFrequency = 10;
+            this.brightnessTrackBar.Value = 50;
+            // 
+            // contrastTrackBar
+            // 
+            this.contrastTrackBar.Location = new System.Drawing.Point(8, 62);
+            this.contrastTrackBar.Maximum = 100;
+            this.contrastTrackBar.Name = "contrastTrackBar";
+            this.contrastTrackBar.Size = new System.Drawing.Size(168, 45);
+            this.contrastTrackBar.TabIndex = 1;
+            this.contrastTrackBar.TickFrequency = 10;
+            this.contrastTrackBar.Value = 50;
+            // 
+            // autoOptimizeCheckBox
+            // 
+            this.autoOptimizeCheckBox.AutoSize = true;
+            this.autoOptimizeCheckBox.Location = new System.Drawing.Point(81, 109);
+            this.autoOptimizeCheckBox.Name = "autoOptimizeCheckBox";
+            this.autoOptimizeCheckBox.Size = new System.Drawing.Size(90, 17);
+            this.autoOptimizeCheckBox.TabIndex = 2;
+            this.autoOptimizeCheckBox.Text = "تحسين تلقائي";
+            this.autoOptimizeCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.formatCombo);
+            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox6.Location = new System.Drawing.Point(3, 615);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(238, 85);
+            this.groupBox6.TabIndex = 10;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "الصيغة";
+            // 
+            // formatCombo
+            // 
+            this.formatCombo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.formatCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.formatCombo.FormattingEnabled = true;
+            this.formatCombo.Location = new System.Drawing.Point(3, 16);
+            this.formatCombo.Name = "formatCombo";
+            this.formatCombo.Size = new System.Drawing.Size(232, 21);
+            this.formatCombo.TabIndex = 0;
+            // 
+            // importBtn
+            // 
+            this.importBtn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.importBtn.Location = new System.Drawing.Point(3, 706);
+            this.importBtn.Name = "importBtn";
+            this.importBtn.Size = new System.Drawing.Size(238, 62);
+            this.importBtn.TabIndex = 7;
+            this.importBtn.Text = "إستيراد ملف";
+            this.importBtn.UseVisualStyleBackColor = true;
+            // 
+            // scanBtn
+            // 
+            this.scanBtn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scanBtn.Location = new System.Drawing.Point(3, 774);
+            this.scanBtn.Name = "scanBtn";
+            this.scanBtn.Size = new System.Drawing.Size(238, 89);
+            this.scanBtn.TabIndex = 8;
+            this.scanBtn.Text = "مسح";
+            this.scanBtn.UseVisualStyleBackColor = true;
+            // 
             // statusBar
             // 
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -751,18 +743,6 @@
             this.RightToLeftLayout = true;
             this.Text = "مسح وثيقة";
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.brightnessTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.contrastTrackBar)).EndInit();
-            this.groupBox6.ResumeLayout(false);
             this.previewPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.previewPictureBox)).EndInit();
             this.zoomPanel.ResumeLayout(false);
@@ -775,6 +755,18 @@
             this.saveLocationPanel.ResumeLayout(false);
             this.saveLocationPanel.PerformLayout();
             this.actionButtonsPanel.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastTrackBar)).EndInit();
+            this.groupBox6.ResumeLayout(false);
             this.statusBar.ResumeLayout(false);
             this.statusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -800,7 +792,6 @@
         private System.Windows.Forms.Button scanBtn;
         private System.Windows.Forms.Panel previewPanel;
         private System.Windows.Forms.PictureBox previewPictureBox;
-        private System.Windows.Forms.Panel navigationPanel;
         private System.Windows.Forms.Button firstBtn;
         private System.Windows.Forms.Button prevBtn;
         private System.Windows.Forms.NumericUpDown pageNumericUpDown;

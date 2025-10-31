@@ -513,8 +513,8 @@ namespace zIdari.Forms
         {
             var panel = new Panel
             {
-                Width = 60,
-                Height = 85,
+                Width = 160,  // Wider for side panel
+                Height = 120, // Compact height for vertical scrolling
                 Margin = new Padding(5),
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = index == _currentPageIndex ? Color.LightBlue : Color.White,
@@ -524,15 +524,33 @@ namespace zIdari.Forms
             var picBox = new PictureBox
             {
                 Dock = DockStyle.Fill,
-                SizeMode = PictureBoxSizeMode.Zoom
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Padding = new Padding(2)
             };
 
-            // Create thumbnail image
+            // Create thumbnail image (wider for side panel)
             if (page.ImageData != null)
             {
                 try
                 {
-                    var thumb = new Bitmap(page.ImageData, 50, 70);
+                    // Maintain aspect ratio but fit to 150x100 thumbnail area
+                    var aspectRatio = (double)page.ImageData.Width / page.ImageData.Height;
+                    int thumbWidth, thumbHeight;
+                    
+                    if (aspectRatio > 1.5)
+                    {
+                        // Landscape - fit to width
+                        thumbWidth = 150;
+                        thumbHeight = (int)(150 / aspectRatio);
+                    }
+                    else
+                    {
+                        // Portrait - fit to height
+                        thumbHeight = 100;
+                        thumbWidth = (int)(100 * aspectRatio);
+                    }
+                    
+                    var thumb = new Bitmap(page.ImageData, thumbWidth, thumbHeight);
                     picBox.Image = thumb;
                 }
                 catch
@@ -544,10 +562,11 @@ namespace zIdari.Forms
             var label = new Label
             {
                 Dock = DockStyle.Bottom,
-                Height = 15,
+                Height = 20,
                 Text = $"Page {index + 1}" + (page.IsImported ? " [I]" : ""),
                 TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", 7)
+                Font = new Font("Arial", 8, FontStyle.Bold),
+                BackColor = index == _currentPageIndex ? Color.LightBlue : Color.LightGray
             };
 
             panel.Controls.Add(picBox);
