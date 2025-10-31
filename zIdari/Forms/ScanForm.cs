@@ -522,33 +522,78 @@ namespace zIdari.Forms
             var previewPanel = previewPictureBox.Parent as Panel;
             if (previewPanel != null && finalImage != null)
             {
+                // Ensure panel MaximumSize is set to prevent column scrolling
+                if (previewPanel.MaximumSize.IsEmpty)
+                {
+                    previewPanel.MaximumSize = previewPanel.Size;
+                }
+                
                 int zoomedWidth = finalImage.Width;
                 int zoomedHeight = finalImage.Height;
                 int availableWidth = previewPanel.ClientSize.Width;
                 int availableHeight = previewPanel.ClientSize.Height - 30; // Subtract zoom panel
-                
-                // Panel size is locked (via MaximumSize) so it won't grow beyond cell
-                // AutoScroll is enabled, so content inside can scroll
                 
                 if (zoomedWidth <= availableWidth && zoomedHeight <= availableHeight)
                 {
                     // Image fits - dock it and use Zoom mode
                     previewPictureBox.Dock = DockStyle.Fill;
                     previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-                    previewPanel.AutoScrollMinSize = Size.Empty; // Clear scroll requirement
+                    // Clear AutoScrollMinSize - no scrolling needed
+                    previewPanel.AutoScrollMinSize = Size.Empty;
+                    previewPanel.AutoScroll = false; // Disable scrollbars when not needed
                     previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Default;
                 }
                 else
                 {
-                    // Image is larger than panel - enable scrolling and panning
+                    // Image is larger than panel - enable scrolling INSIDE previewPanel only
                     previewPictureBox.Dock = DockStyle.None;
                     previewPictureBox.SizeMode = PictureBoxSizeMode.Normal;
                     previewPictureBox.Size = new Size(zoomedWidth, zoomedHeight);
                     previewPictureBox.Location = new Point(0, 30);
                     
-                    // Set AutoScrollMinSize so panel knows how much space is needed
-                    // Panel itself won't grow because MaximumSize is locked
-                    previewPanel.AutoScrollMinSize = new Size(zoomedWidth, zoomedHeight);
+                    // Enable AutoScroll INSIDE previewPanel
+                    // When PictureBox is larger than panel's client area, scrollbars appear automatically
+                    previewPanel.AutoScroll = true;
+                    
+                    // CRITICAL: DO NOT set AutoScrollMinSize - it causes panel to grow
+                    // The panel's AutoScroll will automatically show scrollbars based on 
+                    // the PictureBox size being larger than the panel's client area
+                    
+                    // Force panel to stay at its locked size (prevents column scrolling)
+                    if (!_lockedPanelSize.IsEmpty)
+                    {
+                        // Temporarily suspend layout to prevent resize cascade
+                        previewPanel.SuspendLayout();
+                        
+                        if (previewPanel.Width > _lockedPanelSize.Width)
+                        {
+                            previewPanel.Width = _lockedPanelSize.Width;
+                        }
+                        if (previewPanel.Height > _lockedPanelSize.Height)
+                        {
+                            previewPanel.Height = _lockedPanelSize.Height;
+                        }
+                        
+                        previewPanel.ResumeLayout(false);
+                    }
+                    else
+                    {
+                        // Fallback to MaximumSize if locked size not set yet
+                        var maxSize = previewPanel.MaximumSize;
+                        if (!maxSize.IsEmpty)
+                        {
+                            previewPanel.SuspendLayout();
+                            if (previewPanel.Width > maxSize.Width)
+                            {
+                                previewPanel.Width = maxSize.Width;
+                            }
+                            if (previewPanel.Height > maxSize.Height)
+                            {
+                                previewPanel.Height = maxSize.Height;
+                            }
+                            previewPanel.ResumeLayout(false);
+                        }
+                    }
                     
                     // Enable pan cursor when zoomed in
                     previewPictureBox.Cursor = _isCropping ? Cursors.Cross : Cursors.Hand;
@@ -561,6 +606,7 @@ namespace zIdari.Forms
                 if (previewPanel != null)
                 {
                     previewPanel.AutoScrollMinSize = Size.Empty;
+                    previewPanel.AutoScroll = false;
                 }
             }
             
@@ -2561,21 +2607,51 @@ namespace zIdari.Forms
             UpdateFilename();
         }
         
+        private Size _lockedPanelSize = Size.Empty;
+
         private void ScanForm_Load(object sender, EventArgs e)
         {
             // Lock previewPanel to its allocated TableLayoutPanel cell size
-            // This prevents the panel from growing and causing column scrolling
+            // This prevents the entire column from scrolling
             var previewPanel = previewPictureBox.Parent as Panel;
             if (previewPanel != null)
             {
                 // Wait for layout to complete, then lock the size
                 this.Shown += (s, args) =>
                 {
-                    // Lock the size to allocated size (after layout is complete)
-                    var currentSize = previewPanel.Size;
-                    previewPanel.MaximumSize = currentSize;
-                    // Enable AutoScroll for scrolling within the cell
+                    // Get the actual allocated size from TableLayoutPanel
+                    var allocatedSize = previewPanel.Size;
+                    _lockedPanelSize = allocatedSize;
+                    
+                    // CRITICAL: Lock MaximumSize to EXACTLY the allocated size
+                    // This prevents the panel from growing and causing column scrolling
+                    previewPanel.MaximumSize = allocatedSize;
+                    previewPanel.MinimumSize = new Size(0, 0);
+                    
+                    // Enable AutoScroll for scrolling INSIDE the panel container
+                    // The scrollbars will appear INSIDE previewPanel, not on the column
                     previewPanel.AutoScroll = true;
+                    
+                    // Ensure panel stays docked to fill its TableLayoutPanel cell
+                    if (previewPanel.Dock != DockStyle.Fill)
+                    {
+                        previewPanel.Dock = DockStyle.Fill;
+                    }
+                    
+                    // Handle Resize to prevent panel from growing
+                    previewPanel.Resize += (rs, re) =>
+                    {
+                        if (!_lockedPanelSize.IsEmpty && 
+                            (previewPanel.Width > _lockedPanelSize.Width || 
+                             previewPanel.Height > _lockedPanelSize.Height))
+                        {
+                            previewPanel.Width = Math.Min(previewPanel.Width, _lockedPanelSize.Width);
+                            previewPanel.Height = Math.Min(previewPanel.Height, _lockedPanelSize.Height);
+                        }
+                    };
+                    
+                    // Force a layout update to ensure constraints are respected
+                    previewPanel.PerformLayout();
                 };
             }
         }
