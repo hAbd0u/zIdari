@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Forms;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Drawing;
+using PdfiumPdfDocument = PdfiumViewer.PdfDocument;
 using zIdari.Model;
 
 namespace zIdari.Forms
@@ -1319,42 +1321,8 @@ namespace zIdari.Forms
         {
             try
             {
-                // Using PdfSharp to extract pages
-                var document = PdfReader.Open(filePath, PdfDocumentOpenMode.ReadOnly);
-                
-                for (int i = 0; i < document.PageCount; i++)
-                {
-                    var pdfPage = document.Pages[i];
-                    
-                    // Convert PDF page to image
-                    // Note: PdfSharp doesn't have built-in rendering, so we'll create a placeholder image
-                    // In production, you might want to use a library like PdfiumViewer or Ghostscript
-                    var width = (int)pdfPage.Width.Point;
-                    var height = (int)pdfPage.Height.Point;
-                    
-                    // Create a placeholder bitmap
-                    var bitmap = new Bitmap(Math.Max(width, 800), Math.Max(height, 600));
-                    using (var g = Graphics.FromImage(bitmap))
-                    {
-                        g.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-                        g.DrawString($"PDF Page {i + 1}", SystemFonts.DefaultFont, Brushes.Black, 10, 10);
-                        g.DrawString($"From: {Path.GetFileName(filePath)}", SystemFonts.DefaultFont, Brushes.Gray, 10, 30);
-                    }
-                    
-                    var page = new ScannedPage
-                    {
-                        PageNumber = _pages.Count + 1,
-                        ImageData = bitmap,
-                        Rotation = 0,
-                        IsImported = true,
-                        ImportSourcePath = filePath,
-                        OriginalPdfPageNumber = i + 1
-                    };
-                    
-                    _pages.Add(page);
-                }
-                
-                document.Close();
+                // Use PdfiumViewer directly (much faster than NAPS2)
+                ImportPdfFileUsingPdfiumViewer(filePath);
                 
                 // Update page numbers
                 for (int i = 0; i < _pages.Count; i++)
@@ -1364,8 +1332,450 @@ namespace zIdari.Forms
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to import PDF: {ex.Message}", ex);
+                System.Diagnostics.Debug.WriteLine($"PDF import error: {ex.Message}\n{ex.StackTrace}");
+                // Fallback to placeholders
+                ImportPdfFileAsPlaceholder(filePath);
+                
+                // Update page numbers
+                for (int i = 0; i < _pages.Count; i++)
+                {
+                    _pages[i].PageNumber = i + 1;
+                }
             }
+        }
+        
+        private void ImportPdfFileUsingPdfiumViewer(string filePath)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"PdfiumViewer: Importing PDF {Path.GetFileName(filePath)}");
+                
+                using (var document = PdfiumPdfDocument.Load(filePath))
+                {
+                    int pageCount = document.PageCount;
+                    System.Diagnostics.Debug.WriteLine($"PdfiumViewer: Rendering {pageCount} pages");
+                    
+                    for (int i = 0; i < pageCount; i++)
+                    {
+                        try
+                        {
+                            // Render at 150 DPI (good quality, reasonable speed)
+                            // PdfiumViewer Render method typically takes 4 arguments: (pageIndex, dpiX, dpiY, forPrinting)
+                            Image image = null;
+                            
+                            // Try Render(int, int, int, bool) - most common signature
+                            try
+                            {
+                                image = document.Render(i, 150, 150, false);
+                            }
+                            catch (Exception ex1)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Render(i, 150, 150, false) failed: {ex1.Message}");
+                                
+                                // Try Render(int, int, int, int) with render flags
+                                try
+                                {
+                                    var renderMethod = document.GetType().GetMethod("Render", new[] { typeof(int), typeof(int), typeof(int), typeof(int) });
+                                    if (renderMethod != null)
+                                    {
+                                        image = renderMethod.Invoke(document, new object[] { i, 150, 150, 0 }) as Image;
+                                    }
+                                }
+                                catch (Exception ex2)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"Render with int flags failed: {ex2.Message}");
+                                    
+                                    // Try finding any Render method via reflection
+                                    var allRenderMethods = document.GetType().GetMethods()
+                                        .Where(m => m.Name == "Render" && m.ReturnType == typeof(Image))
+                                        .ToList();
+                                    
+                                    if (allRenderMethods.Count > 0)
+                                    {
+                                        foreach (var method in allRenderMethods)
+                                        {
+                                            try
+                                            {
+                                                var parameters = method.GetParameters();
+                                                if (parameters.Length >= 3)
+                                                {
+                                                    var args = new object[parameters.Length];
+                                                    args[0] = i; // page index
+                                                    args[1] = 150; // dpiX
+                                                    args[2] = 150; // dpiY
+                                                    
+                                                    // Fill remaining parameters with defaults
+                                                    for (int p = 3; p < parameters.Length; p++)
+                                                    {
+                                                        if (parameters[p].ParameterType == typeof(bool))
+                                                            args[p] = false;
+                                                        else if (parameters[p].ParameterType.IsEnum || parameters[p].ParameterType == typeof(int))
+                                                            args[p] = 0;
+                                                        else
+                                                            args[p] = parameters[p].HasDefaultValue ? parameters[p].DefaultValue : Activator.CreateInstance(parameters[p].ParameterType);
+                                                    }
+                                                    
+                                                    image = method.Invoke(document, args) as Image;
+                                                    if (image != null) break;
+                                                }
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (image != null)
+                            {
+                                // Clone the image to avoid disposal issues
+                                var bitmap = new Bitmap(image);
+                                image.Dispose();
+                                
+                                var page = new ScannedPage
+                                {
+                                    PageNumber = _pages.Count + 1,
+                                    ImageData = bitmap,
+                                    Rotation = 0,
+                                    IsImported = true,
+                                    ImportSourcePath = filePath,
+                                    OriginalPdfPageNumber = i + 1
+                                };
+                                
+                                _pages.Add(page);
+                                System.Diagnostics.Debug.WriteLine($"Successfully rendered page {i + 1}/{pageCount}");
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Failed to render page {i + 1}, creating placeholder");
+                                var placeholder = CreatePdfPlaceholderImage(filePath, i + 1, 800, 600);
+                                var page = new ScannedPage
+                                {
+                                    PageNumber = _pages.Count + 1,
+                                    ImageData = placeholder,
+                                    Rotation = 0,
+                                    IsImported = true,
+                                    ImportSourcePath = filePath,
+                                    OriginalPdfPageNumber = i + 1
+                                };
+                                _pages.Add(page);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error rendering page {i + 1}: {ex.Message}");
+                            // Create placeholder for this page
+                            var placeholder = CreatePdfPlaceholderImage(filePath, i + 1, 800, 600);
+                            var page = new ScannedPage
+                            {
+                                PageNumber = _pages.Count + 1,
+                                ImageData = placeholder,
+                                Rotation = 0,
+                                IsImported = true,
+                                ImportSourcePath = filePath,
+                                OriginalPdfPageNumber = i + 1
+                            };
+                            _pages.Add(page);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"PdfiumViewer import failed: {ex.Message}");
+                throw; // Re-throw to trigger fallback
+            }
+        }
+        
+        private void ImportPdfFileUsingReflection(string filePath)
+        {
+            try
+            {
+                // Try to load PdfiumViewer assembly
+                Assembly pdfiumViewerAssembly = null;
+                
+                // First, try to find it in already loaded assemblies
+                pdfiumViewerAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => a.GetName().Name == "PdfiumViewer");
+                
+                // If not found, try to load it explicitly from the packages folder
+                if (pdfiumViewerAssembly == null)
+                {
+                    var packagesPath = Path.Combine(Application.StartupPath, "..", "..", "packages", "PdfiumViewer.2.13.0", "lib", "net40", "PdfiumViewer.dll");
+                    if (File.Exists(packagesPath))
+                    {
+                        pdfiumViewerAssembly = Assembly.LoadFrom(packagesPath);
+                    }
+                }
+                
+                // Also try relative to bin folder
+                if (pdfiumViewerAssembly == null)
+                {
+                    var binPath = Path.Combine(Application.StartupPath, "PdfiumViewer.dll");
+                    if (File.Exists(binPath))
+                    {
+                        pdfiumViewerAssembly = Assembly.LoadFrom(binPath);
+                    }
+                }
+                
+                if (pdfiumViewerAssembly == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("PdfiumViewer assembly not found, using placeholders");
+                    ImportPdfFileAsPlaceholder(filePath);
+                    return;
+                }
+                
+                var pdfDocumentType = pdfiumViewerAssembly.GetType("PdfiumViewer.PdfDocument");
+                if (pdfDocumentType == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("PdfDocument type not found in PdfiumViewer assembly");
+                    ImportPdfFileAsPlaceholder(filePath);
+                    return;
+                }
+                
+                // Try to find Load method - could be static or instance
+                MethodInfo loadMethod = pdfDocumentType.GetMethod("Load", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+                if (loadMethod == null)
+                {
+                    // Try instance constructor instead
+                    var constructor = pdfDocumentType.GetConstructor(new[] { typeof(string) });
+                    if (constructor != null)
+                    {
+                        var document = constructor.Invoke(new object[] { filePath }) as IDisposable;
+                        if (document != null)
+                        {
+                            RenderPdfPages(document, pdfDocumentType, filePath);
+                            return;
+                        }
+                    }
+                    System.Diagnostics.Debug.WriteLine("PdfDocument.Load method or constructor not found");
+                    ImportPdfFileAsPlaceholder(filePath);
+                    return;
+                }
+                
+                // Load the document
+                var doc = loadMethod.Invoke(null, new object[] { filePath });
+                if (doc == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed to load PDF document");
+                    ImportPdfFileAsPlaceholder(filePath);
+                    return;
+                }
+                
+                using (var document = doc as IDisposable)
+                {
+                    if (document == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Document does not implement IDisposable");
+                        ImportPdfFileAsPlaceholder(filePath);
+                        return;
+                    }
+                    
+                    RenderPdfPages(document, pdfDocumentType, filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error importing PDF with PdfiumViewer: {ex.Message}\n{ex.StackTrace}");
+                // If PdfiumViewer is not available or fails, create placeholders using PdfSharp
+                ImportPdfFileAsPlaceholder(filePath);
+            }
+        }
+        
+        private void RenderPdfPages(object document, Type pdfDocumentType, string filePath)
+        {
+            var pageCountProperty = pdfDocumentType.GetProperty("PageCount");
+            if (pageCountProperty == null)
+            {
+                System.Diagnostics.Debug.WriteLine("PageCount property not found");
+                ImportPdfFileAsPlaceholder(filePath);
+                return;
+            }
+            
+            int pageCount = (int)pageCountProperty.GetValue(document);
+            System.Diagnostics.Debug.WriteLine($"PdfiumViewer: Rendering {pageCount} pages from {Path.GetFileName(filePath)}");
+            
+            // Try different Render method signatures
+            // PdfiumViewer Render methods can have different signatures
+            MethodInfo renderMethod = null;
+            
+            // Try: Render(int page, int dpiX, int dpiY)
+            renderMethod = pdfDocumentType.GetMethod("Render", new[] { typeof(int), typeof(int), typeof(int) });
+            
+            // Try: Render(int page, int dpiX, int dpiY, bool forPrinting)
+            if (renderMethod == null)
+            {
+                renderMethod = pdfDocumentType.GetMethod("Render", new[] { typeof(int), typeof(int), typeof(int), typeof(bool) });
+            }
+            
+            // Try: Render(int page, int dpiX, int dpiY, PdfRenderFlags flags)
+            if (renderMethod == null)
+            {
+                var methods = pdfDocumentType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(m => m.Name == "Render" && m.GetParameters().Length >= 3)
+                    .ToList();
+                
+                if (methods.Count > 0)
+                {
+                    // Try the first overload that matches
+                    foreach (var method in methods)
+                    {
+                        var parameters = method.GetParameters();
+                        if (parameters.Length >= 3 && 
+                            parameters[0].ParameterType == typeof(int) && 
+                            parameters[1].ParameterType == typeof(int) && 
+                            parameters[2].ParameterType == typeof(int))
+                        {
+                            renderMethod = method;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (renderMethod == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Render method not found. Available methods:");
+                var allMethods = pdfDocumentType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+                foreach (var method in allMethods)
+                {
+                    System.Diagnostics.Debug.WriteLine($"  {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
+                }
+                ImportPdfFileAsPlaceholder(filePath);
+                return;
+            }
+            
+            System.Diagnostics.Debug.WriteLine($"Found Render method with {renderMethod.GetParameters().Length} parameters");
+            
+            for (int i = 0; i < pageCount; i++)
+            {
+                try
+                {
+                    object imageObj = null;
+                    var parameters = renderMethod.GetParameters();
+                    
+                    // Try different parameter combinations based on the method signature
+                    if (parameters.Length == 3)
+                    {
+                        // Render(int page, int dpiX, int dpiY)
+                        imageObj = renderMethod.Invoke(document, new object[] { i, 150, 150 });
+                    }
+                    else if (parameters.Length == 4)
+                    {
+                        var param4Type = parameters[3].ParameterType;
+                        if (param4Type == typeof(bool))
+                        {
+                            // Render(int page, int dpiX, int dpiY, bool forPrinting)
+                            imageObj = renderMethod.Invoke(document, new object[] { i, 150, 150, false });
+                        }
+                        else if (param4Type.IsEnum || param4Type == typeof(int))
+                        {
+                            // Render(int page, int dpiX, int dpiY, PdfRenderFlags/int flags)
+                            imageObj = renderMethod.Invoke(document, new object[] { i, 150, 150, 0 });
+                        }
+                        else
+                        {
+                            // Try with default value for the 4th parameter
+                            imageObj = renderMethod.Invoke(document, new object[] { i, 150, 150, Activator.CreateInstance(param4Type) });
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Unexpected Render method signature with {parameters.Length} parameters");
+                    }
+                    
+                    if (imageObj is Image image)
+                    {
+                        using (image)
+                        {
+                            var bitmap = new Bitmap(image);
+                            var page = new ScannedPage
+                            {
+                                PageNumber = _pages.Count + 1,
+                                ImageData = bitmap,
+                                Rotation = 0,
+                                IsImported = true,
+                                ImportSourcePath = filePath,
+                                OriginalPdfPageNumber = i + 1
+                            };
+                            _pages.Add(page);
+                            System.Diagnostics.Debug.WriteLine($"Successfully rendered page {i + 1}");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Render returned null or wrong type for page {i + 1}");
+                        var placeholder = CreatePdfPlaceholderImage(filePath, i + 1, 800, 600);
+                        var page = new ScannedPage
+                        {
+                            PageNumber = _pages.Count + 1,
+                            ImageData = placeholder,
+                            Rotation = 0,
+                            IsImported = true,
+                            ImportSourcePath = filePath,
+                            OriginalPdfPageNumber = i + 1
+                        };
+                        _pages.Add(page);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error rendering page {i + 1}: {ex.Message}");
+                    // Fall through to placeholder
+                    var placeholder = CreatePdfPlaceholderImage(filePath, i + 1, 800, 600);
+                    var page = new ScannedPage
+                    {
+                        PageNumber = _pages.Count + 1,
+                        ImageData = placeholder,
+                        Rotation = 0,
+                        IsImported = true,
+                        ImportSourcePath = filePath,
+                        OriginalPdfPageNumber = i + 1
+                    };
+                    _pages.Add(page);
+                }
+            }
+        }
+
+        private void ImportPdfFileAsPlaceholder(string filePath)
+        {
+            // Fallback: Create placeholder images for each page
+            var document = PdfReader.Open(filePath, PdfDocumentOpenMode.ReadOnly);
+            
+            for (int i = 0; i < document.PageCount; i++)
+            {
+                var pdfPage = document.Pages[i];
+                var width = Math.Max((int)pdfPage.Width.Point, 800);
+                var height = Math.Max((int)pdfPage.Height.Point, 600);
+                
+                var bitmap = CreatePdfPlaceholderImage(filePath, i + 1, width, height);
+                
+                var page = new ScannedPage
+                {
+                    PageNumber = _pages.Count + 1,
+                    ImageData = bitmap,
+                    Rotation = 0,
+                    IsImported = true,
+                    ImportSourcePath = filePath,
+                    OriginalPdfPageNumber = i + 1
+                };
+                
+                _pages.Add(page);
+            }
+            
+            document.Close();
+        }
+
+        private Bitmap CreatePdfPlaceholderImage(string filePath, int pageNumber, int width, int height)
+        {
+            var bitmap = new Bitmap(width, height);
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                g.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+                g.DrawString($"PDF Page {pageNumber}", new Font("Arial", 16, FontStyle.Bold), Brushes.Black, 10, 10);
+                g.DrawString($"From: {Path.GetFileName(filePath)}", new Font("Arial", 10), Brushes.Gray, 10, 40);
+                g.DrawString("(Rendering failed)", new Font("Arial", 9), Brushes.LightGray, 10, 60);
+            }
+            return bitmap;
         }
 
         // SAVE FUNCTIONALITY

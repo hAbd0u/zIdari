@@ -401,7 +401,7 @@
             this.filenameTextBox.Location = new System.Drawing.Point(3, 3);
             this.filenameTextBox.Name = "filenameTextBox";
             this.filenameTextBox.ReadOnly = true;
-            this.filenameTextBox.Size = new System.Drawing.Size(831, 20);
+            this.filenameTextBox.Size = new System.Drawing.Size(794, 20);
             this.filenameTextBox.TabIndex = 1;
             // 
             // saveLocationPanel
